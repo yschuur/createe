@@ -78,8 +78,8 @@ function EditProduct() {
     } finally { setSaving(false); }
   }
 
-  async function addImage() {
-    if (!/^https:\/\//.test(newImg)) return toast.error("Gebruik een https-link naar de afbeelding");
+  async function addImage(): Promise<void> {
+    if (!/^https:\/\//.test(newImg)) { toast.error("Gebruik een https-link naar de afbeelding"); return; }
     const { data: im, error } = await supabase.from("product_images").insert({ product_id: id, url: newImg, source_url: newImg, sort_order: images.length + 1 }).select().single();
     if (error) { toast.error(error.message); return; }
     setImages([...images, im]); setNewImg("");
@@ -90,7 +90,7 @@ function EditProduct() {
   }
   function move(i: number, d: number) {
     const arr = [...images]; const j = i + d; if (j < 0 || j >= arr.length) return;
-    [arr[i], arr[j]] = [arr[j], arr[i]]; setImages(arr);
+    const a = arr[i]!, b = arr[j]!; arr[i] = b; arr[j] = a; setImages(arr);
   }
   async function del() {
     if (!confirm(`"${p!.name}" definitief verwijderen?`)) return;

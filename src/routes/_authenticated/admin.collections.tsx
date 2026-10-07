@@ -38,7 +38,7 @@ function CollectionsAdmin() {
     if (error) toast.error(error.message); else refresh();
   }
   async function update(id: string, patch: Record<string, unknown>) {
-    await supabase.from("collections").update(patch).eq("id", id); refresh();
+    await supabase.from("collections").update(patch as never).eq("id", id); refresh();
   }
   async function remove(id: string) {
     if (!confirm("Collectie verwijderen? Producten blijven bestaan.")) return;

@@ -59,7 +59,8 @@ function ProductPage() {
     next[idx] = value;
     // keep a valid combination
     if (!variants.some((v) => keys.every((k, i) => (v[k] ?? null) === (next[i] ?? null)))) {
-      const m = variants.find((v) => v[keys[idx]] === value);
+      const key = keys[idx]!;
+      const m = variants.find((v) => v[key] === value);
       if (m) keys.forEach((k, i) => (next[i] = m[k]));
     }
     setSelected(next);
@@ -107,7 +108,8 @@ function ProductPage() {
 
           {hasOptions && optionNames.map((name, idx) => {
             if (!name) return null;
-            const values = Array.from(new Set(variants.map((v) => v[keys[idx]]).filter(Boolean))) as string[];
+            const key = keys[idx]!;
+            const values = Array.from(new Set(variants.map((v) => v[key]).filter(Boolean))) as string[];
             return (
               <div key={idx} className="mt-6">
                 <p className="mb-2 text-sm font-medium">{name === "Vanille" ? "Kleur" : name}: <span className="text-muted-foreground">{prettyValue(selected[idx])}</span></p>

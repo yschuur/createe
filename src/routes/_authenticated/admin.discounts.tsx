@@ -21,13 +21,13 @@ function DiscountsAdmin() {
     queryFn: async () => (await supabase.from("discounts").select("*").order("created_at", { ascending: false })).data ?? [],
   });
 
-  async function create(e: React.FormEvent<HTMLFormElement>) {
+  async function create(e: React.FormEvent<HTMLFormElement>): Promise<void> {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     const code = String(fd.get("code")).trim().toUpperCase();
     const value = Number(fd.get("value"));
-    if (!/^[A-Z0-9_-]{3,30}$/.test(code)) return toast.error("Code: 3–30 letters/cijfers");
-    if (!(value > 0)) return toast.error("Waarde moet groter dan 0 zijn");
+    if (!/^[A-Z0-9_-]{3,30}$/.test(code)) { toast.error("Code: 3–30 letters/cijfers"); return; }
+    if (!(value > 0)) { toast.error("Waarde moet groter dan 0 zijn"); return; }
     const { error } = await supabase.from("discounts").insert({
       code, value, type: String(fd.get("type")), description: String(fd.get("description") || "") || null,
       min_order_amount: fd.get("min") ? Number(fd.get("min")) : null,

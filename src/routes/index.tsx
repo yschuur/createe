@@ -50,7 +50,7 @@ function Home() {
                 className="absolute w-[55%] rounded-sm bg-card p-2 pb-8 shadow-2xl transition-transform hover:z-10 hover:scale-105"
                 style={{ left: `${i * 22}%`, top: `${[8, 0, 16][i]}%`, transform: `rotate(${[-6, 3, -2][i]}deg)` }}
               >
-                <img src={imgUrl(p.product_images[0].url, 600)} alt={p.name} className="aspect-[4/5] w-full object-cover" />
+                <img src={imgUrl(p.product_images[0]?.url, 600)} alt={p.name} className="aspect-[4/5] w-full object-cover" />
                 <p className="absolute bottom-2 left-3 font-display text-sm text-card-foreground">{p.name}</p>
               </Link>
             ))}

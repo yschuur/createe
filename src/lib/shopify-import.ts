@@ -165,6 +165,6 @@ export async function runImport(products: ParsedProduct[], onExisting: "skip" | 
     }
   }
   const { data: u } = await supabase.auth.getUser();
-  await supabase.from("import_logs").insert({ created_by: u.user?.id, source: "shopify_csv", summary: sum as never, errors: sum.errors as never });
+  await supabase.from("import_logs").insert({ created_by: u.user?.id ?? null, source: "shopify_csv", summary: sum as never, errors: sum.errors as never });
   return sum;
 }
