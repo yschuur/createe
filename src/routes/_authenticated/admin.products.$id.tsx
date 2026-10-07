@@ -1,3 +1,4 @@
+import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -124,7 +125,7 @@ function EditProduct() {
         <div className="space-y-6">
           <Box title="Algemeen">
             <div><Label>Naam</Label><Input value={p.name} onChange={(e) => set("name", e.target.value)} /></div>
-            <div><Label>Omschrijving (HTML)</Label><Textarea rows={6} value={p.description_html ?? ""} onChange={(e) => set("description_html", e.target.value)} /></div>
+            <div><Label>Omschrijving</Label><RichTextEditor minHeight={180} value={p.description_html ?? ""} onChange={(v) => set("description_html", v)} /></div>
             <div className="grid grid-cols-2 gap-3">
               <div><Label>Producttype</Label><Input value={p.product_type ?? ""} onChange={(e) => set("product_type", e.target.value)} /></div>
               <div><Label>Merk</Label><Input value={p.vendor ?? ""} onChange={(e) => set("vendor", e.target.value)} /></div>

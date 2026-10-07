@@ -1,3 +1,4 @@
+import { sanitizeDescription, stripHtml } from "@/lib/shop";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { ShopLayout } from "@/components/shop/ShopLayout";
@@ -11,7 +12,7 @@ export const Route = createFileRoute("/collections/$slug")({
       context.queryClient.ensureQueryData(collectionsQuery()),
     ]);
     if (!data) throw notFound();
-    return { name: data.collection.name, description: data.collection.description };
+    return { name: data.collection.name, description: stripHtml(data.collection.description) };
   },
   head: ({ loaderData }) => {
     const title = `${loaderData?.name ?? "Collectie"} — CREATEE`;
@@ -38,7 +39,7 @@ function CollectionPage() {
     <ShopLayout>
       <section className="mx-auto max-w-7xl px-4 py-12 md:px-8">
         <h1 className="text-5xl font-extrabold md:text-7xl">{data.collection.name}</h1>
-        {data.collection.description && <p className="mt-2 max-w-xl text-muted-foreground">{data.collection.description}</p>}
+        {data.collection.description && <div className="prose-shop mt-2 max-w-xl text-muted-foreground" dangerouslySetInnerHTML={{ __html: sanitizeDescription(data.collection.description) }} />}
         <div className="mt-6 flex flex-wrap gap-2">
           {collections.map((c) => (
             <Link key={c.id} to="/collections/$slug" params={{ slug: c.slug }}

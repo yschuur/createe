@@ -1,3 +1,4 @@
+import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -59,7 +60,7 @@ function CollectionsAdmin() {
           <div key={c.id} className="flex flex-wrap items-center gap-4 rounded-sm bg-card p-4">
             <div className="min-w-48 flex-1 space-y-2">
               <Input defaultValue={c.name} onBlur={(e) => e.target.value !== c.name && update(c.id, { name: e.target.value })} className="font-semibold" />
-              <Input defaultValue={c.description ?? ""} placeholder="Omschrijving" onBlur={(e) => update(c.id, { description: e.target.value || null })} />
+              <CollectionDescription value={c.description ?? ""} onSave={(v) => update(c.id, { description: v || null })} />
               <MediaField value={c.image_url ?? ""} onChange={(v) => update(c.id, { image_url: v || null })} placeholder="Collectiefoto (link)" />
               <p className="font-mono text-xs text-muted-foreground">/collections/{c.slug}</p>
             </div>
@@ -86,4 +87,12 @@ function CollectionsAdmin() {
       </Dialog>
     </AdminLayout>
   );
+}
+
+function CollectionDescription({ value, onSave }: { value: string; onSave: (v: string) => void }) {
+  const [v, setV] = useState(value);
+  return <div className="space-y-1">
+    <RichTextEditor minHeight={60} value={v} onChange={setV} placeholder="Omschrijving" />
+    {v !== value && <Button size="sm" onClick={() => onSave(v)}>Omschrijving opslaan</Button>}
+  </div>;
 }

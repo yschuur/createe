@@ -100,13 +100,24 @@ export function isSoldOut(p: ProductWithRelations) {
   return !p.is_service && p.product_variants.every((v) => !isPurchasable(v));
 }
 
+/** Sanitizes owner rich text; only whitelisted inline styles (font, size, color, alignment) survive. */
 export function sanitizeDescription(html: string | null) {
   if (!html) return "";
   return sanitizeHtml(html, {
-    allowedTags: ["p", "br", "strong", "b", "em", "i", "u", "ul", "ol", "li", "a", "h1", "h2", "h3", "h4", "span", "div"],
-    allowedAttributes: { a: ["href", "target", "rel"] },
+    allowedTags: ["p", "br", "strong", "b", "em", "i", "u", "s", "ul", "ol", "li", "a", "h1", "h2", "h3", "h4", "span", "div", "blockquote"],
+    allowedAttributes: { a: ["href", "target", "rel"], "*": ["style"] },
+    allowedStyles: { "*": {
+      color: [/^#[0-9a-f]{3,8}$/i, /^rgba?\([\d\s.,%]+\)$/i, /^var\(--[a-z0-9-]+\)$/i],
+      "font-family": [/^[\w\s"',-]+$/],
+      "font-size": [/^\d{1,3}(\.\d+)?(px|rem|em)$/],
+      "text-align": [/^(left|right|center|justify)$/],
+    } },
     transformTags: { a: sanitizeHtml.simpleTransform("a", { rel: "noopener noreferrer" }) },
   });
+}
+
+export function stripHtml(html: string | null) {
+  return html ? sanitizeHtml(html, { allowedTags: [], allowedAttributes: {} }).trim() : "";
 }
 
 /** Shopify CDN supports width param for lighter images. */
