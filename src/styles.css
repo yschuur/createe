@@ -391,3 +391,5 @@
 @keyframes atelier-rise { from { opacity: 0; transform: translateY(24px); } }
 @media (max-width: 640px) { .atelier-ticket { transform: none; } .atelier-stamp { right: 6px; } .atelier-polaroid:nth-child(even) { margin-top: 0; } .atelier-moodboard { grid-template-columns: 1fr 1fr; gap: 1rem; } }
 @media (prefers-reduced-motion: reduce) { .studio-atelier * { animation: none !important; transition: none !important; } }
+.storefront .pdp-title { font-family: var(--font-sans); font-weight: 400; }
+.storefront .pdp details > summary::-webkit-details-marker { display: none; }

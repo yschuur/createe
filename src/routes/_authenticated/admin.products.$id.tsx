@@ -10,6 +10,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
+import { ProductPageEditor } from "@/components/admin/ProductPageEditor";
+import { getPage, type ProductPageContent } from "@/lib/product-page";
 import { imgUrl, type Product, type ProductImage, type Variant } from "@/lib/shop";
 
 export const Route = createFileRoute("/_authenticated/admin/products/$id")({
@@ -125,6 +127,10 @@ function EditProduct() {
               <div><Label>Materiaal</Label><Input value={p.fabric ?? ""} onChange={(e) => set("fabric", e.target.value)} /></div>
             </div>
             <div><Label>Tags (komma-gescheiden)</Label><Input value={p.tags.join(", ")} onChange={(e) => set("tags", e.target.value.split(",").map((t) => t.trim()).filter(Boolean))} /></div>
+          </Box>
+
+          <Box title="Productpagina-teksten">
+            <ProductPageEditor value={getPage(p)} onChange={(v: ProductPageContent) => set("metadata", { ...((p.metadata as object) ?? {}), page: v } as Product["metadata"])} />
           </Box>
 
           <Box title="Afbeeldingen">
