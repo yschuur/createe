@@ -69,7 +69,7 @@
 :root {
   --shop-surface: oklch(0.99 0.002 85);
   --shop-ink: oklch(0.25 0.005 150);
-  --review: oklch(0.55 0.13 163);
+  --review: oklch(0.68 0.15 163);
   --radius: 0.25rem;
   --background: oklch(0.94 0.018 85);
   --foreground: oklch(0.24 0.04 150);
