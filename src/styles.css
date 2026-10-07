@@ -193,6 +193,16 @@
 
 /* ===== CREATEE design packs (createe.nl): scoped to the storefront, admin unchanged ===== */
 .storefront {
+  --product-color-anthracite: #5e6065;
+  --product-color-sand: #d7c4a5;
+  --product-color-leaf: #41835f;
+  --product-color-white: #ffffff;
+  --product-color-navy: #38526a;
+  --product-color-ocean: #4d708f;
+  --product-color-offwhite: #e9decb;
+  --product-color-vanilla: #efe3c4;
+  --product-color-black: #000000;
+  --product-color-unknown: var(--muted);
   --font-sans: "Fraunces", Georgia, serif;
   --font-display: "Jost", system-ui, sans-serif;
   --font-label: "Montserrat", system-ui, sans-serif;
