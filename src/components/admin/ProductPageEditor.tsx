@@ -1,3 +1,4 @@
+import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import { Plus, Trash2, ArrowUp, ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,7 +17,7 @@ export function ProductPageEditor({ value, onChange }: { value: ProductPageConte
   );
   return (
     <div className="space-y-4">
-      <div><Label>Introtekst (HTML)</Label><Textarea rows={4} value={value.intro} onChange={(e) => set("intro", e.target.value)} /></div>
+      <div><Label>Introtekst</Label><RichTextEditor value={value.intro} onChange={(v) => set("intro", v)} /></div>
       {F("Knoptekst winkelwagen", "addToCartLabel")}
       <div className="grid grid-cols-2 gap-3">
         {F("Label 1", "fitLabel")}{F("Waarde 1", "fitValue")}
@@ -41,7 +42,7 @@ export function ProductPageEditor({ value, onChange }: { value: ProductPageConte
               <button onClick={() => moveAcc(i, 1)} aria-label="Omlaag"><ArrowDown className="h-4 w-4" /></button>
               <button onClick={() => set("accordions", acc.filter((_, j) => j !== i))} aria-label="Verwijder"><Trash2 className="h-4 w-4 text-destructive" /></button>
             </div>
-            <Textarea rows={4} value={a.html} placeholder="Inhoud (HTML, bijv. <ul><li>…</li></ul>)" onChange={(e) => setAcc(i, { html: e.target.value })} />
+            <RichTextEditor value={a.html} placeholder="Inhoud" onChange={(v) => setAcc(i, { html: v })} />
           </div>
         ))}
         <Button variant="outline" size="sm" onClick={() => set("accordions", [...acc, { title: "Nieuw blok", html: "", open: false }])}><Plus className="mr-1 h-4 w-4" /> Blok</Button>

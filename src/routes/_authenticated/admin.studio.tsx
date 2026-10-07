@@ -1,3 +1,4 @@
+import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -55,7 +56,7 @@ function StudioAdmin() {
               <Button size="icon" variant="ghost" onClick={() => upd((d) => { d.reviews.splice(i, 1); })}><Trash2 /></Button>
             </div>
           </div>
-          <Textarea value={r.text} onChange={(e) => upd((d) => { d.reviews[i]!.text = e.target.value; })} placeholder="Reviewtekst (optioneel)" rows={2} maxLength={500} />
+          <RichTextEditor minHeight={70} value={r.text} onChange={(v) => upd((d) => { d.reviews[i]!.text = v; })} placeholder="Reviewtekst (optioneel)" />
           <ImagePicker value={r.image} onChange={(v) => upd((d) => { d.reviews[i]!.image = v; })} />
         </div>
       </div>)}</div>
