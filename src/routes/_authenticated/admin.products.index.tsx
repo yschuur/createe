@@ -8,7 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { formatPrice, imgUrl } from "@/lib/shop";
 
 export const Route = createFileRoute("/_authenticated/admin/products/")({
-  head: () => ({ meta: [{ title: "Producten — CREATEE beheer" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Producten — CREATEE beheer" }, { name: "description", content: "Producten — CREATEE beheer. Beheer de CREATEE webshop." }, { property: "og:title", content: "Producten — CREATEE beheer" }, { property: "og:description", content: "Producten — CREATEE beheer. Beheer de CREATEE webshop." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: ProductsAdmin,
 });
 

@@ -13,7 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { imgUrl, type Product, type ProductImage, type Variant } from "@/lib/shop";
 
 export const Route = createFileRoute("/_authenticated/admin/products/$id")({
-  head: () => ({ meta: [{ title: "Product bewerken — CREATEE beheer" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Product bewerken — CREATEE beheer" }, { name: "description", content: "Product bewerken — CREATEE beheer. Beheer de CREATEE webshop." }, { property: "og:title", content: "Product bewerken — CREATEE beheer" }, { property: "og:description", content: "Product bewerken — CREATEE beheer. Beheer de CREATEE webshop." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: EditProduct,
 });
 
