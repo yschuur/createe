@@ -52,11 +52,13 @@ export function ShopLayout({ children }: { children: ReactNode }) {
         </div>
       </header>
       <main className="flex-1">{children}</main>
-      <Reviews />
-      <div className="grid gap-4 border-y border-border bg-muted/30 px-4 py-5 text-center text-xs sm:grid-cols-3">
-        <span className="flex items-center justify-center gap-2"><Truck className="size-4" />Binnen 1-3 werkdagen verzonden</span>
-        <span className="flex items-center justify-center gap-2"><PackageCheck className="size-4" />Gratis verzending vanaf €75</span>
-        <span className="flex items-center justify-center gap-2"><RefreshCw className="size-4" />Exclusieve designs · premium kleding</span>
+      <div className="border-t border-border bg-muted/40">
+        <Reviews />
+        <div className="grid border-t border-border font-display text-sm text-primary sm:grid-cols-3 sm:divide-x sm:divide-border">
+          <span className="flex items-center justify-center gap-2.5 py-4"><Truck className="size-4" />Binnen 1-3 werkdagen verzonden</span>
+          <span className="flex items-center justify-center gap-2.5 py-4"><PackageCheck className="size-4" />Gratis verzending vanaf €75</span>
+          <span className="flex items-center justify-center gap-2.5 py-4"><RefreshCw className="size-4" />Eenvoudig retourneren & gratis ruilen</span>
+        </div>
       </div>
       <footer className="bg-primary text-primary-foreground">
         <div className="mx-auto grid max-w-7xl gap-10 px-6 py-14 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1.3fr] md:px-8">
