@@ -1,0 +1,1 @@
+CREATE POLICY "visitors upload design references" ON storage.objects FOR INSERT TO anon, authenticated WITH CHECK (bucket_id = 'studio-assets' AND (storage.foldername(name))[1] = 'requests');
