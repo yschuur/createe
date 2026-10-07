@@ -81,7 +81,7 @@ function EditProduct() {
   async function addImage() {
     if (!/^https:\/\//.test(newImg)) return toast.error("Gebruik een https-link naar de afbeelding");
     const { data: im, error } = await supabase.from("product_images").insert({ product_id: id, url: newImg, source_url: newImg, sort_order: images.length + 1 }).select().single();
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setImages([...images, im]); setNewImg("");
   }
   async function removeImage(imId: string) {

@@ -24,7 +24,7 @@ export type ParsedProduct = {
   product_category: string | null; product_type: string | null; tags: string[];
   status: string; published: boolean; is_service: boolean; featured: boolean;
   fit: string | null; fabric: string | null; target_gender: string | null;
-  seo_title: string | null; seo_description: string | null; metadata: Record<string, unknown>;
+  seo_title: string | null; seo_description: string | null; metadata: Record<string, string | null>;
   variants: ParsedVariant[]; images: ParsedImage[];
 };
 export type ParseResult = { products: ParsedProduct[]; errors: { row: number; message: string }[]; rowCount: number };
@@ -57,13 +57,13 @@ export function parseShopifyCsv(text: string): ParseResult {
   const res = Papa.parse<Row>(text, { header: true, skipEmptyLines: true });
   const errors: ParseResult["errors"] = res.errors.map((e) => ({ row: (e.row ?? 0) + 2, message: e.message }));
   const rows = res.data;
-  if (!rows.length || !("Handle" in rows[0])) {
+  if (!rows[0] || !("Handle" in rows[0])) {
     return { products: [], errors: [{ row: 1, message: "Geen Shopify product-CSV: kolom 'Handle' ontbreekt." }], rowCount: 0 };
   }
   const groups = new Map<string, { row: Row; line: number }[]>();
   rows.forEach((r, i) => {
     const h = s(r["Handle"]);
-    if (!h) return errors.push({ row: i + 2, message: "Regel zonder Handle overgeslagen" });
+    if (!h) { errors.push({ row: i + 2, message: "Regel zonder Handle overgeslagen" }); return; }
     if (!groups.has(h)) groups.set(h, []);
     groups.get(h)!.push({ row: r, line: i + 2 });
   });
@@ -71,12 +71,12 @@ export function parseShopifyCsv(text: string): ParseResult {
   const products: ParsedProduct[] = [];
   for (const [handle, g] of groups) {
     const head = g.find((x) => s(x.row["Title"]));
-    if (!head) { errors.push({ row: g[0].line, message: `${handle}: geen regel met Title` }); continue; }
+    if (!head) { errors.push({ row: g[0]?.line ?? 0, message: `${handle}: geen regel met Title` }); continue; }
     const f = head.row;
     const tags = (s(f["Tags"]) ?? "").split(",").map((t) => t.trim()).filter(Boolean);
-    const meta: Record<string, unknown> = {};
+    const meta: Record<string, string | null> = {};
     for (const [col, key] of Object.entries(META)) if (s(f[col])) meta[key] = s(f[col]);
-    meta.shopify_status = s(f["Status"]);
+    meta["shopify_status"] = s(f["Status"]);
     const is_service = handle === "createe-design-studio" || tags.some((t) => /service/i.test(t));
     const names = [s(f["Option1 Name"]), s(f["Option2 Name"]), s(f["Option3 Name"])];
     const variants: ParsedVariant[] = [];
@@ -86,15 +86,15 @@ export function parseShopifyCsv(text: string): ParseResult {
         const vals = [s(r["Option1 Value"]), s(r["Option2 Value"]), s(r["Option3 Value"])];
         const isDefault = names[0] === "Title" && vals[0] === "Default Title";
         let color: string | null = null, size: string | null = null;
-        names.forEach((nm, i) => { if (kind(nm) === "color") color = vals[i]; if (kind(nm) === "size") size = vals[i]; });
+        names.forEach((nm, i) => { if (kind(nm) === "color") color = vals[i] ?? null; if (kind(nm) === "size") size = vals[i] ?? null; });
         const qty = Math.trunc(n(r["Variant Inventory Qty"]) ?? 0);
         const price = n(r["Variant Price"]);
         if (price == null) errors.push({ row: line, message: `${handle}: variant zonder prijs` });
         variants.push({
           sku: s(r["Variant SKU"]), color, size,
-          option1_name: isDefault ? null : names[0], option1_value: isDefault ? null : vals[0],
-          option2_name: isDefault ? null : names[1], option2_value: isDefault ? null : vals[1],
-          option3_name: isDefault ? null : names[2], option3_value: isDefault ? null : vals[2],
+          option1_name: isDefault ? null : (names[0] ?? null), option1_value: isDefault ? null : (vals[0] ?? null),
+          option2_name: isDefault ? null : (names[1] ?? null), option2_value: isDefault ? null : (vals[1] ?? null),
+          option3_name: isDefault ? null : (names[2] ?? null), option3_value: isDefault ? null : (vals[2] ?? null),
           price: price ?? 0, compare_at_price: n(r["Variant Compare At Price"]),
           inventory_quantity: is_service ? 0 : Math.max(0, qty), original_inventory_qty: qty,
           allow_backorder: s(r["Variant Inventory Policy"]) === "continue", track_inventory: !is_service,
@@ -111,7 +111,7 @@ export function parseShopifyCsv(text: string): ParseResult {
       product_category: s(f["Product Category"]), product_type: s(f["Type"]), tags,
       status: (s(f["Status"]) ?? "draft").toLowerCase(), published: (s(f["Published"]) ?? "").toLowerCase() === "true",
       is_service, featured: tags.some((t) => t.toLowerCase() === "nieuw"),
-      fit: (meta.fit as string) ?? null, fabric: (meta.fabric as string) ?? null, target_gender: (meta.target_gender as string) ?? null,
+      fit: meta["fit"] ?? null, fabric: meta["fabric"] ?? null, target_gender: meta["target_gender"] ?? null,
       seo_title: s(f["SEO Title"]), seo_description: s(f["SEO Description"]), metadata: meta, variants, images,
     });
   }
@@ -132,16 +132,16 @@ export async function runImport(products: ParsedProduct[], onExisting: "skip" | 
       let id = bySlug.get(p.slug);
       if (id && onExisting === "skip") { sum.skipped++; continue; }
       if (id) {
-        const { error } = await supabase.from("products").update(fields).eq("id", id);
+        const { error } = await supabase.from("products").update(fields as never).eq("id", id);
         if (error) throw error;
         // replace variants/images only after product update succeeded
         await supabase.from("product_images").delete().eq("product_id", id);
         await supabase.from("product_variants").delete().eq("product_id", id);
         sum.updated++;
       } else {
-        const { data, error } = await supabase.from("products").insert({ ...fields, sort_order: i }).select("id").single();
+        const { data, error } = await supabase.from("products").insert({ ...fields, sort_order: i } as never).select("id").single();
         if (error) throw error;
-        id = data.id;
+        id = (data as { id: string }).id;
         sum.created++;
       }
       const vRows = variants.map(({ variant_image: _vi, ...v }) => ({ ...v, product_id: id! }));
@@ -149,7 +149,7 @@ export async function runImport(products: ParsedProduct[], onExisting: "skip" | 
       if (vErr) throw vErr;
       sum.variants += vIns?.length ?? 0;
       const imgVariant = new Map<string, string>();
-      variants.forEach((v, idx) => { if (v.variant_image && vIns?.[idx] && !imgVariant.has(v.variant_image)) imgVariant.set(v.variant_image, vIns[idx].id); });
+      variants.forEach((v, idx) => { const row = vIns?.[idx]; if (v.variant_image && row && !imgVariant.has(v.variant_image)) imgVariant.set(v.variant_image, row.id); });
       const iRows = images.map((im) => ({
         product_id: id!, source_url: im.source_url, url: im.source_url, alt_text: im.alt_text, sort_order: im.sort_order,
         is_primary: im.sort_order === 1, variant_id: imgVariant.get(im.source_url) ?? null,

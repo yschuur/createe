@@ -14,7 +14,7 @@ export function ProductCard({ product, index = 0 }: { product: ProductWithRelati
           <img src={imgUrl(imgs[0].url, 700)} alt={imgs[0].alt_text ?? product.name} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-opacity duration-500 group-hover:opacity-0" />
         )}
         {(imgs[1] ?? imgs[0]) && (
-          <img src={imgUrl((imgs[1] ?? imgs[0]).url, 700)} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+          <img src={imgUrl((imgs[1] ?? imgs[0])?.url, 700)} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
         )}
         <div className="absolute left-3 top-3 flex flex-col gap-1">
           {compareAt && <span className="rounded-full bg-accent px-2.5 py-1 text-[11px] font-bold uppercase text-accent-foreground">Sale</span>}

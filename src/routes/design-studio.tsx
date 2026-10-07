@@ -37,16 +37,16 @@ function DesignStudio() {
   const [sent, setSent] = useState(false);
   const [busy, setBusy] = useState(false);
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
     e.preventDefault();
     const fd = Object.fromEntries(new FormData(e.currentTarget));
     const clean = Object.fromEntries(Object.entries(fd).filter(([, v]) => v !== ""));
     const parsed = schema.safeParse(clean);
-    if (!parsed.success) return toast.error(parsed.error.issues[0].message);
+    if (!parsed.success) { toast.error(parsed.error.issues[0]?.message ?? "Controleer het formulier"); return; }
     setBusy(true);
     const { error } = await supabase.from("design_requests").insert(parsed.data as never);
     setBusy(false);
-    if (error) return toast.error("Versturen mislukt, probeer opnieuw.");
+    if (error) { toast.error("Versturen mislukt, probeer opnieuw."); return; }
     setSent(true);
   }
 

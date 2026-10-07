@@ -27,7 +27,7 @@ function AuthPage() {
   const [mode, setMode] = useState<"in" | "up">("in");
   const [busy, setBusy] = useState(false);
 
-  async function submit(e: React.FormEvent<HTMLFormElement>) {
+  async function submit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     const email = String(fd.get("email")).trim();
@@ -36,12 +36,12 @@ function AuthPage() {
     if (mode === "in") {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       setBusy(false);
-      if (error) return toast.error("Inloggen mislukt: controleer je gegevens.");
+      if (error) { toast.error("Inloggen mislukt: controleer je gegevens."); return; }
       nav({ to: "/admin" });
     } else {
       const { error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: `${window.location.origin}/admin` } });
       setBusy(false);
-      if (error) return toast.error(error.message);
+      if (error) { toast.error(error.message); return; }
       toast.success("Check je mail om je account te bevestigen.");
       setMode("in");
     }

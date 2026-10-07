@@ -35,7 +35,7 @@ function DiscountsAdmin() {
       ends_at: fd.get("ends") ? new Date(String(fd.get("ends"))).toISOString() : null,
       usage_limit: fd.get("limit") ? Number(fd.get("limit")) : null,
     });
-    if (error) return toast.error(error.message.includes("duplicate") ? "Deze code bestaat al" : error.message);
+    if (error) { toast.error(error.message.includes("duplicate") ? "Deze code bestaat al" : error.message); return; }
     e.currentTarget.reset();
     qc.invalidateQueries({ queryKey: ["admin", "discounts"] });
   }
