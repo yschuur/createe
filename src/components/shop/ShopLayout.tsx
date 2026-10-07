@@ -58,10 +58,10 @@ export function ShopLayout({ children, page }: { children: ReactNode; page?: "ho
       <main className="flex-1">{children}</main>
       <div className="border-t border-border bg-muted/40">
         <Reviews />
-        <div className="grid border-t border-border font-display text-sm text-primary sm:grid-cols-3 sm:divide-x sm:divide-border">
-          <span className="flex items-center justify-center gap-2.5 py-4"><Truck className="size-4" />Binnen 1-3 werkdagen verzonden</span>
-          <span className="flex items-center justify-center gap-2.5 py-4"><PackageCheck className="size-4" />Gratis verzending vanaf €75</span>
-          <span className="flex items-center justify-center gap-2.5 py-4"><RefreshCw className="size-4" />Eenvoudig retourneren & gratis ruilen</span>
+        <div data-section="site-usps" className="grid divide-y divide-border border-t border-border bg-background font-body text-[15px] text-primary sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+          <span className="flex items-center justify-center gap-3 py-5"><Truck className="size-5" strokeWidth={1.5} />Binnen 1-3 werkdagen verzonden</span>
+          <span className="flex items-center justify-center gap-3 py-5"><PackageCheck className="size-5" strokeWidth={1.5} />Gratis verzending vanaf €75</span>
+          <span className="flex items-center justify-center gap-3 py-5"><RefreshCw className="size-5" strokeWidth={1.5} />Eenvoudig retourneren & gratis ruilen</span>
         </div>
       </div>
       <footer data-section="site-footer" className="bg-primary text-primary-foreground">
