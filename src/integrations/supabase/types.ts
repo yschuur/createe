@@ -167,6 +167,24 @@ export type Database = {
         }
         Relationships: []
       }
+      image_migration_map: {
+        Row: {
+          path: string
+          src: string
+          url: string
+        }
+        Insert: {
+          path: string
+          src: string
+          url: string
+        }
+        Update: {
+          path?: string
+          src?: string
+          url?: string
+        }
+        Relationships: []
+      }
       import_logs: {
         Row: {
           created_at: string
