@@ -79,7 +79,7 @@ function StudioAdmin() {
             </div>
           </div>
           <Textarea value={r.text} onChange={(e) => upd((d) => { d.reviews[i]!.text = e.target.value; })} placeholder="Reviewtekst (optioneel)" rows={2} maxLength={500} />
-          <ImagePicker value={r.image} options={library} onChange={(v) => upd((d) => { d.reviews[i]!.image = v; })} />
+          <ImagePicker value={r.image} onChange={(v) => upd((d) => { d.reviews[i]!.image = v; })} />
         </div>
       </div>)}</div>
     </section>
@@ -90,7 +90,7 @@ function StudioAdmin() {
       <div className="space-y-6">{studioProducts.map((p) => <div key={p.name}><h3 className="mb-3 font-semibold">{p.name}</h3>
         <div className="grid gap-4 md:grid-cols-2">{p.colors.map((c) => { const k = colorKey(p.name, c.name); const v = s.color_images[k] ?? ""; return <div key={k} className="flex gap-3 rounded-sm border p-3">
           <div className="relative size-20 shrink-0 overflow-hidden rounded-sm bg-muted"><img src={v || p.image} alt="" className="size-full object-cover" /><span className="absolute bottom-1 left-1 size-4 rounded-full border border-border" style={{ background: c.hex }} /></div>
-          <div className="min-w-0 flex-1"><p className="mb-2 text-sm font-medium">{c.name}</p><ImagePicker value={v} options={library} onChange={(nv) => upd((d) => { if (nv) d.color_images[k] = nv; else delete d.color_images[k]; })} /></div>
+          <div className="min-w-0 flex-1"><p className="mb-2 text-sm font-medium">{c.name}</p><ImagePicker value={v} onChange={(nv) => upd((d) => { if (nv) d.color_images[k] = nv; else delete d.color_images[k]; })} /></div>
         </div>; })}</div></div>)}</div>
     </section>
   </AdminLayout>;
