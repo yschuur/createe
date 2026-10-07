@@ -3,7 +3,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { ShopLayout } from "@/components/shop/ShopLayout";
-import { ShoppingBag, Ruler, ChevronRight, ChevronUp } from "lucide-react";
+import { ShoppingBag, Ruler, ChevronRight, ChevronUp as ChevronUpIcon } from "lucide-react";
 import { getPage } from "@/lib/product-page";
 import { useCart } from "@/lib/cart";
 import {
@@ -194,7 +194,7 @@ function ProductPage() {
             {page.accordions.filter((a) => a.title).map((a, i) => (
               <details key={i} open={a.open} className="group border border-border bg-background">
                 <summary className="font-label flex cursor-pointer list-none items-center justify-between px-4 py-4 text-xs uppercase tracking-wider">
-                  {a.title}<ChevronUp className="h-3.5 w-3.5 transition group-open:rotate-0 rotate-180" />
+                  {a.title}<ChevronUpIcon className="h-3.5 w-3.5 transition group-open:rotate-0 rotate-180" />
                 </summary>
                 <div className="prose-shop border-t border-border px-4 py-4 text-xs leading-relaxed" dangerouslySetInnerHTML={{ __html: sanitizeDescription(a.html) }} />
               </details>

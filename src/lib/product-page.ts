@@ -46,6 +46,6 @@ export function defaultPage(p: P): ProductPageContent {
 }
 
 export function getPage(p: P): ProductPageContent {
-  const saved = ((p.metadata as Record<string, unknown> | null)?.page ?? {}) as Partial<ProductPageContent>;
+  const saved = ((p.metadata as Record<string, unknown> | null)?.["page"] ?? {}) as Partial<ProductPageContent>;
   return { ...defaultPage(p), ...saved };
 }
