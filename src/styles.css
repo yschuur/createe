@@ -248,7 +248,81 @@
 .page-studio .studio-option span { font-family: var(--font-display); font-weight: 700; font-size: 12px; text-transform: uppercase; }
 .page-studio figure { box-shadow: var(--shadow-card); }
 
-/* Over ons pages: rounded 14px cards, white buttons with green label */
-.page-story .editorial-section, .page-story main section > .grid { border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-card); }
-.page-story [data-slot="button"] { border-radius: 14px; background: var(--card); color: var(--primary); font-weight: 600; }
-.page-story [data-slot="button"]:hover { background: var(--secondary); }
+/* Selected Sportief magazine direction; scoped to About pages. */
+.page-story {
+  --primary: oklch(0.42766 0.08431 151.42); /* #275C38 */
+  --shop-surface: oklch(1 0 0); /* #FFFFFF */
+  --shop-ink: oklch(0.21779 0 0); /* #1A1A1A */
+  --foreground: var(--shop-ink);
+  --muted: oklch(0.97015 0 0); /* #F5F5F5 */
+}
+.page-story [data-slot="button"] { border-radius: 4px; font-weight: 600; min-height: 44px; }
+.about-magazine { width: 100%; letter-spacing: 0; }
+.about-band { width: 100%; padding: 88px 5%; }
+.about-heading-grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); align-items: end; gap: 32px; }
+.about-kicker { font-family: var(--font-label); font-size: 11px; font-weight: 600; text-transform: uppercase; margin-bottom: 24px; }
+.about-magazine .about-headline { font-size: 112px; font-weight: 700; line-height: .9; text-transform: uppercase; margin-bottom: 24px; overflow-wrap: anywhere; }
+.about-heading-aside { padding-bottom: 24px; }
+.about-magazine .about-secondary-title { font-size: 48px; line-height: 1; text-transform: uppercase; margin-bottom: 24px; }
+.about-lead { font-size: 20px; line-height: 1.65; }
+.about-media-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); column-gap: 8%; align-items: center; margin-top: 64px; }
+.about-portrait { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+.about-media-copy { max-width: 640px; }
+.about-note { margin-top: 32px; padding-left: 24px; border-left: 2px solid var(--primary); font-size: 16px; line-height: 1.8; font-style: italic; }
+.about-mission-grid { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 4fr); gap: 8%; align-items: center; }
+.about-magazine .about-section-title { font-size: 56px; text-transform: uppercase; line-height: 1.05; margin-bottom: 32px; overflow-wrap: anywhere; }
+.about-mission-grid .about-lead { font-size: 26px; line-height: 1.5; }
+.about-mission-quote { margin-top: 32px; padding-top: 24px; border-top: 1px solid color-mix(in oklab, var(--primary-foreground) 30%, transparent); font-family: var(--font-label); font-size: 12px; line-height: 1.8; text-transform: uppercase; }
+.about-mission-image { width: 100%; aspect-ratio: 1; object-fit: cover; transform: translateY(-32px); }
+.about-history-grid, .about-technology-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 6%; align-items: center; }
+.about-history-image { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+.about-history-copy { padding-block: 32px; }
+.about-prose { font-size: 17px; line-height: 1.8; }
+.about-prose p + p { margin-top: 24px; }
+.about-values-title { text-align: center; padding-bottom: 48px; }
+.about-values-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; }
+.about-value { padding: 40px 32px; }
+.about-value:nth-child(2) { transform: translateY(-32px); }
+.about-value h3 { font-size: 28px; line-height: 1.15; text-transform: uppercase; margin-bottom: 24px; }
+.about-value p { font-size: 17px; line-height: 1.75; }
+.about-cta { display: flex; align-items: center; justify-content: space-between; gap: 48px; }
+.about-cta > div:first-child { max-width: 800px; }
+.about-cta > div:last-child { flex-shrink: 0; }
+.about-technology-heading { padding-block: 72px; }
+.about-technology-heading .about-section-title { margin-bottom: 0; }
+.about-features { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px 32px; }
+.about-features dt { font-family: var(--font-display); font-size: 24px; font-weight: 700; text-transform: uppercase; line-height: 1.2; margin-bottom: 16px; }
+.about-feature-number { display: block; font-family: var(--font-label); font-size: 12px; margin-bottom: 20px; }
+.about-features dd { font-size: 17px; line-height: 1.8; }
+@media (min-width: 1600px) {
+  .about-band { padding-inline: 7%; }
+  .about-magazine .about-headline { font-size: 144px; }
+  .about-magazine .about-secondary-title { font-size: 60px; }
+}
+@media (max-width: 1023px) {
+  .about-magazine .about-headline { font-size: 76px; }
+  .about-magazine .about-secondary-title { font-size: 36px; }
+  .about-magazine .about-section-title { font-size: 40px; }
+  .about-band { padding: 64px 5%; }
+  .about-value { padding: 32px 24px; }
+  .about-value h3 { font-size: 24px; }
+  .about-features { grid-template-columns: 1fr; gap: 28px; }
+}
+@media (max-width: 767px) {
+  .about-band { padding: 48px 24px; }
+  .about-heading-grid, .about-media-grid, .about-mission-grid, .about-history-grid, .about-technology-grid, .about-values-grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .about-magazine .about-headline { font-size: 48px; }
+  .about-magazine .about-secondary-title, .about-magazine .about-section-title { font-size: 34px; }
+  .about-heading-aside { padding-bottom: 0; }
+  .about-media-grid { margin-top: 40px; }
+  .about-portrait { aspect-ratio: 4 / 3; }
+  .about-lead, .about-mission-grid .about-lead { font-size: 19px; }
+  .about-mission-image { transform: none; }
+  .about-history-image { aspect-ratio: 4 / 3; }
+  .about-history-grid .about-history-image { order: 2; }
+  .about-history-copy { padding: 0; }
+  .about-values-title { padding-bottom: 0; text-align: left; }
+  .about-value:nth-child(2) { transform: none; }
+  .about-value { padding: 32px 24px; }
+  .about-cta { flex-direction: column; align-items: flex-start; gap: 24px; }
+}
