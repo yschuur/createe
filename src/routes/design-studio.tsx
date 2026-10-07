@@ -111,7 +111,7 @@ function DesignStudio() {
         <div className="mb-12 flex flex-wrap items-center justify-center gap-4"><h2 className="atelier-section-title !mb-0 text-primary">Onze scorecard</h2><Stars /></div>
         <div className="atelier-moodboard">{studio.reviews.map((r,i)=><figure key={r.id} className="atelier-polaroid" style={{ ["--tilt" as string]: `${[-2.5,1.8,-1.2,2.4,-1.8,1.2][i%6]}deg` }}>
           {r.image && <img src={r.image} alt={r.name ? `CREATEE ontwerp voor ${r.name}` : `Persoonlijk CREATEE ontwerp voor een klant ${i+1}`} className="aspect-square w-full object-cover" loading="lazy" />}
-          <figcaption className="px-1 pb-1 pt-4"><div className="flex">{Array.from({length:5}).map((_,n)=><span key={n} className={`mr-0.5 inline-block size-3.5 ${n<r.rating?"bg-[var(--trustpilot)]":"bg-muted"}`} style={{clipPath:"polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)"}} />)}</div>
+          <figcaption className="px-1 pb-1 pt-4"><div className="flex">{Array.from({length:5}).map((_,n)=><span key={n} className={`mr-0.5 inline-block size-3.5 ${n<r.rating?"bg-primary":"bg-muted"}`} style={{clipPath:"polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)"}} />)}</div>
             {r.text && <p className="mt-2 text-sm leading-snug">{r.text}</p>}
             <span className="mt-2 block text-[10px] font-semibold uppercase tracking-wider text-primary">{r.name || "CREATEE Design Studio"}</span></figcaption>
         </figure>)}</div>
