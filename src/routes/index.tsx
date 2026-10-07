@@ -1,9 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useRef } from "react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { ShopLayout } from "@/components/shop/ShopLayout";
 import { ProductCard } from "@/components/shop/ProductCard";
-import { Logo } from "@/components/Logo";
-import { imgUrl, listProductsQuery, type ProductWithRelations } from "@/lib/shop";
+import { Button } from "@/components/ui/button";
+import { listProductsQuery } from "@/lib/shop";
+import golf from "@/assets/home-golf.jpg.asset.json";
+import padel from "@/assets/home-padel.jpg.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -22,69 +26,27 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { data: products } = useSuspenseQuery(listProductsQuery());
-  const hero = products.filter((p) => p.product_images.length).slice(0, 3);
-  const polos = products.filter((p) => p.product_category?.includes("Polos"));
-  const tees = products.filter((p) => !p.product_category?.includes("Polos"));
-
-  return (
-    <ShopLayout>
-      <section className="relative overflow-hidden bg-primary text-primary-foreground">
-        <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-16 md:grid-cols-2 md:px-8 md:py-24">
-          <div className="space-y-6">
-            <p className="text-xs uppercase tracking-[0.3em] opacity-80">Golf · Padel · 19e hole</p>
-            <h1 className="text-5xl font-extrabold leading-[0.95] md:text-7xl">
-              Speel serieus.<br /><span className="italic font-normal text-accent">Draag het niet.</span>
-            </h1>
-            <p className="max-w-md opacity-85">Polo's en tees met woordgrappen die je flightgenoten pas op de derde hole doorhebben.</p>
-            <div className="flex flex-wrap gap-3">
-              <Link to="/collections/$slug" params={{ slug: "golf" }} className="rounded-sm bg-accent px-6 py-3 font-semibold text-accent-foreground hover:opacity-90">Shop golf</Link>
-              <Link to="/collections/$slug" params={{ slug: "padel" }} className="rounded-sm border border-primary-foreground/40 px-6 py-3 font-semibold hover:bg-primary-foreground/10">Shop padel</Link>
-            </div>
-          </div>
-          <div className="relative h-[420px] md:h-[520px]">
-            {hero.map((p, i) => (
-              <Link
-                key={p.id}
-                to="/products/$handle"
-                params={{ handle: p.slug }}
-                className="absolute w-[55%] rounded-sm bg-card p-2 pb-8 shadow-2xl transition-transform hover:z-10 hover:scale-105"
-                style={{ left: `${i * 22}%`, top: `${[8, 0, 16][i]}%`, transform: `rotate(${[-6, 3, -2][i]}deg)` }}
-              >
-                <img src={imgUrl(p.product_images[0]?.url, 600)} alt={p.name} className="aspect-[4/5] w-full object-cover" />
-                <p className="absolute bottom-2 left-3 font-display text-sm text-card-foreground">{p.name}</p>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <Section title="Polo's" subtitle="HYBR™ — technisch genoeg voor 18 holes, net genoeg voor de bar." slug="polos" products={polos.slice(0, 8)} />
-
-      <section className="mx-4 my-8 rounded-sm bg-accent px-6 py-14 text-center text-accent-foreground md:mx-8">
-        <Logo variant="favicon" className="mx-auto mb-4 h-14" />
-        <h2 className="text-3xl font-extrabold md:text-5xl">Eigen design voor je flight of club?</h2>
-        <p className="mx-auto mt-3 max-w-xl">De CREATEE Design Studio werkt drie unieke voorstellen voor je uit, inclusief twee feedbackrondes.</p>
-        <Link to="/design-studio" className="mt-6 inline-block rounded-sm bg-primary px-6 py-3 font-semibold text-primary-foreground">Naar de Design Studio</Link>
-      </section>
-
-      <Section title="T-shirts" subtitle="Organisch katoen, bedrukt met een knipoog." slug="t-shirts" products={tees.slice(0, 8)} />
-    </ShopLayout>
-  );
-}
-
-function Section({ title, subtitle, slug, products }: { title: string; subtitle: string; slug: string; products: ProductWithRelations[] }) {
-  return (
-    <section className="mx-auto max-w-7xl px-4 py-16 md:px-8">
-      <div className="mb-8 flex items-end justify-between gap-4">
-        <div>
-          <h2 className="text-4xl font-extrabold md:text-5xl">{title}</h2>
-          <p className="mt-1 text-muted-foreground">{subtitle}</p>
-        </div>
-        <Link to="/collections/$slug" params={{ slug }} className="shrink-0 text-sm font-semibold underline underline-offset-4">Bekijk alles</Link>
-      </div>
-      <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-4 md:gap-x-6">
-        {products.map((p, i) => <ProductCard key={p.id} product={p} index={i} />)}
+  const row = useRef<HTMLDivElement>(null);
+  const preferred = ["padelo-picasso", "red-hot-chili-putters", "bogeymian-rhapsody", "bandeja-vu", "at-the-19th"];
+  const featured = [...products].sort((a,b) => {
+    const rank = (slug: string) => { const i=preferred.findIndex(s=>slug.includes(s)); return i<0 ? preferred.length : i; };
+    return rank(a.slug)-rank(b.slug);
+  });
+  return <ShopLayout>
+    <section className="home-hero relative grid grid-cols-2 overflow-hidden bg-primary">
+      <h1 className="sr-only">CREATEE — Golf & padel kleding</h1>
+      <img src={golf.url} alt="CREATEE golfshirt op de golfbaan" className="h-full min-h-0 w-full object-cover object-[75%_center]" fetchPriority="high" />
+      <img src={padel.url} alt="Padelo Picasso op de padelbaan" className="h-full min-h-0 w-full object-cover object-[30%_center]" fetchPriority="high" />
+      <div className="absolute inset-x-0 bottom-10 flex justify-center gap-2 md:bottom-16">
+        <Button asChild variant="secondary" className="bg-shop-surface text-shop-ink"><Link to="/collections/$slug" params={{slug:"golf"}}>Golf</Link></Button>
+        <Button asChild variant="secondary" className="bg-shop-surface text-shop-ink"><Link to="/design-studio">Studio</Link></Button>
+        <Button asChild variant="secondary" className="bg-shop-surface text-shop-ink"><Link to="/collections/$slug" params={{slug:"padel"}}>Padel</Link></Button>
       </div>
     </section>
-  );
+    <div className="flex justify-center gap-6 bg-primary px-4 py-3 text-xs text-primary-foreground"><span>Google ★★★★★</span><span>Trustpilot ★★★★★</span></div>
+    <section aria-label="CREATEE collectie" className="px-4 py-7 md:px-6">
+      <div ref={row} className="home-product-carousel">{featured.slice(0,12).map(p=><ProductCard key={p.id} product={p} index={2} />)}</div>
+      <div className="mt-6 flex items-center justify-between gap-3"><Link to="/collections/$slug" params={{slug:"golf"}} className="text-sm font-medium underline underline-offset-4">Bekijk de collectie</Link><div className="flex gap-2"><Button variant="outline" size="icon" aria-label="Vorige producten" onClick={()=>row.current?.scrollBy({left:-row.current.clientWidth,behavior:"smooth"})}><ArrowLeft /></Button><Button variant="outline" size="icon" aria-label="Volgende producten" onClick={()=>row.current?.scrollBy({left:row.current.clientWidth,behavior:"smooth"})}><ArrowRight /></Button></div></div>
+    </section>
+  </ShopLayout>;
 }
