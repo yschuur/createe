@@ -32,7 +32,7 @@ export function ShopLayout({ children, page }: { children: ReactNode; page?: "ho
           ))}
         </div>
       </div>}
-      <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur">
+      <header data-section="site-header" className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur">
         <div className="relative mx-auto grid h-16 max-w-[1600px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-3 md:px-6">
           <Button variant="ghost" size="icon" className="md:hidden" aria-label="Menu openen" onClick={() => setMenuOpen(true)}><Menu /></Button>
           <nav aria-label="Hoofdmenu" className="hidden md:block"><DesktopMenu items={menuItems} /></nav>
@@ -60,7 +60,7 @@ export function ShopLayout({ children, page }: { children: ReactNode; page?: "ho
           <span className="flex items-center justify-center gap-2.5 py-4"><RefreshCw className="size-4" />Eenvoudig retourneren & gratis ruilen</span>
         </div>
       </div>
-      <footer className="bg-primary text-primary-foreground">
+      <footer data-section="site-footer" className="bg-primary text-primary-foreground">
         <div className="mx-auto grid max-w-7xl gap-10 px-6 py-14 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1.3fr] md:px-8">
           <div className="space-y-4">
             <Logo variant="white" className="h-7 md:h-8" />
