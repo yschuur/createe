@@ -51,7 +51,7 @@ function Home() {
     return rank(a.slug)-rank(b.slug);
   });
   const btn = "bg-shop-surface text-shop-ink";
-  return <ShopLayout>
+  return <ShopLayout page="home">
     <section className="home-hero relative grid grid-cols-2 overflow-hidden bg-primary">
       <h1 className="sr-only">CREATEE — Golf & padel kleding</h1>
       <HeroPanel side={home.golf} video={golfVideo.url} poster={golfPoster.url} image={golfImg.url} alt="CREATEE golfkleding op de golfbaan" position="object-center" />

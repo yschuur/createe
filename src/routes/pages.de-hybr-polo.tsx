@@ -15,7 +15,7 @@ export const Route = createFileRoute("/pages/de-hybr-polo")({
 });
 
 function Hybr() {
-  return <ShopLayout><div className="bg-primary py-8 md:py-12">
+  return <ShopLayout page="story"><div className="bg-primary py-8 md:py-12">
     <section className="editorial-section grid md:grid-cols-2">
       <div className="flex flex-col justify-center p-7 sm:p-10 md:p-12"><p className="mb-5 text-xs font-semibold text-primary">HYBR™</p><h1 className="editorial-title text-4xl md:text-5xl">De<br />HYBR™<br />polo</h1><p className="editorial-copy mt-5 max-w-sm">Ontdek de ultieme veelzijdigheid. De HYBR™ Polo is ontwikkeld voor de golfer die prestatie niet zonder in te leveren op een volmaakte look. Onze unieke hybride stof biedt volledige bewegingsvrijheid, maar keert daarna direct terug naar de perfecte pasvorm. Ervaar het comfort van een sportpolo met de uitstraling van premium kwaliteit.</p><div className="mt-6 flex flex-wrap gap-3"><Button asChild><Link to="/collections/$slug" params={{ slug: "polos" }}>Ontdek HYBR</Link></Button><Button asChild variant="outline"><Link to="/design-studio">Personaliseer nu</Link></Button></div></div>
       <img src={golf.url} alt="Golfer in de groene CREATEE HYBR polo" className="aspect-square h-full w-full object-cover" />

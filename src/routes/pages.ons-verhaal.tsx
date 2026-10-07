@@ -23,7 +23,7 @@ function Story() {
     { title: "Grenzeloze creativiteit", image: studio.url, alt: "Een persoonlijk CREATEE ontwerp", text: "Vanuit die premium basis laten we de creativiteit pas echt de vrije loop. We geloven niet in de standaard grijze massa, dus ontwerpen we uitsluitend exclusieve designs die je nergens anders op de fairway tegenkomt. Bovendien bieden we een podium aan sporters die zelf hun visie willen uiten via onze Design Studio." },
     { title: "Persoonlijke aanpak", image: personal.url, alt: "CREATEE kleding op de golfbaan", text: "Die creativiteit krijgt pas echt betekenis door de persoonlijke klik die we met je hebben. We zijn namelijk geen anonieme fabriek, maar golfers die de sport begrijpen en er plezier in hebben. Om jouw ideeën echt tot leven te wekken, bieden we in onze Design Studio altijd een gratis online meeting aan. Op die manier kennen we echt samen wat je nodig hebt en maken we samen iets unieks." },
   ];
-  return <ShopLayout>
+  return <ShopLayout page="story">
     <div className="bg-primary py-8 md:py-12">
       <section className="editorial-section p-6 sm:p-10 md:p-14">
         <p className="mb-5 text-[10px] font-bold uppercase text-primary">Het verhaal achter het merk</p>

@@ -77,7 +77,7 @@ function DesignStudio() {
     if (error) { toast.error("Versturen mislukt, probeer opnieuw."); return; }
     setSent(true);
   }
-  return <ShopLayout><div className="bg-primary py-8 md:py-12">
+  return <ShopLayout page="studio"><div className="bg-primary py-8 md:py-12">
     <section className="editorial-section p-6 sm:p-10 md:p-14">
       <div className="grid gap-8 md:grid-cols-[minmax(0,1fr)_260px]">
         <div><h1 className="editorial-title text-3xl sm:text-4xl md:text-5xl">CREATEE<br />Design Studio</h1><p className="mt-5 max-w-lg text-sm leading-relaxed">Dé plek waar we jouw persoonlijke ideeën vertalen naar unieke, exclusieve designs op onze premium kleding. Wij nemen al het werk volledig uit handen. Het resultaat? Een premium eindproduct dat naadloos past bij de gelegenheid en jullie identiteit.</p><ul className="mt-6 space-y-3 text-sm">{["Drie unieke, professioneel uitgewerkte designvoorstellen.","Twee feedbackrondes om het gekozen ontwerp te perfectioneren.","Hoogwaardige bedrukking op onze premium kleding.","Een eindproduct dat perfect past bij de gelegenheid en jouw groep."].map(t=><li key={t} className="flex gap-2"><Check className="size-4 shrink-0 text-primary" />{t}</li>)}</ul></div>
