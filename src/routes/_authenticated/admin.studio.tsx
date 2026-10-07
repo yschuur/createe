@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
-import { colorKey, tiersFor, studioProducts, studioQuery, type StudioSettings } from "@/lib/studio";
+import { colorKey, genderKey, imageFor, tiersFor, studioProducts, studioQuery, type StudioSettings } from "@/lib/studio";
 
 export const Route = createFileRoute("/_authenticated/admin/studio")({
   head: () => ({ meta: [{ title: "Design Studio — CREATEE beheer" }, { name: "description", content: "Beheer scorecard-reviews en kleurfoto's van de Design Studio." }, { property: "og:title", content: "Design Studio — CREATEE beheer" }, { property: "og:description", content: "Beheer scorecard-reviews en kleurfoto's." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
@@ -49,6 +49,7 @@ function StudioAdmin() {
   const { data } = useQuery(studioQuery());
   const [s, setS] = useState<StudioSettings | null>(null);
   const [busy, setBusy] = useState(false);
+  const [gender, setGender] = useState<"Heren" | "Dames">("Heren");
   useEffect(() => { if (data && !s) setS(structuredClone(data)); }, [data, s]);
   if (!s) return <AdminLayout title="Design Studio"><p>Laden…</p></AdminLayout>;
   const upd = (fn: (d: StudioSettings) => void) => { const d = structuredClone(s); fn(d); setS(d); };
@@ -105,13 +106,19 @@ function StudioAdmin() {
     </section>
 
     <section className="mt-6 rounded-sm bg-card p-5">
-      <h2 className="text-lg font-bold">Foto per kleur</h2>
-      <p className="mb-4 text-sm text-muted-foreground">Kies welke foto in de configurator verschijnt als iemand deze kleur kiest. Leeg = standaard productfoto.</p>
-      <div className="space-y-6">{studioProducts.map((p) => <div key={p.name}><h3 className="mb-3 font-semibold">{p.name}</h3>
-        <div className="grid gap-4 md:grid-cols-2">{p.colors.map((c) => { const k = colorKey(p.name, c.name); const v = s.color_images[k] ?? ""; return <div key={k} className="flex gap-3 rounded-sm border p-3">
-          <div className="relative size-20 shrink-0 overflow-hidden rounded-sm bg-muted"><img src={v || p.image} alt="" className="size-full object-cover" /><span className="absolute bottom-1 left-1 size-4 rounded-full border border-border" style={{ background: c.hex }} /></div>
-          <div className="min-w-0 flex-1"><p className="mb-2 text-sm font-medium">{c.name}</p><ImagePicker value={v} onChange={(nv) => upd((d) => { if (nv) d.color_images[k] = nv; else delete d.color_images[k]; })} /></div>
-        </div>; })}</div></div>)}</div>
+      <div className="mb-4 flex flex-wrap items-start justify-between gap-3"><div><h2 className="text-lg font-bold">Foto's per doelgroep en kleur</h2>
+        <p className="text-sm text-muted-foreground">Stel voor Heren en Dames apart in welke foto verschijnt. Leeg = standaardfoto.</p></div>
+        <div className="flex rounded-sm border p-1">{(["Heren","Dames"] as const).map((g) => <Button key={g} size="sm" variant={gender === g ? "default" : "ghost"} onClick={() => setGender(g)}>{g}</Button>)}</div></div>
+      <div className="space-y-6">{studioProducts.filter((p) => p.gender === "Beide" || p.gender === gender).map((p) => { const dk = genderKey(p.name, gender); const dv = s.color_images[dk] ?? ""; return <div key={p.name}><h3 className="mb-3 font-semibold">{p.name} · {gender}</h3>
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="flex gap-3 rounded-sm border border-primary/40 p-3">
+            <div className="size-20 shrink-0 overflow-hidden rounded-sm bg-muted"><img src={dv || p.image} alt="" className="size-full object-cover" /></div>
+            <div className="min-w-0 flex-1"><p className="mb-2 text-sm font-medium">Standaardfoto (geen kleur gekozen)</p><ImagePicker value={dv} onChange={(nv) => upd((d) => { if (nv) d.color_images[dk] = nv; else delete d.color_images[dk]; })} /></div>
+          </div>
+          {p.colors.filter((c) => c.gender === "Beide" || c.gender === gender).map((c) => { const k = genderKey(p.name, gender, c.name); const v = s.color_images[k] ?? ""; return <div key={k} className="flex gap-3 rounded-sm border p-3">
+          <div className="relative size-20 shrink-0 overflow-hidden rounded-sm bg-muted"><img src={imageFor(s, p, gender, c.name)} alt="" className="size-full object-cover" /><span className="absolute bottom-1 left-1 size-4 rounded-full border border-border" style={{ background: c.hex }} /></div>
+          <div className="min-w-0 flex-1"><p className="mb-2 text-sm font-medium">{c.name}</p><ImagePicker value={v} onChange={(nv) => upd((d) => { if (nv) d.color_images[k] = nv; else delete d.color_images[k]; delete d.color_images[colorKey(p.name, c.name)]; })} /></div>
+        </div>; })}</div></div>; })}</div>
     </section>
   </AdminLayout>;
 }
