@@ -88,7 +88,7 @@ function ProductPage() {
   const isColor = (n: string | null) => !!n && /kleur|color|colour|vanille/i.test(n);
   const colorImg = (val: string) => {
     const vids = variants.filter((v) => v.color === val || v.option1_value === val).map((v) => v.id);
-    return images.find((im) => im.variant_id && vids.includes(im.variant_id))?.url;
+    return images.find((im) => im.variant_id && vids.includes(im.variant_id))?.url ?? (variants.every((v) => (v.color ?? v.option1_value) === val) ? images[0]?.url : undefined);
   };
 
   return (
