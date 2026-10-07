@@ -15,3 +15,4 @@
 - [ ] Stripe, verzendbeleid-pagina's, redirects, domeinswitch
 - [x] Design Studio luxe restyle + beheerbare scorecard & kleurfoto's
 - [ ] Foto's uploaden in Design Studio-beheer (geblokkeerd: openbare opslag staat uit in werkruimte-instellingen)
+- [x] Mediabibliotheek (/admin/media) + kiezen uit bibliotheek in studio, producten, collecties en homepage-header
