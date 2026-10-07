@@ -16,3 +16,5 @@
 - Product HTML is sanitized with sanitize-html before rendering (worker-safe, works in SSR).
 - Original editorial pages use /pages/ons-verhaal and /pages/de-hybr-polo, with /pages/design-studio redirecting to /design-studio — preserves original links while keeping one request form.
 - Screenshot-led storefront styles are scoped with .storefront and semantic shop surface tokens — keeps the admin design unchanged.
+- Shared storefront testimonials render through Reviews in ShopLayout — keeps the reference footer area consistent across public pages.
+- Design Studio choices are included in the existing request message without changing the schema — preserves the admin request readback and keeps this restyle frontend-only.
