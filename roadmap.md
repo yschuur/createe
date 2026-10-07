@@ -5,3 +5,8 @@
 - [ ] Online checkout with Stripe + orders (needs go-ahead to connect payments)
 - [ ] Move product images off Shopify into own storage (blocked: workspace disallows public file storage)
 - [ ] Redirects + domain switch of createe.nl (only after launch checklist)
+- [x] Video-header homepage + homepage aanpasbaar in beheer (/admin/homepage)
+- [x] Echte reviews, footer en aankondigingsbalk uit Shopify-thema
+- [x] Design Studio: producten, kleuren en staffelprijzen uit originele configurator
+- [ ] Clubhouse-aanmelding (e-mail) — wachten op keuze nieuwsbriefdienst
+- [ ] Stripe, verzendbeleid-pagina's, redirects, domeinswitch
