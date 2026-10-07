@@ -7,6 +7,7 @@ import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { MediaField } from "@/components/admin/MediaLibrary";
 import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { homepageQuery, type HomepageSettings, type HeroSide } from "@/lib/site-settings";
@@ -40,6 +41,8 @@ function HomepageAdmin() {
       <div><Label>Knoptekst</Label><Input value={v.label} onChange={e => set({ [key]: { ...v, label: e.target.value } } as Partial<HomepageSettings>)} /></div>
       <div><Label>Link</Label><Input value={v.link} onChange={e => set({ [key]: { ...v, link: e.target.value } } as Partial<HomepageSettings>)} /></div>
       <label className="flex items-center gap-3 text-sm"><Switch checked={v.show_video} onCheckedChange={c => set({ [key]: { ...v, show_video: c } } as Partial<HomepageSettings>)} />Video tonen (uit = foto)</label>
+      <div><Label>Video (leeg = standaard)</Label><MediaField kind="video" value={v.video_url ?? ""} onChange={u => set({ [key]: { ...v, video_url: u } } as Partial<HomepageSettings>)} /></div>
+      <div><Label>Foto (leeg = standaard)</Label><MediaField value={v.image_url ?? ""} onChange={u => set({ [key]: { ...v, image_url: u } } as Partial<HomepageSettings>)} /></div>
     </div>;
   };
   return <AdminLayout title="Homepage" actions={<Button onClick={save} disabled={busy}>{busy ? "Opslaan…" : "Opslaan"}</Button>}>
