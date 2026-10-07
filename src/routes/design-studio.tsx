@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { Check, ArrowDown, ArrowRight, MessageCircle, Pencil, Shirt, Flag } from "lucide-react";
+import { Check, ArrowDown, ArrowRight, MessageCircle, Pencil, Shirt, Flag, Upload, X } from "lucide-react";
 import { z } from "zod";
 import { toast } from "sonner";
 import { ShopLayout } from "@/components/shop/ShopLayout";
@@ -104,10 +104,10 @@ function DesignStudio() {
           <ul className="mt-8 grid gap-3 sm:grid-cols-2">{["Drie unieke, professioneel uitgewerkte designvoorstellen.","Twee feedbackrondes om het gekozen ontwerp te perfectioneren.","Hoogwaardige bedrukking op onze premium kleding.","Een eindproduct dat perfect past bij de gelegenheid en jouw groep."].map(t=><li key={t} className="atelier-check"><span><Check className="size-3.5" /></span>{t}</li>)}</ul>
         </div>
         <aside className="atelier-ticket">
-          <div className="atelier-stamp">-50%</div>
+          {feePct>0 && <div className="atelier-stamp">-{feePct}%</div>}
           <p className="atelier-kicker text-primary">Design service</p>
           <p className="mt-3 flex items-baseline gap-3">{feeWas>fee && <s className="text-xl text-muted-foreground">{formatPrice(feeWas)}</s>}<span className="font-display text-6xl font-bold tracking-tight">{formatPrice(fee)}</span></p>
-          <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-destructive">Nu 50% korting</p>
+          {feePct>0 && <p className="mt-2 text-xs font-semibold uppercase tracking-wider text-destructive">Nu {feePct}% korting</p>}
           <div className="atelier-perf" aria-hidden />
           <p className="text-sm leading-relaxed">Ga je bestellen met jouw gekozen design? Dan ontvang je €12,50 terug als voucher op je bestelling.</p>
           <Button asChild className="mt-6 h-12 w-full"><a href="#aanvraag">Vraag je design aan <ArrowDown /></a></Button>

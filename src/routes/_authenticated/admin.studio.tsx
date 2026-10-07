@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
-import { colorKey, studioProducts, studioQuery, type StudioSettings } from "@/lib/studio";
+import { colorKey, tiersFor, studioProducts, studioQuery, type StudioSettings } from "@/lib/studio";
 
 export const Route = createFileRoute("/_authenticated/admin/studio")({
   head: () => ({ meta: [{ title: "Design Studio — CREATEE beheer" }, { name: "description", content: "Beheer scorecard-reviews en kleurfoto's van de Design Studio." }, { property: "og:title", content: "Design Studio — CREATEE beheer" }, { property: "og:description", content: "Beheer scorecard-reviews en kleurfoto's." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
@@ -82,6 +82,26 @@ function StudioAdmin() {
           <ImagePicker value={r.image} onChange={(v) => upd((d) => { d.reviews[i]!.image = v; })} />
         </div>
       </div>)}</div>
+    </section>
+
+    <section className="mt-6 rounded-sm bg-card p-5">
+      <h2 className="text-lg font-bold">Prijs Design Studio-service</h2>
+      <p className="mb-4 text-sm text-muted-foreground">Doorgestreepte prijs leeg of 0 = geen korting tonen. Het kortingspercentage wordt automatisch berekend.</p>
+      <div className="grid max-w-md gap-4 sm:grid-cols-2">
+        <label className="text-sm">Prijs (€)<Input type="number" min={0} step="0.01" value={s.service_price} onChange={(e) => upd((d) => { d.service_price = Number(e.target.value) || 0; })} className="mt-1" /></label>
+        <label className="text-sm">Van-prijs (€)<Input type="number" min={0} step="0.01" value={s.service_compare || ""} onChange={(e) => upd((d) => { d.service_compare = Number(e.target.value) || 0; })} className="mt-1" /></label>
+      </div>
+    </section>
+
+    <section className="mt-6 rounded-sm bg-card p-5">
+      <h2 className="text-lg font-bold">Staffelprijzen & korting per product</h2>
+      <p className="mb-4 text-sm text-muted-foreground">Prijs per stuk (incl. btw). Korting in % geldt op alle staffels van dat product.</p>
+      <div className="overflow-x-auto"><table className="w-full min-w-[560px] text-sm"><thead><tr className="text-left text-muted-foreground"><th className="py-2">Product</th><th>1–3 st.</th><th>4–9 st.</th><th>10+ st.</th><th>Korting %</th></tr></thead>
+        <tbody>{studioProducts.map((p) => { const t = tiersFor(s, p); return <tr key={p.name} className="border-t">
+          <td className="py-2 pr-3 font-medium">{p.name}</td>
+          {[0, 1, 2].map((i) => <td key={i} className="pr-2"><Input type="number" min={0} step="0.01" value={t[i]} onChange={(e) => upd((d) => { const nt = [...tiersFor(d, p)] as [number, number, number]; nt[i] = Number(e.target.value) || 0; d.tiers = { ...(d.tiers ?? {}), [p.name]: nt }; })} /></td>)}
+          <td><Input type="number" min={0} max={100} value={s.discounts?.[p.name] ?? ""} placeholder="0" onChange={(e) => upd((d) => { const v = Math.min(100, Math.max(0, Number(e.target.value) || 0)); d.discounts = { ...(d.discounts ?? {}) }; if (v) d.discounts[p.name] = v; else delete d.discounts[p.name]; })} /></td>
+        </tr>; })}</tbody></table></div>
     </section>
 
     <section className="mt-6 rounded-sm bg-card p-5">
