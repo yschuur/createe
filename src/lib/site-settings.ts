@@ -2,7 +2,7 @@ import { queryOptions } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
 export type LinkItem = { text: string; link: string };
-export type HeroSide = { label: string; link: string; show_video: boolean };
+export type HeroSide = { label: string; link: string; show_video: boolean; video_url?: string; image_url?: string };
 export type HomepageSettings = {
   announcements: LinkItem[];
   golf: HeroSide;

@@ -2,7 +2,8 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Trash2, ArrowUp, ArrowDown, Plus } from "lucide-react";
+import { Trash2, ArrowUp, ArrowDown, Plus, Images } from "lucide-react";
+import { MediaLibraryDialog } from "@/components/admin/MediaLibrary";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -83,9 +84,9 @@ function EditProduct() {
     } finally { setSaving(false); }
   }
 
-  async function addImage(): Promise<void> {
-    if (!/^https:\/\//.test(newImg)) { toast.error("Gebruik een https-link naar de afbeelding"); return; }
-    const { data: im, error } = await supabase.from("product_images").insert({ product_id: id, url: newImg, source_url: newImg, sort_order: images.length + 1 }).select().single();
+  async function addImage(url = newImg): Promise<void> {
+    if (!/^https:\/\//.test(url)) { toast.error("Gebruik een https-link naar de afbeelding"); return; }
+    const { data: im, error } = await supabase.from("product_images").insert({ product_id: id, url, source_url: url, sort_order: images.length + 1 }).select().single();
     if (error) { toast.error(error.message); return; }
     setImages([...images, im]); setNewImg("");
   }
@@ -158,7 +159,8 @@ function EditProduct() {
                 </div>
               ))}
             </div>
-            <div className="flex gap-2"><Input placeholder="https://… afbeeldingslink" value={newImg} onChange={(e) => setNewImg(e.target.value)} /><Button variant="outline" onClick={addImage}>Toevoegen</Button></div>
+            <div className="flex gap-2"><Input placeholder="https://… afbeeldingslink" value={newImg} onChange={(e) => setNewImg(e.target.value)} /><Button variant="outline" onClick={() => addImage()}>Toevoegen</Button><Button variant="outline" onClick={() => setLibOpen(true)}><Images /> Bibliotheek</Button></div>
+            <MediaLibraryDialog open={libOpen} onOpenChange={setLibOpen} kind="image" onPick={(a) => addImage(a.url)} />
           </Box>
 
           <Box title={`Varianten (${variants.length})`}>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
+import { MediaField } from "@/components/admin/MediaLibrary";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -59,6 +60,7 @@ function CollectionsAdmin() {
             <div className="min-w-48 flex-1 space-y-2">
               <Input defaultValue={c.name} onBlur={(e) => e.target.value !== c.name && update(c.id, { name: e.target.value })} className="font-semibold" />
               <Input defaultValue={c.description ?? ""} placeholder="Omschrijving" onBlur={(e) => update(c.id, { description: e.target.value || null })} />
+              <MediaField value={c.image_url ?? ""} onChange={(v) => update(c.id, { image_url: v || null })} placeholder="Collectiefoto (link)" />
               <p className="font-mono text-xs text-muted-foreground">/collections/{c.slug}</p>
             </div>
             <p className="text-sm">{data.links.filter((l) => l.collection_id === c.id).length} producten</p>

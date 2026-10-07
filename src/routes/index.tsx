@@ -35,8 +35,8 @@ export const Route = createFileRoute("/")({
 function HeroPanel({ side, video, poster, image, alt, position }: { side: HeroSide; video: string; poster: string; image: string; alt: string; position: string }) {
   return <a href={side.link} className="group relative block h-full min-h-0 overflow-hidden" aria-label={side.label}>
     {side.show_video
-      ? <video src={video} poster={poster} autoPlay muted loop playsInline preload="metadata" aria-label={alt} className={`h-full w-full object-cover ${position}`} />
-      : <img src={image} alt={alt} className={`h-full w-full object-cover ${position}`} fetchPriority="high" />}
+      ? <video key={side.video_url || video} src={side.video_url || video} poster={side.video_url ? undefined : poster} autoPlay muted loop playsInline preload="metadata" aria-label={alt} className={`h-full w-full object-cover ${position}`} />
+      : <img src={side.image_url || image} alt={alt} className={`h-full w-full object-cover ${position}`} fetchPriority="high" />}
     <span className="absolute inset-0 bg-gradient-to-t from-primary/50 via-transparent to-transparent" />
   </a>;
 }
