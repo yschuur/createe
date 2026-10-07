@@ -10,6 +10,7 @@ import { Reviews } from "@/components/shop/Reviews";
 import { useQuery } from "@tanstack/react-query";
 import { homepageQuery, defaultHomepage } from "@/lib/site-settings";
 import { menuQuery, defaultMenu } from "@/lib/menu";
+import { sectionStylesQuery, buildCss } from "@/lib/section-styles";
 import { DesktopMenu, MobileMenu } from "@/components/shop/SiteMenu";
 
 
@@ -20,9 +21,12 @@ export function ShopLayout({ children, page }: { children: ReactNode; page?: "ho
   const { data: home } = useQuery(homepageQuery());
   const { data: menu } = useQuery(menuQuery());
   const menuItems = menu ?? defaultMenu;
+  const { data: sectionStyles } = useQuery(sectionStylesQuery());
+  const customCss = sectionStyles ? buildCss(sectionStyles) : "";
   const items = (home ?? defaultHomepage).announcements.filter(a => a.text.trim());
   return (
     <div className={`storefront ${page ? `page-${page}` : ""} flex min-h-screen flex-col bg-background text-foreground`}>
+      {customCss && <style dangerouslySetInnerHTML={{ __html: customCss }} />}
       {items.length > 0 && <div className="overflow-hidden bg-primary py-1.5 text-[10px] font-medium uppercase text-primary-foreground">
         <div className="animate-marquee flex w-max gap-12 whitespace-nowrap">
           {Array.from({ length: 2 }).map((_, k) => (
