@@ -3,7 +3,8 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { ShopLayout } from "@/components/shop/ShopLayout";
-import { Button } from "@/components/ui/button";
+import { ShoppingBag, Ruler, ChevronRight, ChevronUp } from "lucide-react";
+import { getPage } from "@/lib/product-page";
 import { useCart } from "@/lib/cart";
 import {
   formatPrice, imgUrl, isPurchasable, optionLabel, prettyValue, productQuery, sanitizeDescription,
@@ -48,6 +49,7 @@ function ProductPage() {
     return first ? [first.option1_value, first.option2_value, first.option3_value] : [];
   });
   const [activeImg, setActiveImg] = useState(0);
+  void Link;
   if (!product) return null;
 
   const keys = ["option1_value", "option2_value", "option3_value"] as const;
