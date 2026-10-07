@@ -117,7 +117,7 @@ export function imgUrl(url: string | undefined, width = 800) {
 }
 
 export function optionLabel(v: Variant) {
-  return [v.option1_value, v.option2_value, v.option3_value].filter(Boolean).join(" / ") || "Standaard";
+  return [v.option1_value, v.option2_value, v.option3_value].filter(Boolean).map((x) => prettyValue(x)).join(" / ") || "Standaard";
 }
 
 export function prettyValue(s: string | null | undefined) {
