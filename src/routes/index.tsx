@@ -52,7 +52,7 @@ function Home() {
   });
   const btn = "bg-shop-surface text-shop-ink";
   return <ShopLayout page="home">
-    <section className="home-hero relative grid grid-cols-2 overflow-hidden bg-primary">
+    <section data-section="home-hero" className="home-hero relative grid grid-cols-2 overflow-hidden bg-primary">
       <h1 className="sr-only">CREATEE — Golf & padel kleding</h1>
       <HeroPanel side={home.golf} video={golfVideo.url} poster={golfPoster.url} image={golfImg.url} alt="CREATEE golfkleding op de golfbaan" position="object-center" />
       <HeroPanel side={home.padel} video={padelVideo.url} poster={padelPoster.url} image={padelImg.url} alt="CREATEE padelkleding op de padelbaan" position="object-center" />
@@ -63,7 +63,7 @@ function Home() {
       </div>
     </section>
     {home.show_ratings && <div className="flex justify-center gap-6 bg-primary px-4 py-3 text-xs text-primary-foreground"><span>Google ★★★★★</span><a href="https://nl.trustpilot.com/review/createe.nl" target="_blank" rel="noreferrer">Trustpilot ★★★★★</a></div>}
-    <section aria-label="CREATEE collectie" className="px-4 py-7 md:px-6">
+    <section data-section="home-products" aria-label="CREATEE collectie" className="px-4 py-7 md:px-6">
       {home.carousel_title && <h2 className="mb-5 font-display text-2xl text-primary md:text-3xl">{home.carousel_title}</h2>}
       <div ref={row} className="home-product-carousel">{featured.slice(0,12).map(p=><ProductCard key={p.id} product={p} index={2} />)}</div>
       <div className="mt-6 flex items-center justify-between gap-3"><Link to="/collections/$slug" params={{slug:"golf"}} className="text-sm font-medium underline underline-offset-4">{home.collection_link_label}</Link><div className="flex gap-2"><Button variant="outline" size="icon" aria-label="Vorige producten" onClick={()=>row.current?.scrollBy({left:-row.current.clientWidth,behavior:"smooth"})}><ArrowLeft /></Button><Button variant="outline" size="icon" aria-label="Volgende producten" onClick={()=>row.current?.scrollBy({left:row.current.clientWidth,behavior:"smooth"})}><ArrowRight /></Button></div></div>

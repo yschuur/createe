@@ -22,3 +22,4 @@
 - Hero videos are transcoded to H.264 MP4 without audio before upload — .mov/PCM audio is heavy and not reliably playable in browsers.
 - Site navigation is a nested JSON tree in `site_settings` (key "menu") rendered by SiteMenu — supports unlimited submenu depth without schema changes.
 - Storefront design-pack tokens are scoped under .storefront with per-page classes (page-home/page-studio/page-story) via ShopLayout `page` prop — page-specific styling without touching admin.
+- Per-section text styles live in `site_settings` (key "section_styles") and are turned into CSS only from whitelisted fonts/colors/numeric ranges in buildCss; sections are targeted via data-section attributes — owner-editable typography without CSS injection risk.
