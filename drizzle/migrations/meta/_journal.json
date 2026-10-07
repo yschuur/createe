@@ -50,6 +50,13 @@
       "when": 1791407555006,
       "tag": "0006_product_images_to_storage",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1791409089503,
+      "tag": "0007_media_library",
+      "breakpoints": true
     }
   ]
 }

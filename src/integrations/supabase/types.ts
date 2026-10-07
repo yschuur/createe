@@ -212,6 +212,39 @@ export type Database = {
         }
         Relationships: []
       }
+      media_assets: {
+        Row: {
+          created_at: string
+          id: string
+          kind: string
+          mime_type: string | null
+          name: string | null
+          size_bytes: number | null
+          storage_path: string | null
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          kind?: string
+          mime_type?: string | null
+          name?: string | null
+          size_bytes?: number | null
+          storage_path?: string | null
+          url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kind?: string
+          mime_type?: string | null
+          name?: string | null
+          size_bytes?: number | null
+          storage_path?: string | null
+          url?: string
+        }
+        Relationships: []
+      }
       product_images: {
         Row: {
           alt_text: string | null
