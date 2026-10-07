@@ -14,6 +14,9 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DesignStudioRouteImport } from './routes/design-studio'
 import { Route as CollectionsSlugRouteImport } from './routes/collections.$slug'
+import { Route as PagesDeHybrPoloRouteImport } from './routes/pages.de-hybr-polo'
+import { Route as PagesDesignStudioRouteImport } from './routes/pages.design-studio'
+import { Route as PagesOnsVerhaalRouteImport } from './routes/pages.ons-verhaal'
 import { Route as ProductsHandleRouteImport } from './routes/products.$handle'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminCollectionsRouteImport } from './routes/_authenticated/admin.collections'
@@ -44,6 +47,21 @@ const DesignStudioRoute = DesignStudioRouteImport.update({
 const CollectionsSlugRoute = CollectionsSlugRouteImport.update({
   id: '/collections/$slug',
   path: '/collections/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PagesDeHybrPoloRoute = PagesDeHybrPoloRouteImport.update({
+  id: '/pages/de-hybr-polo',
+  path: '/pages/de-hybr-polo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PagesDesignStudioRoute = PagesDesignStudioRouteImport.update({
+  id: '/pages/design-studio',
+  path: '/pages/design-studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PagesOnsVerhaalRoute = PagesOnsVerhaalRouteImport.update({
+  id: '/pages/ons-verhaal',
+  path: '/pages/ons-verhaal',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProductsHandleRoute = ProductsHandleRouteImport.update({
@@ -92,6 +110,9 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/design-studio': typeof DesignStudioRoute
   '/collections/$slug': typeof CollectionsSlugRoute
+  '/pages/de-hybr-polo': typeof PagesDeHybrPoloRoute
+  '/pages/design-studio': typeof PagesDesignStudioRoute
+  '/pages/ons-verhaal': typeof PagesOnsVerhaalRoute
   '/products/$handle': typeof ProductsHandleRoute
   '/admin/collections': typeof AuthenticatedAdminCollectionsRoute
   '/admin/discounts': typeof AuthenticatedAdminDiscountsRoute
@@ -105,6 +126,9 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/design-studio': typeof DesignStudioRoute
   '/collections/$slug': typeof CollectionsSlugRoute
+  '/pages/de-hybr-polo': typeof PagesDeHybrPoloRoute
+  '/pages/design-studio': typeof PagesDesignStudioRoute
+  '/pages/ons-verhaal': typeof PagesOnsVerhaalRoute
   '/products/$handle': typeof ProductsHandleRoute
   '/admin/collections': typeof AuthenticatedAdminCollectionsRoute
   '/admin/discounts': typeof AuthenticatedAdminDiscountsRoute
@@ -120,6 +144,9 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/design-studio': typeof DesignStudioRoute
   '/collections/$slug': typeof CollectionsSlugRoute
+  '/pages/de-hybr-polo': typeof PagesDeHybrPoloRoute
+  '/pages/design-studio': typeof PagesDesignStudioRoute
+  '/pages/ons-verhaal': typeof PagesOnsVerhaalRoute
   '/products/$handle': typeof ProductsHandleRoute
   '/_authenticated/admin/collections': typeof AuthenticatedAdminCollectionsRoute
   '/_authenticated/admin/discounts': typeof AuthenticatedAdminDiscountsRoute
@@ -135,6 +162,9 @@ export interface FileRouteTypes {
     | '/auth'
     | '/design-studio'
     | '/collections/$slug'
+    | '/pages/de-hybr-polo'
+    | '/pages/design-studio'
+    | '/pages/ons-verhaal'
     | '/products/$handle'
     | '/admin/collections'
     | '/admin/discounts'
@@ -148,6 +178,9 @@ export interface FileRouteTypes {
     | '/auth'
     | '/design-studio'
     | '/collections/$slug'
+    | '/pages/de-hybr-polo'
+    | '/pages/design-studio'
+    | '/pages/ons-verhaal'
     | '/products/$handle'
     | '/admin/collections'
     | '/admin/discounts'
@@ -162,6 +195,9 @@ export interface FileRouteTypes {
     | '/auth'
     | '/design-studio'
     | '/collections/$slug'
+    | '/pages/de-hybr-polo'
+    | '/pages/design-studio'
+    | '/pages/ons-verhaal'
     | '/products/$handle'
     | '/_authenticated/admin/collections'
     | '/_authenticated/admin/discounts'
@@ -177,6 +213,9 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   DesignStudioRoute: typeof DesignStudioRoute
   CollectionsSlugRoute: typeof CollectionsSlugRoute
+  PagesDeHybrPoloRoute: typeof PagesDeHybrPoloRoute
+  PagesDesignStudioRoute: typeof PagesDesignStudioRoute
+  PagesOnsVerhaalRoute: typeof PagesOnsVerhaalRoute
   ProductsHandleRoute: typeof ProductsHandleRoute
 }
 
@@ -215,6 +254,27 @@ declare module '@tanstack/react-router' {
       path: '/collections/$slug'
       fullPath: '/collections/$slug'
       preLoaderRoute: typeof CollectionsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pages/de-hybr-polo': {
+      id: '/pages/de-hybr-polo'
+      path: '/pages/de-hybr-polo'
+      fullPath: '/pages/de-hybr-polo'
+      preLoaderRoute: typeof PagesDeHybrPoloRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pages/design-studio': {
+      id: '/pages/design-studio'
+      path: '/pages/design-studio'
+      fullPath: '/pages/design-studio'
+      preLoaderRoute: typeof PagesDesignStudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pages/ons-verhaal': {
+      id: '/pages/ons-verhaal'
+      path: '/pages/ons-verhaal'
+      fullPath: '/pages/ons-verhaal'
+      preLoaderRoute: typeof PagesOnsVerhaalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/products/$handle': {
@@ -296,6 +356,9 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   DesignStudioRoute: DesignStudioRoute,
   CollectionsSlugRoute: CollectionsSlugRoute,
+  PagesDeHybrPoloRoute: PagesDeHybrPoloRoute,
+  PagesDesignStudioRoute: PagesDesignStudioRoute,
+  PagesOnsVerhaalRoute: PagesOnsVerhaalRoute,
   ProductsHandleRoute: ProductsHandleRoute,
 }
 export const routeTree = rootRouteImport

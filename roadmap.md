@@ -1,4 +1,5 @@
 # Roadmap
+- [x] Match CREATEE menu and screenshot pages (home, story, studio, HYBR polo), verify desktop/mobile and studio request readback
 - [x] Shop front (home, collections, product pages, cart) with CREATEE logos and real catalog
 - [x] Admin: products, variants/stock, collections, discounts, Design Studio requests, Shopify CSV import
 - [ ] Online checkout with Stripe + orders (needs go-ahead to connect payments)

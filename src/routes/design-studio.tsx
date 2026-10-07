@@ -1,26 +1,38 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { Check, ArrowDown, MessageCircle, Pencil, Shirt, Flag } from "lucide-react";
 import { z } from "zod";
 import { toast } from "sonner";
 import { ShopLayout } from "@/components/shop/ShopLayout";
-import { Logo } from "@/components/Logo";
+import { Stars } from "@/components/shop/Reviews";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
+import { listProductsQuery, formatPrice, prettyValue } from "@/lib/shop";
+import polo from "@/assets/studio-polo.jpg.asset.json";
+import tee from "@/assets/studio-tee.jpg.asset.json";
+import hoodie from "@/assets/studio-hoodie.jpg.asset.json";
+import performance from "@/assets/studio-performance.jpg.asset.json";
+import photo1 from "@/assets/studio-1.jpg.asset.json";
+import photo2 from "@/assets/studio-2.jpg.asset.json";
+import photo3 from "@/assets/studio-3.jpg.asset.json";
+import photo4 from "@/assets/studio-4.jpg.asset.json";
+import photo5 from "@/assets/studio-5.jpg.asset.json";
+import photo6 from "@/assets/studio-6.jpg.asset.json";
 
 export const Route = createFileRoute("/design-studio")({
-  head: () => ({
-    meta: [
-      { title: "CREATEE Design Studio — eigen design voor je groep" },
-      { name: "description", content: "Drie unieke designvoorstellen, twee feedbackrondes en premium bedrukking voor je flight, club of event." },
-      { property: "og:title", content: "CREATEE Design Studio" },
-      { property: "og:description", content: "Eigen design voor je flight, club of event." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () => ({ meta: [
+    { title: "CREATEE Design Studio — jouw eigen design" },
+    { name: "description", content: "Unieke premium kleding voor jouw groep. Drie persoonlijke designvoorstellen en twee feedbackrondes bij CREATEE Design Studio." },
+    { property: "og:title", content: "CREATEE Design Studio — jouw eigen design" },
+    { property: "og:description", content: "Breng je idee tot leven. Vraag jouw persoonlijke CREATEE ontwerp aan." },
+    { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
+  ] }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(listProductsQuery()),
   component: DesignStudio,
 });
 
@@ -34,61 +46,60 @@ const schema = z.object({
 });
 
 function DesignStudio() {
+  const { data: products } = useSuspenseQuery(listProductsQuery());
   const [sent, setSent] = useState(false);
   const [busy, setBusy] = useState(false);
-
+  const [gender, setGender] = useState("Heren");
+  const [selected, setSelected] = useState("");
+  const [color, setColor] = useState("");
+  const options = [
+    { name: "HYBR™ polo", image: polo.url, matches: products.filter(p=>p.product_type?.includes("HYBR")) },
+    { name: "Loose fit tee", image: tee.url, matches: products.filter(p=>p.product_type?.includes("RELAXED") || p.product_type?.includes("KATOEN")) },
+    { name: "Hoodie", image: hoodie.url, matches: products.filter(p=>p.name.toLowerCase().includes("hoodie")) },
+    { name: "Performance shirt", image: performance.url, matches: products.filter(p=>p.product_type?.includes("HYBR")) },
+  ];
+  const selectedOption = options.find(o=>o.name===selected);
+  const colors = [...new Set(selectedOption?.matches.flatMap(p=>p.product_variants.map(v=>v.color)).filter((c):c is string=>Boolean(c)) ?? [])];
   async function onSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
     e.preventDefault();
-    const fd = Object.fromEntries(new FormData(e.currentTarget));
-    const clean = Object.fromEntries(Object.entries(fd).filter(([, v]) => v !== ""));
+    const fd = new FormData(e.currentTarget);
+    const entries = Object.fromEntries(fd);
+    const clean = Object.fromEntries(Object.entries(entries).filter(([,v])=>v!==""));
     const parsed = schema.safeParse(clean);
     if (!parsed.success) { toast.error(parsed.error.issues[0]?.message ?? "Controleer het formulier"); return; }
+    const details = [`Doelgroep: ${gender}`, `Product: ${selectedOption?.name ?? "Anders"}`, color ? `Kleur: ${prettyValue(color)}` : "", fd.get("reference") ? `Referentie: ${fd.get("reference")}` : "", fd.get("meeting") ? "Online afspraak gewenst" : ""].filter(Boolean).join("\n");
     setBusy(true);
-    const { error } = await supabase.from("design_requests").insert(parsed.data as never);
+    const { error } = await supabase.from("design_requests").insert({ ...parsed.data, message: `${parsed.data.message}\n\n${details}` } as never);
     setBusy(false);
     if (error) { toast.error("Versturen mislukt, probeer opnieuw."); return; }
     setSent(true);
   }
-
-  return (
-    <ShopLayout>
-      <section className="bg-primary text-primary-foreground">
-        <div className="mx-auto max-w-4xl px-4 py-16 text-center md:py-24">
-          <Logo variant="favicon" className="mx-auto mb-6 h-16" />
-          <h1 className="text-5xl font-extrabold md:text-7xl">Design Studio</h1>
-          <p className="mx-auto mt-4 max-w-xl opacity-85">Een eigen design voor je flight, club, vrijgezellen of bedrijfsuitje — uitgewerkt door onze designers.</p>
-        </div>
-      </section>
-      <section className="mx-auto grid max-w-6xl gap-12 px-4 py-16 md:grid-cols-2 md:px-8">
-        <div className="space-y-5">
-          <h2 className="text-3xl font-extrabold">Zo werkt het</h2>
-          <ol className="space-y-4">
-            {["Drie unieke, professioneel uitgewerkte designvoorstellen.", "Twee feedbackrondes om het gekozen ontwerp te perfectioneren.", "Hoogwaardige bedrukking op onze premium kleding.", "Een eindproduct dat perfect past bij de gelegenheid en jouw groep."].map((t, i) => (
-              <li key={i} className="flex gap-4"><span className="font-display text-3xl text-accent">{i + 1}</span><span className="pt-2">{t}</span></li>
-            ))}
-          </ol>
-          <p className="rounded-sm bg-card p-4 text-sm">Voor deze persoonlijke service vragen we een eenmalige vergoeding van <strong>€50</strong>. Bestel je met het gekozen design? Dan ontvang je <strong>€25</strong> terug als kortingsvoucher op je volgende bestelling.</p>
-        </div>
-        {sent ? (
-          <div className="flex flex-col items-center justify-center rounded-sm bg-card p-10 text-center">
-            <h3 className="text-3xl font-extrabold">Bedankt!</h3>
-            <p className="mt-2 text-muted-foreground">We nemen zo snel mogelijk contact met je op.</p>
-          </div>
-        ) : (
-          <form onSubmit={onSubmit} className="space-y-4 rounded-sm bg-card p-6">
-            <h3 className="text-2xl font-extrabold">Vraag je design aan</h3>
-            <div><Label htmlFor="name">Naam</Label><Input id="name" name="name" required maxLength={100} /></div>
-            <div><Label htmlFor="email">E-mail</Label><Input id="email" name="email" type="email" required maxLength={255} /></div>
-            <div className="grid grid-cols-2 gap-3">
-              <div><Label htmlFor="phone">Telefoon</Label><Input id="phone" name="phone" maxLength={30} /></div>
-              <div><Label htmlFor="quantity">Aantal stuks</Label><Input id="quantity" name="quantity" type="number" min={1} /></div>
-            </div>
-            <div><Label htmlFor="occasion">Gelegenheid</Label><Input id="occasion" name="occasion" maxLength={200} placeholder="Bijv. golfweekend, clubkampioenschap" /></div>
-            <div><Label htmlFor="message">Je idee</Label><Textarea id="message" name="message" required maxLength={3000} rows={5} /></div>
-            <Button type="submit" size="lg" className="w-full" disabled={busy}>{busy ? "Versturen…" : "Aanvraag versturen"}</Button>
-          </form>
-        )}
-      </section>
-    </ShopLayout>
-  );
+  return <ShopLayout><div className="bg-primary py-8 md:py-12">
+    <section className="editorial-section p-6 sm:p-10 md:p-14">
+      <div className="grid gap-8 md:grid-cols-[minmax(0,1fr)_260px]">
+        <div><h1 className="editorial-title text-3xl sm:text-4xl md:text-5xl">CREATEE<br />Design Studio</h1><p className="mt-5 max-w-lg text-sm leading-relaxed">Dé plek waar we jouw persoonlijke ideeën vertalen naar unieke, exclusieve designs op onze premium kleding. Wij nemen al het werk volledig uit handen. Het resultaat? Een premium eindproduct dat naadloos past bij de gelegenheid en jullie identiteit.</p><ul className="mt-6 space-y-3 text-sm">{["Drie unieke, professioneel uitgewerkte designvoorstellen.","Twee feedbackrondes om het gekozen ontwerp te perfectioneren.","Hoogwaardige bedrukking op onze premium kleding.","Een eindproduct dat perfect past bij de gelegenheid en jouw groep."].map(t=><li key={t} className="flex gap-2"><Check className="size-4 shrink-0 text-primary" />{t}</li>)}</ul></div>
+        <aside className="self-start border border-primary p-5"><p className="text-xs font-bold uppercase text-primary">Design service</p><p className="mt-2 text-4xl font-bold">€50</p><p className="mt-4 text-xs leading-relaxed">Ga je voor het bestellen met jouw gekozen design? Dan ontvang je €25 terug als kortingsvoucher op je volgende bestelling.</p><Button asChild className="mt-5 w-full"><a href="#aanvraag">Vraag je design aan <ArrowDown /></a></Button></aside>
+      </div>
+      <h2 className="mb-7 mt-12 text-center text-xl font-bold uppercase text-primary">Hoe werkt het</h2>
+      <ol className="grid gap-7 sm:grid-cols-2 lg:grid-cols-4">{[
+        { title: "Pitch", icon: MessageCircle, text: "Jij bepaalt de speelrichting. Vertel ons wat je zoekt: denk aan een unieke gelegenheid, het team waarvoor de kleding is, hoe het eruit moet zien." },
+        { title: "Approach", icon: Pencil, text: "Onze designers vertalen jouw visie naar drie unieke ontwerpen. Zo heb je een duidelijke keuze en verschillende creatieve interpretaties." },
+        { title: "Reading the green", icon: Shirt, text: "Kies je favoriete design en geef feedback. Op basis van jouw input werken wij het ontwerp uit tot de definitieve versie." },
+        { title: "Putting it on", icon: Flag, text: "Het design staat vast. Wij bedrukken jouw nieuwe kleding op onze premium kleding en leveren het bij je. Tijd om te shinen." },
+      ].map((s,i)=><li key={s.title}><s.icon className="mb-3 size-5 text-primary" /><h3 className="text-xs font-bold uppercase text-primary">{i+1}. {s.title}</h3><p className="mt-2 text-xs leading-relaxed">{s.text}</p></li>)}</ol>
+    </section>
+    <section className="mx-auto max-w-[1500px] px-4 py-10"><div className="mb-6 flex flex-wrap items-center justify-center gap-4"><h2 className="text-xl font-bold uppercase text-primary-foreground">Onze scorecard</h2><Stars /></div><div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">{[photo1,photo2,photo3,photo4,photo5,photo6].map((p,i)=><figure key={p.asset_id} className="bg-shop-surface p-2"><img src={p.url} alt={`Persoonlijk CREATEE ontwerp voor een klant ${i+1}`} className="aspect-square w-full object-cover" loading="lazy" /><figcaption className="px-1 pb-2 pt-3"><Stars /><span className="mt-2 block text-[10px] font-semibold uppercase text-primary">CREATEE Design Studio</span></figcaption></figure>)}</div></section>
+    <section id="aanvraag" className="editorial-section scroll-mt-24 p-6 sm:p-10 md:p-12">
+      {sent ? <div className="py-16 text-center" role="status"><Check className="mx-auto mb-5 size-12 text-primary" /><h2 className="text-3xl font-bold text-primary">Bedankt voor je aanvraag!</h2><p className="mt-3">We nemen zo snel mogelijk contact met je op.</p></div> : <form onSubmit={onSubmit} className="space-y-8">
+        <div className="grid grid-cols-2" aria-label="Doelgroep">{["Heren","Dames"].map(g=><Button key={g} type="button" variant={gender===g?"outline":"ghost"} aria-pressed={gender===g} className="h-12 rounded-none uppercase" onClick={()=>setGender(g)}>{g}</Button>)}</div>
+        <fieldset><legend className="mb-4 text-sm font-bold uppercase text-primary">Kies een product</legend><div className="grid grid-cols-2 gap-3 sm:grid-cols-5">{options.map(o=><Button key={o.name} type="button" variant="outline" className={`studio-option ${selected===o.name?"ring-2 ring-primary":""}`} aria-pressed={selected===o.name} onClick={()=>{setSelected(o.name);setColor("");}}><img src={o.image} alt={o.name} /><span>{o.name}</span></Button>)}<Button type="button" variant="outline" className={`min-h-36 h-full text-lg font-bold uppercase ${selected==="anders"?"ring-2 ring-primary":""}`} aria-pressed={selected==="anders"} onClick={()=>{setSelected("anders");setColor("");}}>Anders</Button></div></fieldset>
+        <div><Label htmlFor="studio-color" className="mb-3 block font-bold uppercase text-primary">Kies een kleur</Label><Select value={color} onValueChange={setColor} disabled={!colors.length}><SelectTrigger id="studio-color" className="h-12"><SelectValue placeholder={colors.length?"Selecteer een kleur":"Selecteer eerst een product"} /></SelectTrigger><SelectContent>{colors.map(c=><SelectItem key={c} value={c}>{prettyValue(c)}</SelectItem>)}</SelectContent></Select></div>
+        <div className="grid gap-5 sm:grid-cols-[2fr_1fr]"><div><Label htmlFor="message" className="mb-3 block font-bold uppercase text-primary">Wat is je idee?</Label><Textarea id="message" name="message" required maxLength={2600} rows={4} placeholder="Beschrijf jouw idee. Welke stijl past bij jouw groep?" /></div><div><Label htmlFor="quantity" className="mb-3 block font-bold uppercase text-primary">Aantal stuks</Label><Input id="quantity" name="quantity" type="number" min={1} max={10000} placeholder="Bijv. 8" className="h-12" /><Label htmlFor="occasion" className="mb-2 mt-5 block">Gelegenheid</Label><Input id="occasion" name="occasion" maxLength={200} placeholder="Bijv. golfweekend" /></div></div>
+        <div><Label htmlFor="reference" className="mb-3 block font-bold uppercase text-primary">Referentieafbeeldingen</Label><Input id="reference" name="reference" type="url" maxLength={300} placeholder="Link naar je voorbeeld of inspiratie" className="h-12" /></div>
+        <fieldset><legend className="mb-4 text-sm font-bold uppercase text-primary">Contact</legend><div className="grid gap-4 md:grid-cols-3"><div><Label htmlFor="name">Naam</Label><Input id="name" name="name" autoComplete="name" required maxLength={100} className="mt-2 h-12" /></div><div><Label htmlFor="email">E-mailadres</Label><Input id="email" name="email" autoComplete="email" type="email" required maxLength={255} className="mt-2 h-12" /></div><div><Label htmlFor="phone">Telefoonnummer</Label><Input id="phone" name="phone" type="tel" autoComplete="tel" maxLength={30} className="mt-2 h-12" /></div></div><label className="mt-5 flex items-start gap-3 text-xs"><input type="checkbox" name="meeting" className="mt-0.5 size-4 accent-primary" />Ja, ik wil mijn idee graag persoonlijk bespreken via een online (video) call.</label></fieldset>
+        <div className="border border-primary p-5"><h3 className="mb-4 text-xs font-bold uppercase text-primary">Prijzen & overzicht</h3><div className="flex justify-between gap-4 text-sm"><span>Design Studio</span><span>{formatPrice(50)}</span></div><div className="mt-3 flex justify-between gap-4 border-t border-border pt-3 text-xs"><span>Kleding & bedrukking</span><span>Op aanvraag</span></div><div className="mt-3 flex justify-between gap-4 border-t border-primary pt-3 text-sm font-bold"><span>Design service</span><span>{formatPrice(50)}</span></div></div>
+        <div className="text-center"><Button type="submit" size="lg" disabled={busy}>{busy?"Versturen…":"Verzend aanvraag"}</Button></div>
+      </form>}
+    </section>
+  </div></ShopLayout>;
 }

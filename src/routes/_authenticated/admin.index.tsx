@@ -4,7 +4,7 @@ import { AdminLayout } from "@/components/admin/AdminLayout";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
-  head: () => ({ meta: [{ title: "Overzicht — CREATEE beheer" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Overzicht — CREATEE beheer" }, { name: "description", content: "Overzicht — CREATEE beheer. Beheer de CREATEE webshop." }, { property: "og:title", content: "Overzicht — CREATEE beheer" }, { property: "og:description", content: "Overzicht — CREATEE beheer. Beheer de CREATEE webshop." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: Dashboard,
 });
 
