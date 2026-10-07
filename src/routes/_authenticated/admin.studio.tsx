@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import { ArrowDown, ArrowUp, Plus, Star, Trash2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowDown, ArrowUp, Plus, Star, Trash2, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
@@ -15,10 +15,32 @@ export const Route = createFileRoute("/_authenticated/admin/studio")({
   component: StudioAdmin,
 });
 
-function ImagePicker({ value, onChange, options }: { value: string; onChange: (v: string) => void; options: string[] }) {
+function ImagePicker({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  async function upload(file: File) {
+    setUploading(true);
+    const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+    const path = `${crypto.randomUUID()}.${ext}`;
+    const { error } = await supabase.storage.from("studio-assets").upload(path, file, { contentType: file.type });
+    if (error) { setUploading(false); toast.error("Upload mislukt: " + error.message); return; }
+    // Lange geldigheid zodat de link ook voor bezoekers blijft werken.
+    const { data, error: signError } = await supabase.storage.from("studio-assets").createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
+    setUploading(false);
+    if (signError || !data) { toast.error("Link maken mislukt"); return; }
+    onChange(data.signedUrl);
+    toast.success("Foto geüpload");
+  }
+
   return <div className="space-y-2">
-    <Input value={value} onChange={(e) => onChange(e.target.value)} placeholder="Link naar foto (https://…)" />
-    <div className="flex flex-wrap gap-1.5">{options.map((u) => <button key={u} type="button" onClick={() => onChange(u)} className={`size-11 overflow-hidden rounded-sm border-2 ${value === u ? "border-primary" : "border-transparent"}`}><img src={u} alt="" className="size-full object-cover" loading="lazy" /></button>)}</div>
+    <div className="flex gap-2">
+      <Input value={value} onChange={(e) => onChange(e.target.value)} placeholder="Link naar foto (https://…)" />
+      <Button type="button" variant="outline" disabled={uploading} onClick={() => fileRef.current?.click()}>
+        <Upload /> {uploading ? "Uploaden…" : "Upload"}
+      </Button>
+      <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) upload(f); e.target.value = ""; }} />
+    </div>
   </div>;
 }
 
