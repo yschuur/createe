@@ -12,13 +12,7 @@ import { homepageQuery, defaultHomepage } from "@/lib/site-settings";
 import { menuQuery, defaultMenu } from "@/lib/menu";
 import { DesktopMenu, MobileMenu } from "@/components/shop/SiteMenu";
 
-const nav = [
-  { to: "/", label: "Home" },
-  { to: "/collections/$slug", params: { slug: "golf" }, label: "Golf" },
-  { to: "/collections/$slug", params: { slug: "padel" }, label: "Padel" },
-  { to: "/design-studio", label: "Studio" },
-  { to: "/pages/ons-verhaal", label: "Over ons" },
-] as const;
+
 
 export function ShopLayout({ children }: { children: ReactNode }) {
   const cart = useCart();
