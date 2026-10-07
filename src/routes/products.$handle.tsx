@@ -82,45 +82,59 @@ function ProductPage() {
 
   const hasOptions = optionNames.some(Boolean);
   const compareAt = variant?.compare_at_price && Number(variant.compare_at_price) > Number(variant.price) ? variant.compare_at_price : null;
+  const page = getPage(product);
+  const isColor = (n: string | null) => !!n && /kleur|color|colour|vanille/i.test(n);
+  const colorImg = (val: string) => {
+    const vids = variants.filter((v) => v.color === val || v.option1_value === val).map((v) => v.id);
+    return images.find((im) => im.variant_id && vids.includes(im.variant_id))?.url;
+  };
 
   return (
     <ShopLayout>
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-10 md:grid-cols-[1.2fr_1fr] md:px-8">
-        <div className="space-y-3">
-          <div className="aspect-[4/5] overflow-hidden rounded-sm bg-card">
-            {images[activeImg] && <img src={imgUrl(images[activeImg].url, 1200)} alt={images[activeImg].alt_text ?? product.name} className="h-full w-full object-cover" />}
-          </div>
-          <div className="grid grid-cols-5 gap-2">
-            {images.map((im, i) => (
-              <button key={im.id} onClick={() => setActiveImg(i)} className={`aspect-square overflow-hidden rounded-sm border-2 ${i === activeImg ? "border-primary" : "border-transparent"}`}>
-                <img src={imgUrl(im.url, 200)} alt={im.alt_text ?? ""} className="h-full w-full object-cover" />
-              </button>
-            ))}
-          </div>
+      <div className="pdp grid gap-8 md:grid-cols-[1.9fr_1fr] md:gap-10 md:pr-4">
+        <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
+          {images.length === 0 && <div className="aspect-[3/4] bg-card" />}
+          {images.map((im) => (
+            <div key={im.id} className="aspect-[3/4] overflow-hidden bg-card">
+              <img src={imgUrl(im.url, 1000)} alt={im.alt_text ?? product.name} className="h-full w-full object-cover" loading="lazy" />
+            </div>
+          ))}
         </div>
-        <div className="md:sticky md:top-24 md:self-start">
-          <Link to="/" className="text-xs uppercase tracking-widest text-muted-foreground">{product.product_type}</Link>
-          <h1 className="mt-2 text-5xl font-extrabold leading-none">{product.name}</h1>
-          <div className="mt-4 flex items-baseline gap-3 text-xl">
-            <span className="font-semibold">{formatPrice(variant?.price ?? variants[0]?.price)}</span>
-            {compareAt && <span className="text-base text-muted-foreground line-through">{formatPrice(compareAt)}</span>}
+        <div className="px-4 pb-10 md:sticky md:top-24 md:self-start md:px-0 md:pt-6">
+          <div className="flex items-baseline justify-between gap-4">
+            <h1 className="pdp-title text-3xl">{product.name}</h1>
+            <div className="text-right text-base">
+              <span>{formatPrice(variant?.price ?? variants[0]?.price)}</span>
+              {compareAt && <span className="ml-2 text-sm text-muted-foreground line-through">{formatPrice(compareAt)}</span>}
+            </div>
           </div>
 
           {hasOptions && optionNames.map((name, idx) => {
             if (!name) return null;
             const key = keys[idx]!;
             const values = Array.from(new Set(variants.map((v) => v[key]).filter(Boolean))) as string[];
+            const color = isColor(name);
             return (
-              <div key={idx} className="mt-6">
-                <p className="mb-2 text-sm font-medium">{name === "Vanille" ? "Kleur" : name}: <span className="text-muted-foreground">{prettyValue(selected[idx])}</span></p>
-                <div className="flex flex-wrap gap-2">
+              <div key={idx} className="mt-5">
+                <p className="mb-2 text-sm"><span className="font-semibold">{name === "Vanille" ? "Kleur" : name}</span>{color && <span className="ml-2 text-muted-foreground">{prettyValue(selected[idx])}</span>}</p>
+                <div className={color ? "flex flex-wrap gap-2" : "grid grid-cols-4 gap-2"}>
                   {values.map((val) => {
                     const combo = [...selected]; combo[idx] = val;
                     const v = variants.find((x) => keys.every((k, i) => (x[k] ?? null) === (combo[i] ?? null)));
                     const available = v ? isPurchasable(v) : false;
+                    const active = selected[idx] === val;
+                    if (color) {
+                      const src = colorImg(val);
+                      return (
+                        <button key={val} onClick={() => choose(idx, val)} title={prettyValue(val)} aria-label={prettyValue(val)}
+                          className={`h-7 w-7 overflow-hidden border p-0.5 ${active ? "border-foreground" : "border-border"} ${!available ? "opacity-40" : ""}`}>
+                          {src ? <img src={imgUrl(src, 80)} alt="" className="h-full w-full object-cover" /> : <span className="block h-full w-full bg-muted text-[8px] leading-6">{prettyValue(val).slice(0, 2)}</span>}
+                        </button>
+                      );
+                    }
                     return (
                       <button key={val} onClick={() => choose(idx, val)}
-                        className={`min-w-12 rounded-sm border px-3 py-2 text-sm transition ${selected[idx] === val ? "border-primary bg-primary text-primary-foreground" : "border-border hover:border-primary"} ${!available ? "line-through opacity-50" : ""}`}>
+                        className={`h-10 border text-xs font-semibold transition ${active ? "border-foreground bg-foreground text-background" : "border-border bg-background hover:border-foreground"} ${!available ? "line-through opacity-50" : ""}`}>
                         {prettyValue(val)}
                       </button>
                     );
@@ -130,20 +144,60 @@ function ProductPage() {
             );
           })}
 
-          <Button size="lg" className="mt-8 w-full" onClick={add} disabled={!variant || !isPurchasable(variant)}>
-            {!variant ? "Niet beschikbaar" : isPurchasable(variant) ? "In winkelmand" : "Uitverkocht"}
-          </Button>
+          <button onClick={add} disabled={!variant || !isPurchasable(variant)}
+            className="font-label mt-4 flex h-11 w-full items-center justify-center gap-2 bg-primary text-sm font-semibold uppercase tracking-wider text-primary-foreground transition hover:opacity-90 disabled:opacity-50">
+            <ShoppingBag className="h-4 w-4" />
+            {!variant ? "Niet beschikbaar" : isPurchasable(variant) ? page.addToCartLabel : "Uitverkocht"}
+          </button>
           {variant && variant.track_inventory && variant.inventory_quantity > 0 && variant.inventory_quantity <= 2 && (
             <p className="mt-2 text-center text-sm text-muted-foreground">Nog maar {variant.inventory_quantity} op voorraad</p>
           )}
 
-          <div className="prose-shop mt-8 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: sanitizeDescription(product.description_html) }} />
-          {(product.fit || product.fabric) && (
-            <dl className="mt-6 grid grid-cols-2 gap-3 border-t border-border pt-6 text-sm">
-              {product.fit && (<><dt className="text-muted-foreground">Pasvorm</dt><dd>{product.fit}</dd></>)}
-              {product.fabric && (<><dt className="text-muted-foreground">Materiaal</dt><dd>{product.fabric}</dd></>)}
+          <div className="mt-4 flex items-center justify-between gap-4 border-b border-border pb-4">
+            <dl className="font-label space-y-1 text-[11px] uppercase tracking-wide">
+              {page.fitValue && <div><dt className="inline font-bold">{page.fitLabel}</dt> <dd className="inline text-muted-foreground">{page.fitValue}</dd></div>}
+              {page.modelValue && <div><dt className="inline font-bold">{page.modelLabel}</dt> <dd className="inline text-muted-foreground">{page.modelValue}</dd></div>}
             </dl>
+            {page.sizeChartLabel && (
+              <a href={page.sizeChartUrl || undefined} target={page.sizeChartUrl ? "_blank" : undefined} rel="noreferrer"
+                className="font-label flex items-center gap-1 border border-primary px-4 py-2 text-xs text-primary">
+                <Ruler className="h-3.5 w-3.5" /> {page.sizeChartLabel}
+              </a>
+            )}
+          </div>
+
+          {page.intro && <div className="prose-shop mt-4 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: sanitizeDescription(page.intro) }} />}
+
+          {page.featureShow && (
+            <div className="mt-5 bg-primary text-primary-foreground">
+              <div className="flex items-center justify-between gap-3 px-4 py-4">
+                <p className="font-label text-sm font-bold uppercase tracking-wider">{page.featureTitle}</p>
+                {page.featureLinkUrl && (
+                  <a href={page.featureLinkUrl} className="font-label flex items-center gap-1 border border-primary-foreground/70 px-4 py-2 text-[10px] font-semibold uppercase tracking-wider">
+                    {page.featureLinkLabel} <ChevronRight className="h-3 w-3" />
+                  </a>
+                )}
+              </div>
+              {page.featureBadges.filter(Boolean).length > 0 && (
+                <div className="grid grid-cols-2 border-t border-primary-foreground/30 sm:grid-cols-4">
+                  {page.featureBadges.filter(Boolean).map((b, i) => (
+                    <div key={i} className="font-label border-primary-foreground/30 px-2 py-2.5 text-center text-[10px] font-semibold uppercase tracking-wide [&:not(:last-child)]:border-r">{b}</div>
+                  ))}
+                </div>
+              )}
+            </div>
           )}
+
+          <div className="mt-5 space-y-2">
+            {page.accordions.filter((a) => a.title).map((a, i) => (
+              <details key={i} open={a.open} className="group border border-border bg-background">
+                <summary className="font-label flex cursor-pointer list-none items-center justify-between px-4 py-4 text-xs uppercase tracking-wider">
+                  {a.title}<ChevronUp className="h-3.5 w-3.5 transition group-open:rotate-0 rotate-180" />
+                </summary>
+                <div className="prose-shop border-t border-border px-4 py-4 text-xs leading-relaxed" dangerouslySetInnerHTML={{ __html: sanitizeDescription(a.html) }} />
+              </details>
+            ))}
+          </div>
         </div>
       </div>
     </ShopLayout>
