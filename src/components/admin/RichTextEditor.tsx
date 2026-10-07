@@ -43,8 +43,8 @@ export function RichTextEditor({ value, onChange, placeholder, minHeight = 120 }
     selector: ({ editor: e }) => e ? {
       bold: e.isActive("bold"), italic: e.isActive("italic"), underline: e.isActive("underline"), strike: e.isActive("strike"),
       bullet: e.isActive("bulletList"), ordered: e.isActive("orderedList"), quote: e.isActive("blockquote"), link: e.isActive("link"),
-      font: (e.getAttributes("textStyle").fontFamily as string) ?? "", size: (e.getAttributes("textStyle").fontSize as string) ?? "",
-      color: (e.getAttributes("textStyle").color as string) ?? "",
+      font: (e.getAttributes("textStyle")["fontFamily"] as string) ?? "", size: (e.getAttributes("textStyle")["fontSize"] as string) ?? "",
+      color: (e.getAttributes("textStyle")["color"] as string) ?? "",
       block: e.isActive("heading", { level: 2 }) ? "h2" : e.isActive("heading", { level: 3 }) ? "h3" : e.isActive("heading", { level: 4 }) ? "h4" : "p",
       align: (["center", "right", "justify"].find((a) => e.isActive({ textAlign: a })) ?? "left"),
     } : null,
@@ -87,7 +87,7 @@ export function RichTextEditor({ value, onChange, placeholder, minHeight = 120 }
       {btn(st.bullet, "Opsomming", () => c().toggleBulletList().run(), List)}
       {btn(st.ordered, "Nummering", () => c().toggleOrderedList().run(), ListOrdered)}
       {btn(st.quote, "Citaat", () => c().toggleBlockquote().run(), Quote)}
-      {btn(st.link, "Link", () => { const prev = editor.getAttributes("link").href as string | undefined; const url = window.prompt("Link (leeg = verwijderen)", prev ?? "https://"); if (url === null) return; if (!url) c().unsetLink().run(); else c().extendMarkRange("link").setLink({ href: url }).run(); }, Link2)}
+      {btn(st.link, "Link", () => { const prev = editor.getAttributes("link")["href"] as string | undefined; const url = window.prompt("Link (leeg = verwijderen)", prev ?? "https://"); if (url === null) return; if (!url) c().unsetLink().run(); else c().extendMarkRange("link").setLink({ href: url }).run(); }, Link2)}
       {btn(false, "Opmaak wissen", () => c().unsetAllMarks().clearNodes().run(), RemoveFormatting)}
     </div>
     <EditorContent editor={editor} />
