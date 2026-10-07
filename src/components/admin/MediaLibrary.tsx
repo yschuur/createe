@@ -39,7 +39,7 @@ export function MediaThumb({ a, className = "" }: { a: Pick<MediaAsset, "url" | 
     : <img src={a.url} alt={a.name ?? ""} loading="lazy" className={`h-full w-full object-cover ${className}`} />;
 }
 
-export function MediaGrid({ kind, onPick, selected, manage }: { kind?: MediaKind; onPick?: (a: MediaAsset) => void; selected?: string; manage?: boolean }) {
+export function MediaGrid({ kind, onPick, selected, manage }: { kind?: MediaKind | undefined; onPick?: ((a: MediaAsset) => void) | undefined; selected?: string | undefined; manage?: boolean }) {
   const qc = useQueryClient();
   const { data = [], isLoading } = useQuery(mediaQuery());
   const [q, setQ] = useState("");
@@ -62,7 +62,7 @@ export function MediaGrid({ kind, onPick, selected, manage }: { kind?: MediaKind
     if (!confirm("Verwijderen uit de bibliotheek? Plekken die dit bestand gebruiken tonen het dan mogelijk niet meer.")) return;
     if (a.storage_path?.startsWith("media/")) await supabase.storage.from("studio-assets").remove([a.storage_path]);
     const { error } = await supabase.from("media_assets").delete().eq("id", a.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     qc.invalidateQueries({ queryKey: ["media-assets"] });
   }
 
@@ -95,7 +95,7 @@ export function MediaGrid({ kind, onPick, selected, manage }: { kind?: MediaKind
   </div>;
 }
 
-export function MediaLibraryDialog({ open, onOpenChange, kind, selected, onPick }: { open: boolean; onOpenChange: (o: boolean) => void; kind?: MediaKind; selected?: string; onPick: (a: MediaAsset) => void }) {
+export function MediaLibraryDialog({ open, onOpenChange, kind, selected, onPick }: { open: boolean; onOpenChange: (o: boolean) => void; kind?: MediaKind | undefined; selected?: string | undefined; onPick: (a: MediaAsset) => void }) {
   return <Dialog open={open} onOpenChange={onOpenChange}>
     <DialogContent className="max-h-[90vh] max-w-5xl overflow-y-auto">
       <DialogHeader><DialogTitle>Mediabibliotheek</DialogTitle></DialogHeader>
