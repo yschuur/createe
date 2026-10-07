@@ -1,4 +1,5 @@
 # Roadmap
+- [ ] Productbeheer: fotoselectie en volgorde per kleur, opgeslagen galerij en gesloten uitklapblokken controleren.
 - [x] Effen productswatches, eerste foto bij kleurkeuze en geen tweede foto bij product-hover; getest met twee gekoppelde kleurfoto's en homepage-preview.
 - [x] Over ons: selected Sportief magazine restyle of Ons verhaal and HYBR polo; desktop/mobile images and Studio links verified, original section IDs retained
 - [x] Match CREATEE menu and screenshot pages (home, story, studio, HYBR polo), verify desktop/mobile and studio request readback

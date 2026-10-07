@@ -2,16 +2,16 @@ import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { productColor } from "@/lib/product-colors";
+import { galleryImages } from "@/lib/product-gallery";
 import { formatPrice, imgUrl, isSoldOut, priceRange, prettyValue, type ProductWithRelations } from "@/lib/shop";
 
 export function ProductCard({ product, index = 0 }: { product: ProductWithRelations; index?: number }) {
-  const imgs = product.product_images;
+  const imgs = galleryImages(product);
   const { min, compareAt } = priceRange(product);
   const soldOut = isSoldOut(product);
   const colors = Array.from(new Set(product.product_variants.map((v) => v.color).filter((c): c is string => Boolean(c))));
   const colorImage = (c: string) => {
-    const ids = new Set(product.product_variants.filter((v) => v.color === c).map((v) => v.id));
-    return imgs.find((i) => i.variant_id && ids.has(i.variant_id));
+    return galleryImages(product, c)[0];
   };
   const [active, setActive] = useState<string | null>(null);
   const activeImg = active ? colorImage(active) : undefined;

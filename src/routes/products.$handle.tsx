@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { productColor } from "@/lib/product-colors";
 import { ShoppingBag, Ruler, ChevronRight, ChevronUp as ChevronUpIcon } from "lucide-react";
 import { getPage } from "@/lib/product-page";
+import { galleryImages, variantColor } from "@/lib/product-gallery";
 import { useCart } from "@/lib/cart";
 import {
   formatPrice, imgUrl, isPurchasable, optionLabel, prettyValue, productQuery, sanitizeDescription,
@@ -50,13 +51,12 @@ function ProductPage() {
     const first = variants.find(isPurchasable) ?? variants[0];
     return first ? [first.option1_value, first.option2_value, first.option3_value] : [];
   });
-  const [activeImg, setActiveImg] = useState(0);
   void Link;
   if (!product) return null;
 
   const keys = ["option1_value", "option2_value", "option3_value"] as const;
   const variant = variants.find((v) => keys.every((k, i) => (v[k] ?? null) === (selected[i] ?? null)));
-  const images = product.product_images;
+  const images = galleryImages(product, variantColor(variant));
 
   const choose = (idx: number, value: string) => {
     const next = [...selected];
@@ -69,18 +69,13 @@ function ProductPage() {
       if (m) keys.forEach((k, i) => (next[i] = m[k]));
     }
     setSelected(next);
-     if (isColor(optionNames[idx] ?? null)) {
-       const colorVariants = variants.filter((v) => v[keys[idx] ?? "option1_value"] === value);
-       const vi = images.findIndex((im) => im.variant_id && colorVariants.some((v) => v.id === im.variant_id));
-       setActiveImg(vi >= 0 ? vi : 0);
-     }
   };
 
   const add = () => {
     if (!variant || !isPurchasable(variant)) return;
     cart.add({
       variantId: variant.id, productSlug: product.slug, name: product.name, variantLabel: optionLabel(variant),
-      price: Number(variant.price), image: imgUrl(images[activeImg]?.url ?? images[0]?.url, 200), quantity: 1,
+      price: Number(variant.price), image: imgUrl(images[0]?.url, 200), quantity: 1,
       maxQuantity: variant.track_inventory && !variant.allow_backorder ? variant.inventory_quantity : null,
     });
     cart.setOpen(true);
@@ -97,10 +92,9 @@ function ProductPage() {
       <div className="pdp grid gap-8 md:grid-cols-[1.9fr_1fr] md:gap-10 md:pr-4">
         <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
           {images.length === 0 && <div className="aspect-[3/4] bg-card" />}
-           {images.map((original, idx) => {
-             const im = idx === 0 ? images[activeImg] ?? original : original;
+           {images.map((im) => {
              return (
-             <div key={original.id} className="aspect-[3/4] overflow-hidden bg-card">
+             <div key={im.id} className="aspect-[3/4] overflow-hidden bg-card">
               <img src={imgUrl(im.url, 1000)} alt={im.alt_text ?? product.name} className="h-full w-full object-cover" loading="lazy" />
             </div>
            ); })}
@@ -195,7 +189,7 @@ function ProductPage() {
 
           <div className="mt-5 space-y-2">
             {page.accordions.filter((a) => a.title).map((a, i) => (
-              <details key={i} open={a.open} className="group border border-border bg-background">
+              <details key={`${handle}-${i}`} className="group border border-border bg-background">
                 <summary className="font-label flex cursor-pointer list-none items-center justify-between px-4 py-4 text-xs uppercase tracking-wider">
                   {a.title}<ChevronUpIcon className="h-3.5 w-3.5 transition group-open:rotate-0 rotate-180" />
                 </summary>

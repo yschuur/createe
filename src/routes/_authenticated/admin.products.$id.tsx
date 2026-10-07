@@ -11,6 +11,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { ProductPageEditor } from "@/components/admin/ProductPageEditor";
+import { ProductGalleryEditor } from "@/components/admin/ProductGalleryEditor";
+import { getGallery } from "@/lib/product-gallery";
 import { getPage, type ProductPageContent } from "@/lib/product-page";
 import { imgUrl, type Product, type ProductImage, type Variant } from "@/lib/shop";
 
@@ -53,22 +55,23 @@ function EditProduct() {
   const setV = (idx: number, patch: Partial<Variant>) => setVariants(variants.map((v, i) => (i === idx ? { ...v, ...patch } : v)));
 
   async function save() {
-    if (!p) return;
+    if (!p || !data) return;
     setSaving(true);
     try {
       const { id: _i, created_at: _c, updated_at: _u, ...fields } = p;
       const { error } = await supabase.from("products").update(fields).eq("id", id);
       if (error) throw error;
-      const existingIds = new Set(data!.variants.map((v) => v.id));
+      const existingIds = new Set(data.variants.map((v) => v.id));
       for (const v of variants) {
         const { created_at: _vc, updated_at: _vu, ...vf } = v;
         if (existingIds.has(v.id)) { const { error: e } = await supabase.from("product_variants").update(vf).eq("id", v.id); if (e) throw e; }
         else { const { id: _x, ...ins } = vf; const { error: e } = await supabase.from("product_variants").insert(ins); if (e) throw e; }
       }
-      const removed = data!.variants.filter((v) => !variants.some((x) => x.id === v.id)).map((v) => v.id);
+      const removed = data.variants.filter((v) => !variants.some((x) => x.id === v.id)).map((v) => v.id);
       if (removed.length) await supabase.from("product_variants").delete().in("id", removed);
       for (const [i, im] of images.entries()) {
-        await supabase.from("product_images").update({ sort_order: i + 1, is_primary: i === 0, alt_text: im.alt_text, variant_id: im.variant_id }).eq("id", im.id);
+        const { error: imageError } = await supabase.from("product_images").update({ sort_order: i + 1, is_primary: i === 0, alt_text: im.alt_text, variant_id: im.variant_id }).eq("id", im.id);
+        if (imageError) throw imageError;
       }
       await supabase.from("collection_products").delete().eq("product_id", id);
       if (colls.length) await supabase.from("collection_products").insert(colls.map((c) => ({ collection_id: c, product_id: id })));
@@ -92,10 +95,10 @@ function EditProduct() {
   }
   function move(i: number, d: number) {
     const arr = [...images]; const j = i + d; if (j < 0 || j >= arr.length) return;
-    const a = arr[i]!, b = arr[j]!; arr[i] = b; arr[j] = a; setImages(arr);
+    const a = arr[i], b = arr[j]; if (!a || !b) return; arr[i] = b; arr[j] = a; setImages(arr);
   }
   async function del() {
-    if (!confirm(`"${p!.name}" definitief verwijderen?`)) return;
+    if (!p || !confirm(`"${p.name}" definitief verwijderen?`)) return;
     await supabase.from("products").delete().eq("id", id);
     qc.invalidateQueries(); nav({ to: "/admin/products" });
   }
@@ -133,7 +136,11 @@ function EditProduct() {
             <ProductPageEditor value={getPage(p)} onChange={(v: ProductPageContent) => set("metadata", { ...((p.metadata as object) ?? {}), page: v } as Product["metadata"])} />
           </Box>
 
-          <Box title="Afbeeldingen">
+          <Box title="Foto's per kleur">
+            <ProductGalleryEditor images={images} variants={variants} value={getGallery(p.metadata)} onChange={(gallery) => set("metadata", { ...((p.metadata as object) ?? {}), gallery } as Product["metadata"])} />
+          </Box>
+
+          <Box title="Alle productafbeeldingen">
             <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
               {images.map((im, i) => (
                 <div key={im.id} className="space-y-1 rounded-sm border border-border p-2">
