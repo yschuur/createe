@@ -16,7 +16,8 @@ export const Route = createFileRoute("/_authenticated/admin/menu")({
 
 type Path = number[];
 const clone = (x: MenuItem[]): MenuItem[] => JSON.parse(JSON.stringify(x));
-function listAt(items: MenuItem[], path: Path): MenuItem[] { let l = items; for (const i of path) l = l[i].children; return l; }
+function listAt(items: MenuItem[], path: Path): MenuItem[] { let l = items; for (const i of path) l = l[i]!.children; return l; }
+function swap(l: MenuItem[], a: number, b: number) { const t = l[a]!; l[a] = l[b]!; l[b] = t; }
 
 function MenuAdmin() {
   const qc = useQueryClient();
@@ -28,7 +29,7 @@ function MenuAdmin() {
 
   const mutate = (fn: (draft: MenuItem[]) => void) => { const d = clone(items); fn(d); setItems(d); };
   const parentList = (d: MenuItem[], path: Path) => listAt(d, path.slice(0, -1));
-  const idx = (path: Path) => path[path.length - 1];
+  const idx = (path: Path) => path[path.length - 1] ?? 0;
 
   async function save() {
     setBusy(true);
@@ -44,10 +45,10 @@ function MenuAdmin() {
     const siblings = listAt(items!, path.slice(0, -1)).length;
     return <li key={path.join("-")} className="space-y-2">
       <div className="flex flex-wrap items-center gap-2 rounded-sm border border-border bg-background p-2">
-        <Input aria-label="Naam" className="min-w-36 flex-1" value={item.label} onChange={e => mutate(d => { parentList(d, path)[i].label = e.target.value; })} />
-        <Input aria-label="Link" className="min-w-44 flex-1" placeholder="/collections/golf" value={item.link} onChange={e => mutate(d => { parentList(d, path)[i].link = e.target.value; })} />
-        <Button variant="ghost" size="icon" aria-label="Omhoog" disabled={i === 0} onClick={() => mutate(d => { const l = parentList(d, path); [l[i - 1], l[i]] = [l[i], l[i - 1]]; })}><ArrowUp /></Button>
-        <Button variant="ghost" size="icon" aria-label="Omlaag" disabled={i === siblings - 1} onClick={() => mutate(d => { const l = parentList(d, path); [l[i + 1], l[i]] = [l[i], l[i + 1]]; })}><ArrowDown /></Button>
+        <Input aria-label="Naam" className="min-w-36 flex-1" value={item.label} onChange={e => mutate(d => { parentList(d, path)[i]!.label = e.target.value; })} />
+        <Input aria-label="Link" className="min-w-44 flex-1" placeholder="/collections/golf" value={item.link} onChange={e => mutate(d => { parentList(d, path)[i]!.link = e.target.value; })} />
+        <Button variant="ghost" size="icon" aria-label="Omhoog" disabled={i === 0} onClick={() => mutate(d => { swap(parentList(d, path), i, i - 1); })}><ArrowUp /></Button>
+        <Button variant="ghost" size="icon" aria-label="Omlaag" disabled={i === siblings - 1} onClick={() => mutate(d => { swap(parentList(d, path), i, i + 1); })}><ArrowDown /></Button>
         <Button variant="ghost" size="icon" aria-label="Verwijderen" onClick={() => { if (item.children.length && !confirm("Dit item en alle submenu's verwijderen?")) return; mutate(d => { parentList(d, path).splice(i, 1); }); }}><Trash2 /></Button>
       </div>
       <ul className="ml-6 space-y-2 border-l border-border pl-4">
