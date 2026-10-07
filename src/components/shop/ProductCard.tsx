@@ -43,7 +43,7 @@ export function ProductCard({ product, index = 0 }: { product: ProductWithRelati
       <Link to="/products/$handle" params={{ handle: product.slug }} className="mt-3 flex items-start justify-between gap-2">
         <div className="min-w-0">
           <h3 className="font-display text-lg leading-tight">{product.name}</h3>
-          <p className="text-xs uppercase tracking-wider text-muted-foreground">{product.product_type}{colors.length > 1 ? ` · ${colors.length} kleuren` : ""}</p>
+          <p className="text-xs uppercase tracking-wider text-muted-foreground">{product.product_type}</p>
         </div>
         <div className="shrink-0 text-right text-sm">
           <p className="font-medium">{formatPrice(min)}</p>
