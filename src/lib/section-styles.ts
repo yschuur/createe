@@ -2,7 +2,7 @@ import { queryOptions } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
 export type TextRole = "heading" | "body" | "label";
-export type TextStyle = { font?: string; size?: number; weight?: number; uppercase?: "" | "yes" | "no"; color?: string; lineHeight?: number };
+export type TextStyle = { font?: string | undefined; size?: number | undefined; weight?: number | undefined; uppercase?: "" | "yes" | "no" | undefined; color?: string | undefined; lineHeight?: number | undefined };
 export type SectionStyles = Record<string, Partial<Record<TextRole, TextStyle>>>;
 
 export const PAGES: { label: string; sections: { id: string; label: string }[] }[] = [
