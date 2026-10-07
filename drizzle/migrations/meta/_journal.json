@@ -43,6 +43,13 @@
       "when": 1791407411771,
       "tag": "0005_image_migration_map",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1791407555006,
+      "tag": "0006_product_images_to_storage",
+      "breakpoints": true
     }
   ]
 }
