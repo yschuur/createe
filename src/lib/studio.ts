@@ -40,6 +40,13 @@ export const discountedTiers = (s: StudioSettings, p: StudioProduct): [number, n
 };
 
 export const colorKey = (product: string, color: string) => `${product}|${color}`;
+// Foto's per doelgroep: `${product}|${gender}|${kleur}`; lege kleur = standaardfoto voor die doelgroep.
+export const genderKey = (product: string, gender: "Heren" | "Dames", color = "") => `${product}|${gender}|${color}`;
+export const imageFor = (s: StudioSettings, p: StudioProduct, gender: "Heren" | "Dames", color = "") =>
+  (color && s.color_images[genderKey(p.name, gender, color)]) ||
+  (color && s.color_images[colorKey(p.name, color)]) ||
+  s.color_images[genderKey(p.name, gender)] ||
+  p.image;
 export const builtinImages = [polo, tee, hoodie, performance, photo1, photo2, photo3, photo4, photo5, photo6].map((a) => a.url);
 
 export const defaultStudio: StudioSettings = {

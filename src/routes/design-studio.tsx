@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { formatPrice } from "@/lib/shop";
-import { colorKey, discountedTiers, studioProducts, studioQuery, tiersFor } from "@/lib/studio";
+import { discountedTiers, imageFor, studioProducts, studioQuery, tiersFor } from "@/lib/studio";
 
 export const Route = createFileRoute("/design-studio")({
   head: () => ({ meta: [
@@ -60,8 +60,8 @@ function DesignStudio() {
   const fee = studio.service_price ?? 25;
   const feeWas = studio.service_compare ?? 0;
   const feePct = feeWas > fee ? Math.round((1 - fee/feeWas)*100) : 0;
-  const imgFor = (name: string, fallback: string) => (color && name===selected && studio.color_images[colorKey(name, color)]) || fallback;
-  const previewImg = selectedOption ? imgFor(selectedOption.name, selectedOption.image) : "";
+  const imgFor = (name: string, _fallback?: string) => { const p = studioProducts.find(o=>o.name===name)!; return imageFor(studio, p, gender, name===selected ? color : ""); };
+  const previewImg = selectedOption ? imgFor(selectedOption.name) : "";
   const activeHex = colors.find(c=>c.name===color)?.hex;
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
