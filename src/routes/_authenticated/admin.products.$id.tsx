@@ -44,6 +44,7 @@ function EditProduct() {
   const [p, setP] = useState<Product | null>(null);
   const [variants, setVariants] = useState<Variant[]>([]);
   const [images, setImages] = useState<ProductImage[]>([]);
+  const [libOpen, setLibOpen] = useState(false);
   const [colls, setColls] = useState<string[]>([]);
   const [newImg, setNewImg] = useState("");
   const [saving, setSaving] = useState(false);
