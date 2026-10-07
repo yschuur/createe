@@ -1,39 +1,56 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import { ArrowDown, ArrowUp, Plus, Star, Trash2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowDown, ArrowUp, Plus, Star, Trash2, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
-import { builtinImages, colorKey, studioProducts, studioQuery, type StudioSettings } from "@/lib/studio";
+import { colorKey, studioProducts, studioQuery, type StudioSettings } from "@/lib/studio";
 
 export const Route = createFileRoute("/_authenticated/admin/studio")({
   head: () => ({ meta: [{ title: "Design Studio — CREATEE beheer" }, { name: "description", content: "Beheer scorecard-reviews en kleurfoto's van de Design Studio." }, { property: "og:title", content: "Design Studio — CREATEE beheer" }, { property: "og:description", content: "Beheer scorecard-reviews en kleurfoto's." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: StudioAdmin,
 });
 
-function ImagePicker({ value, onChange, options }: { value: string; onChange: (v: string) => void; options: string[] }) {
+function ImagePicker({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  async function upload(file: File) {
+    setUploading(true);
+    const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+    const path = `${crypto.randomUUID()}.${ext}`;
+    const { error } = await supabase.storage.from("studio-assets").upload(path, file, { contentType: file.type });
+    if (error) { setUploading(false); toast.error("Upload mislukt: " + error.message); return; }
+    // Lange geldigheid zodat de link ook voor bezoekers blijft werken.
+    const { data, error: signError } = await supabase.storage.from("studio-assets").createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
+    setUploading(false);
+    if (signError || !data) { toast.error("Link maken mislukt"); return; }
+    onChange(data.signedUrl);
+    toast.success("Foto geüpload");
+  }
+
   return <div className="space-y-2">
-    <Input value={value} onChange={(e) => onChange(e.target.value)} placeholder="Link naar foto (https://…)" />
-    <div className="flex flex-wrap gap-1.5">{options.map((u) => <button key={u} type="button" onClick={() => onChange(u)} className={`size-11 overflow-hidden rounded-sm border-2 ${value === u ? "border-primary" : "border-transparent"}`}><img src={u} alt="" className="size-full object-cover" loading="lazy" /></button>)}</div>
+    <div className="flex gap-2">
+      <Input value={value} onChange={(e) => onChange(e.target.value)} placeholder="Link naar foto (https://…)" />
+      <Button type="button" variant="outline" disabled={uploading} onClick={() => fileRef.current?.click()}>
+        <Upload /> {uploading ? "Uploaden…" : "Upload"}
+      </Button>
+      <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) upload(f); e.target.value = ""; }} />
+    </div>
   </div>;
 }
 
 function StudioAdmin() {
   const qc = useQueryClient();
   const { data } = useQuery(studioQuery());
-  const { data: productImgs = [] } = useQuery({ queryKey: ["admin-image-library"], queryFn: async () => {
-    const { data } = await supabase.from("product_images").select("url").order("created_at").limit(200);
-    return Array.from(new Set((data ?? []).map((r) => r.url)));
-  } });
   const [s, setS] = useState<StudioSettings | null>(null);
   const [busy, setBusy] = useState(false);
   useEffect(() => { if (data && !s) setS(structuredClone(data)); }, [data, s]);
   if (!s) return <AdminLayout title="Design Studio"><p>Laden…</p></AdminLayout>;
-  const library = [...builtinImages, ...productImgs];
   const upd = (fn: (d: StudioSettings) => void) => { const d = structuredClone(s); fn(d); setS(d); };
 
   async function save() {
@@ -62,7 +79,7 @@ function StudioAdmin() {
             </div>
           </div>
           <Textarea value={r.text} onChange={(e) => upd((d) => { d.reviews[i]!.text = e.target.value; })} placeholder="Reviewtekst (optioneel)" rows={2} maxLength={500} />
-          <ImagePicker value={r.image} options={library} onChange={(v) => upd((d) => { d.reviews[i]!.image = v; })} />
+          <ImagePicker value={r.image} onChange={(v) => upd((d) => { d.reviews[i]!.image = v; })} />
         </div>
       </div>)}</div>
     </section>
@@ -73,7 +90,7 @@ function StudioAdmin() {
       <div className="space-y-6">{studioProducts.map((p) => <div key={p.name}><h3 className="mb-3 font-semibold">{p.name}</h3>
         <div className="grid gap-4 md:grid-cols-2">{p.colors.map((c) => { const k = colorKey(p.name, c.name); const v = s.color_images[k] ?? ""; return <div key={k} className="flex gap-3 rounded-sm border p-3">
           <div className="relative size-20 shrink-0 overflow-hidden rounded-sm bg-muted"><img src={v || p.image} alt="" className="size-full object-cover" /><span className="absolute bottom-1 left-1 size-4 rounded-full border border-border" style={{ background: c.hex }} /></div>
-          <div className="min-w-0 flex-1"><p className="mb-2 text-sm font-medium">{c.name}</p><ImagePicker value={v} options={library} onChange={(nv) => upd((d) => { if (nv) d.color_images[k] = nv; else delete d.color_images[k]; })} /></div>
+          <div className="min-w-0 flex-1"><p className="mb-2 text-sm font-medium">{c.name}</p><ImagePicker value={v} onChange={(nv) => upd((d) => { if (nv) d.color_images[k] = nv; else delete d.color_images[k]; })} /></div>
         </div>; })}</div></div>)}</div>
     </section>
   </AdminLayout>;
