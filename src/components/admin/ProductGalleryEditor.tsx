@@ -15,7 +15,11 @@ export function ProductGalleryEditor({ images, variants, value, onChange }: {
   const inherited = galleryImages({ metadata: { gallery: value }, product_images: images, product_variants: variants }, color);
   const selected = (current ?? inherited.map((im) => im.id)).filter((id) => images.some((im) => im.id === id));
   const setIds = (ids: string[] | undefined) => {
-    if (!color) { onChange({ ...value, default: ids }); return; }
+    if (!color) {
+      const next = { ...value };
+      if (ids) next.default = ids; else delete next.default;
+      onChange(next); return;
+    }
     const next = { ...value.colors };
     if (ids) next[color] = ids; else delete next[color];
     onChange({ ...value, colors: next });
