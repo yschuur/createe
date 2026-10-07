@@ -11,3 +11,5 @@
 - [x] Design Studio: producten, kleuren en staffelprijzen uit originele configurator
 - [ ] Clubhouse-aanmelding (e-mail) — wachten op keuze nieuwsbriefdienst
 - [ ] Stripe, verzendbeleid-pagina's, redirects, domeinswitch
+- [x] Design Studio luxe restyle + beheerbare scorecard & kleurfoto's
+- [ ] Foto's uploaden in Design Studio-beheer (geblokkeerd: openbare opslag staat uit in werkruimte-instellingen)

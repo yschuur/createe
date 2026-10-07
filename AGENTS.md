@@ -24,3 +24,4 @@
 - Storefront design-pack tokens are scoped under .storefront with per-page classes (page-home/page-studio/page-story) via ShopLayout `page` prop — page-specific styling without touching admin.
 - About-page magazine layouts use shared page-story CSS and retain existing data-section identifiers — full-width editorial presentation stays compatible with owner typography overrides.
 - Per-section text styles live in `site_settings` (key "section_styles") and are turned into CSS only from whitelisted fonts/colors/numeric ranges in buildCss; sections are targeted via data-section attributes — owner-editable typography without CSS injection risk.
+- Design Studio scorecard reviews and per-color configurator photos live in `site_settings` (key "studio") via src/lib/studio.ts, edited at /admin/studio; photos are referenced by URL because public storage buckets are blocked in this workspace.
