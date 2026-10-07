@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
-import { builtinImages, colorKey, studioProducts, studioQuery, type StudioSettings } from "@/lib/studio";
+import { colorKey, studioProducts, studioQuery, type StudioSettings } from "@/lib/studio";
 
 export const Route = createFileRoute("/_authenticated/admin/studio")({
   head: () => ({ meta: [{ title: "Design Studio — CREATEE beheer" }, { name: "description", content: "Beheer scorecard-reviews en kleurfoto's van de Design Studio." }, { property: "og:title", content: "Design Studio — CREATEE beheer" }, { property: "og:description", content: "Beheer scorecard-reviews en kleurfoto's." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
@@ -47,15 +47,10 @@ function ImagePicker({ value, onChange }: { value: string; onChange: (v: string)
 function StudioAdmin() {
   const qc = useQueryClient();
   const { data } = useQuery(studioQuery());
-  const { data: productImgs = [] } = useQuery({ queryKey: ["admin-image-library"], queryFn: async () => {
-    const { data } = await supabase.from("product_images").select("url").order("created_at").limit(200);
-    return Array.from(new Set((data ?? []).map((r) => r.url)));
-  } });
   const [s, setS] = useState<StudioSettings | null>(null);
   const [busy, setBusy] = useState(false);
   useEffect(() => { if (data && !s) setS(structuredClone(data)); }, [data, s]);
   if (!s) return <AdminLayout title="Design Studio"><p>Laden…</p></AdminLayout>;
-  const library = [...builtinImages, ...productImgs];
   const upd = (fn: (d: StudioSettings) => void) => { const d = structuredClone(s); fn(d); setS(d); };
 
   async function save() {
