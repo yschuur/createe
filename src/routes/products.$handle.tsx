@@ -3,6 +3,8 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { ShopLayout } from "@/components/shop/ShopLayout";
+import { Button } from "@/components/ui/button";
+import { productColor } from "@/lib/product-colors";
 import { ShoppingBag, Ruler, ChevronRight, ChevronUp as ChevronUpIcon } from "lucide-react";
 import { getPage } from "@/lib/product-page";
 import { useCart } from "@/lib/cart";
@@ -61,14 +63,17 @@ function ProductPage() {
     next[idx] = value;
     // keep a valid combination
     if (!variants.some((v) => keys.every((k, i) => (v[k] ?? null) === (next[i] ?? null)))) {
-      const key = keys[idx]!;
+       const key = keys[idx];
+       if (!key) return;
       const m = variants.find((v) => v[key] === value);
       if (m) keys.forEach((k, i) => (next[i] = m[k]));
     }
     setSelected(next);
-    const match = variants.find((v) => keys.every((k, i) => (v[k] ?? null) === (next[i] ?? null)));
-    const vi = images.findIndex((im) => im.variant_id && (im.variant_id === match?.id || variants.find((x) => x.id === im.variant_id)?.color === match?.color));
-    if (vi >= 0) setActiveImg(vi);
+     if (isColor(optionNames[idx] ?? null)) {
+       const colorVariants = variants.filter((v) => v[keys[idx] ?? "option1_value"] === value);
+       const vi = images.findIndex((im) => im.variant_id && colorVariants.some((v) => v.id === im.variant_id));
+       setActiveImg(vi >= 0 ? vi : 0);
+     }
   };
 
   const add = () => {
@@ -86,21 +91,19 @@ function ProductPage() {
   const compareAt = variant?.compare_at_price && Number(variant.compare_at_price) > Number(variant.price) ? variant.compare_at_price : null;
   const page = getPage(product);
   const isColor = (n: string | null) => !!n && /kleur|color|colour|vanille/i.test(n);
-  const colorImg = (val: string) => {
-    const vids = variants.filter((v) => v.color === val || v.option1_value === val).map((v) => v.id);
-    return images.find((im) => im.variant_id && vids.includes(im.variant_id))?.url ?? (variants.every((v) => (v.color ?? v.option1_value) === val) ? images[0]?.url : undefined);
-  };
 
   return (
     <ShopLayout>
       <div className="pdp grid gap-8 md:grid-cols-[1.9fr_1fr] md:gap-10 md:pr-4">
         <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
           {images.length === 0 && <div className="aspect-[3/4] bg-card" />}
-          {images.map((im) => (
-            <div key={im.id} className="aspect-[3/4] overflow-hidden bg-card">
+           {images.map((original, idx) => {
+             const im = idx === 0 ? images[activeImg] ?? original : original;
+             return (
+             <div key={original.id} className="aspect-[3/4] overflow-hidden bg-card">
               <img src={imgUrl(im.url, 1000)} alt={im.alt_text ?? product.name} className="h-full w-full object-cover" loading="lazy" />
             </div>
-          ))}
+           ); })}
         </div>
         <div className="px-4 pb-10 md:sticky md:top-24 md:self-start md:px-0 md:pt-6">
           <div className="flex items-baseline justify-between gap-4">
@@ -113,7 +116,8 @@ function ProductPage() {
 
           {hasOptions && optionNames.map((name, idx) => {
             if (!name) return null;
-            const key = keys[idx]!;
+             const key = keys[idx];
+             if (!key) return null;
             const values = Array.from(new Set(variants.map((v) => v[key]).filter(Boolean))) as string[];
             const color = isColor(name);
             return (
@@ -126,12 +130,11 @@ function ProductPage() {
                     const available = v ? isPurchasable(v) : false;
                     const active = selected[idx] === val;
                     if (color) {
-                      const src = colorImg(val);
                       return (
-                        <button key={val} onClick={() => choose(idx, val)} title={prettyValue(val)} aria-label={prettyValue(val)}
-                          className={`h-7 w-7 overflow-hidden border p-0.5 ${active ? "border-foreground" : "border-border"} ${!available ? "opacity-40" : ""}`}>
-                          {src ? <img src={imgUrl(src, 80)} alt="" className="h-full w-full object-cover" /> : <span className="block h-full w-full bg-muted text-[8px] leading-6">{prettyValue(val).slice(0, 2)}</span>}
-                        </button>
+                         <Button variant="ghost" size="icon" key={val} onClick={() => choose(idx, val)} title={prettyValue(val)} aria-label={prettyValue(val)} aria-pressed={active}
+                           className={`h-7 w-7 overflow-hidden border p-0.5 ${active ? "border-foreground ring-1 ring-foreground ring-offset-2 ring-offset-background" : "border-border"}`}>
+                           <span className="block h-full w-full" style={{ background: productColor(val) }} />
+                         </Button>
                       );
                     }
                     return (
