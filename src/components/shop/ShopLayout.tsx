@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Reviews } from "@/components/shop/Reviews";
 import { useQuery } from "@tanstack/react-query";
 import { homepageQuery, defaultHomepage } from "@/lib/site-settings";
+import { menuQuery, defaultMenu } from "@/lib/menu";
+import { DesktopMenu, MobileMenu } from "@/components/shop/SiteMenu";
 
 const nav = [
   { to: "/", label: "Home" },
@@ -22,6 +24,8 @@ export function ShopLayout({ children }: { children: ReactNode }) {
   const cart = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
   const { data: home } = useQuery(homepageQuery());
+  const { data: menu } = useQuery(menuQuery());
+  const menuItems = menu ?? defaultMenu;
   const items = (home ?? defaultHomepage).announcements.filter(a => a.text.trim());
   return (
     <div className="storefront flex min-h-screen flex-col bg-background text-foreground">
@@ -37,13 +41,7 @@ export function ShopLayout({ children }: { children: ReactNode }) {
       <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur">
         <div className="relative mx-auto grid h-16 max-w-[1600px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-3 md:px-6">
           <Button variant="ghost" size="icon" className="md:hidden" aria-label="Menu openen" onClick={() => setMenuOpen(true)}><Menu /></Button>
-          <nav aria-label="Hoofdmenu" className="hidden min-w-0 gap-4 text-xs font-medium uppercase md:flex lg:gap-5">
-            {nav.map((n) => (
-              <Link key={n.label} {...n} className="py-3 hover:text-primary" activeProps={{ className: "text-primary underline underline-offset-8" }} activeOptions={{ exact: true }}>
-                {n.label}
-              </Link>
-            ))}
-          </nav>
+          <nav aria-label="Hoofdmenu" className="hidden md:block"><DesktopMenu items={menuItems} /></nav>
           <Link to="/" className="shrink-0" aria-label="CREATEE home">
             <Logo variant="green" />
           </Link>
@@ -97,10 +95,7 @@ export function ShopLayout({ children }: { children: ReactNode }) {
       <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
         <SheetContent side="left" className="storefront w-[min(88vw,360px)] bg-background px-6">
           <SheetHeader><SheetTitle><Logo variant="green" className="h-7" /></SheetTitle></SheetHeader>
-          <nav aria-label="Mobiel menu" className="mt-8 flex flex-col">
-            {nav.map(n => <Link key={n.label} {...n} onClick={() => setMenuOpen(false)} className="border-b border-border py-5 text-lg font-semibold uppercase" activeProps={{ className: "text-primary" }} activeOptions={{ exact: true }}>{n.label}</Link>)}
-            <Link to="/pages/de-hybr-polo" onClick={() => setMenuOpen(false)} className="py-5 text-sm">De HYBR™ polo</Link>
-          </nav>
+          <nav aria-label="Mobiel menu" className="mt-6"><MobileMenu items={menuItems} onNavigate={() => setMenuOpen(false)} /></nav>
         </SheetContent>
       </Sheet>
       <CartSheet />

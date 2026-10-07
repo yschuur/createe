@@ -20,3 +20,4 @@
 - Design Studio choices are included in the existing request message without changing the schema — preserves the admin request readback and keeps this restyle frontend-only.
 - Editable storefront content (homepage header, announcement bar, carousel order) lives as JSON rows in `site_settings`, read publicly and written by admins via RLS — lets the owner change copy without code.
 - Hero videos are transcoded to H.264 MP4 without audio before upload — .mov/PCM audio is heavy and not reliably playable in browsers.
+- Site navigation is a nested JSON tree in `site_settings` (key "menu") rendered by SiteMenu — supports unlimited submenu depth without schema changes.

@@ -42,7 +42,7 @@ function MenuAdmin() {
   function Row({ item, path }: { item: MenuItem; path: Path }) {
     const i = idx(path);
     const siblings = listAt(items!, path.slice(0, -1)).length;
-    return <li className="space-y-2">
+    return <li key={path.join("-")} className="space-y-2">
       <div className="flex flex-wrap items-center gap-2 rounded-sm border border-border bg-background p-2">
         <Input aria-label="Naam" className="min-w-36 flex-1" value={item.label} onChange={e => mutate(d => { parentList(d, path)[i].label = e.target.value; })} />
         <Input aria-label="Link" className="min-w-44 flex-1" placeholder="/collections/golf" value={item.link} onChange={e => mutate(d => { parentList(d, path)[i].link = e.target.value; })} />
@@ -51,7 +51,7 @@ function MenuAdmin() {
         <Button variant="ghost" size="icon" aria-label="Verwijderen" onClick={() => { if (item.children.length && !confirm("Dit item en alle submenu's verwijderen?")) return; mutate(d => { parentList(d, path).splice(i, 1); }); }}><Trash2 /></Button>
       </div>
       <ul className="ml-6 space-y-2 border-l border-border pl-4">
-        {item.children.map((c, j) => <Row key={j} item={c} path={[...path, j]} />)}
+        {item.children.map((c, j) => Row({ item: c, path: [...path, j] }))}
         <li><Button variant="ghost" size="sm" onClick={() => mutate(d => { listAt(d, path).push({ label: "Nieuw item", link: "", children: [] }); })}><Plus /> Submenu toevoegen aan {item.label || "item"}</Button></li>
       </ul>
     </li>;
@@ -61,7 +61,7 @@ function MenuAdmin() {
     <section className="rounded-sm bg-card p-6">
       <p className="mb-4 text-sm text-muted-foreground">Elk item heeft een naam en een link (bijv. /collections/golf, /design-studio of een volledige webadres). Submenu's kun je onbeperkt nesten. Laat de link leeg voor een item zonder pagina.</p>
       <ul className="space-y-3">
-        {items.map((it, i) => <Row key={i} item={it} path={[i]} />)}
+        {items.map((it, i) => Row({ item: it, path: [i] }))}
         <li><Button variant="outline" onClick={() => mutate(d => { d.push({ label: "Nieuw item", link: "", children: [] }); })}><Plus /> Menu-item toevoegen</Button></li>
       </ul>
     </section>
