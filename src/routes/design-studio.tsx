@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Check, ArrowDown, MessageCircle, Pencil, Shirt, Flag } from "lucide-react";
 import { z } from "zod";
@@ -10,9 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
-import { listProductsQuery, formatPrice } from "@/lib/shop";
+import { formatPrice } from "@/lib/shop";
 import polo from "@/assets/studio-polo.jpg.asset.json";
 import tee from "@/assets/studio-tee.jpg.asset.json";
 import hoodie from "@/assets/studio-hoodie.jpg.asset.json";
@@ -32,7 +30,6 @@ export const Route = createFileRoute("/design-studio")({
     { property: "og:description", content: "Breng je idee tot leven. Vraag jouw persoonlijke CREATEE ontwerp aan." },
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
   ] }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(listProductsQuery()),
   component: DesignStudio,
 });
 
@@ -56,7 +53,6 @@ const schema = z.object({
 });
 
 function DesignStudio() {
-  const { data: products } = useSuspenseQuery(listProductsQuery());
   const [sent, setSent] = useState(false);
   const [busy, setBusy] = useState(false);
   const [gender, setGender] = useState<"Heren"|"Dames">("Heren");
