@@ -14,7 +14,7 @@ function ReviewText({ text }: { text: string }) {
 export function Reviews() {
   const row = useRef<HTMLDivElement>(null);
   const scroll = (dir: number) => row.current?.scrollBy({ left: dir * row.current.clientWidth, behavior: "smooth" });
-  return <section aria-label="Klantbeoordelingen" className="px-5 py-5 font-display lg:px-10 lg:py-10">
+  return <section data-section="site-reviews" aria-label="Klantbeoordelingen" className="px-5 py-5 font-display lg:px-10 lg:py-10">
     <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-10">
       <div className="flex shrink-0 flex-col items-center gap-2 text-center lg:w-40 lg:items-start lg:text-left">
         <div className="flex items-center gap-3 lg:flex-col lg:items-start lg:gap-2">
