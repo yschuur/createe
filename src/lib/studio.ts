@@ -24,7 +24,20 @@ export const studioProducts: StudioProduct[] = [
 ];
 
 export type StudioReview = { id: string; image: string; name: string; text: string; rating: number };
-export type StudioSettings = { reviews: StudioReview[]; color_images: Record<string, string> };
+export type StudioSettings = {
+  reviews: StudioReview[];
+  color_images: Record<string, string>;
+  service_price: number; // prijs Design Studio-service
+  service_compare: number; // doorgestreepte prijs (0 = geen)
+  tiers: Record<string, [number, number, number]>; // staffel per product
+  discounts: Record<string, number>; // korting % per product
+};
+
+export const tiersFor = (s: StudioSettings, p: StudioProduct) => s.tiers?.[p.name] ?? p.tiers;
+export const discountedTiers = (s: StudioSettings, p: StudioProduct): [number, number, number] => {
+  const d = Math.min(100, Math.max(0, s.discounts?.[p.name] ?? 0));
+  return tiersFor(s, p).map((t) => Math.round(t * (100 - d)) / 100) as [number, number, number];
+};
 
 export const colorKey = (product: string, color: string) => `${product}|${color}`;
 export const builtinImages = [polo, tee, hoodie, performance, photo1, photo2, photo3, photo4, photo5, photo6].map((a) => a.url);
@@ -32,6 +45,10 @@ export const builtinImages = [polo, tee, hoodie, performance, photo1, photo2, ph
 export const defaultStudio: StudioSettings = {
   reviews: [photo1, photo2, photo3, photo4, photo5, photo6].map((p, i) => ({ id: `default-${i}`, image: p.url, name: "", text: "", rating: 5 })),
   color_images: {},
+  service_price: 25,
+  service_compare: 50,
+  tiers: {},
+  discounts: {},
 };
 
 export const studioQuery = () => queryOptions({

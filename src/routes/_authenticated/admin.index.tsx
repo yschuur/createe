@@ -50,7 +50,7 @@ function Dashboard() {
                 <div>
                   <p className="font-medium">{r.name} · <a href={`mailto:${r.email}`} className="underline">{r.email}</a>{r.phone ? ` · ${r.phone}` : ""}</p>
                   <p className="text-muted-foreground">{r.occasion}{r.quantity ? ` · ${r.quantity} stuks` : ""} · {new Date(r.created_at).toLocaleDateString("nl-NL")}</p>
-                  <p className="mt-1 whitespace-pre-wrap">{r.message}</p>
+                  <RequestMessage text={r.message} />
                 </div>
                 <select value={r.status} onChange={(e) => setStatus(r.id, e.target.value)} className="rounded-sm border border-input bg-background px-2 py-1">
                   {["nieuw", "in behandeling", "afgerond"].map((s) => <option key={s}>{s}</option>)}
@@ -66,4 +66,17 @@ function Dashboard() {
 
 function Card({ label, value }: { label: string; value: number | string }) {
   return <div className="rounded-sm bg-card p-5"><p className="text-sm text-muted-foreground">{label}</p><p className="mt-1 text-3xl font-semibold">{value}</p></div>;
+}
+
+function RequestMessage({ text }: { text: string }) {
+  const lines = text.split("\n");
+  async function open(path: string) {
+    const { data, error } = await supabase.storage.from("studio-assets").createSignedUrl(path, 3600);
+    if (error || !data) return;
+    window.open(data.signedUrl, "_blank", "noopener");
+  }
+  return <div className="mt-1 whitespace-pre-wrap">{lines.map((l, i) => {
+    const m = l.match(/^Bestand: (requests\/[\w.-]+)$/);
+    return m ? <div key={i}><button type="button" className="text-primary underline" onClick={() => open(m[1]!)}>Bekijk referentiebestand</button></div> : <div key={i}>{l || "\u00a0"}</div>;
+  })}</div>;
 }
