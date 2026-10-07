@@ -14,7 +14,7 @@ import { DesktopMenu, MobileMenu } from "@/components/shop/SiteMenu";
 
 
 
-export function ShopLayout({ children }: { children: ReactNode }) {
+export function ShopLayout({ children, page }: { children: ReactNode; page?: "home" | "studio" | "story" }) {
   const cart = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
   const { data: home } = useQuery(homepageQuery());
@@ -22,7 +22,7 @@ export function ShopLayout({ children }: { children: ReactNode }) {
   const menuItems = menu ?? defaultMenu;
   const items = (home ?? defaultHomepage).announcements.filter(a => a.text.trim());
   return (
-    <div className="storefront flex min-h-screen flex-col bg-background text-foreground">
+    <div className={`storefront ${page ? `page-${page}` : ""} flex min-h-screen flex-col bg-background text-foreground`}>
       {items.length > 0 && <div className="overflow-hidden bg-primary py-1.5 text-[10px] font-medium uppercase text-primary-foreground">
         <div className="animate-marquee flex w-max gap-12 whitespace-nowrap">
           {Array.from({ length: 2 }).map((_, k) => (
