@@ -69,7 +69,6 @@ function ProductPage() {
       if (m) keys.forEach((k, i) => (next[i] = m[k]));
     }
     setSelected(next);
-    const match = variants.find((v) => keys.every((k, i) => (v[k] ?? null) === (next[i] ?? null)));
      if (isColor(optionNames[idx] ?? null)) {
        const colorVariants = variants.filter((v) => v[keys[idx] ?? "option1_value"] === value);
        const vi = images.findIndex((im) => im.variant_id && colorVariants.some((v) => v.id === im.variant_id));
