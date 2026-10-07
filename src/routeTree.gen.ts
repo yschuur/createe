@@ -23,6 +23,7 @@ import { Route as AuthenticatedAdminCollectionsRouteImport } from './routes/_aut
 import { Route as AuthenticatedAdminDiscountsRouteImport } from './routes/_authenticated/admin.discounts'
 import { Route as AuthenticatedAdminHomepageRouteImport } from './routes/_authenticated/admin.homepage'
 import { Route as AuthenticatedAdminImportRouteImport } from './routes/_authenticated/admin.import'
+import { Route as AuthenticatedAdminMediaRouteImport } from './routes/_authenticated/admin.media'
 import { Route as AuthenticatedAdminMenuRouteImport } from './routes/_authenticated/admin.menu'
 import { Route as AuthenticatedAdminStudioRouteImport } from './routes/_authenticated/admin.studio'
 import { Route as AuthenticatedAdminStylesRouteImport } from './routes/_authenticated/admin.styles'
@@ -102,6 +103,11 @@ const AuthenticatedAdminImportRoute =
     path: '/admin/import',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminMediaRoute = AuthenticatedAdminMediaRouteImport.update({
+  id: '/admin/media',
+  path: '/admin/media',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAdminMenuRoute = AuthenticatedAdminMenuRouteImport.update({
   id: '/admin/menu',
   path: '/admin/menu',
@@ -145,6 +151,7 @@ export interface FileRoutesByFullPath {
   '/admin/discounts': typeof AuthenticatedAdminDiscountsRoute
   '/admin/homepage': typeof AuthenticatedAdminHomepageRoute
   '/admin/import': typeof AuthenticatedAdminImportRoute
+  '/admin/media': typeof AuthenticatedAdminMediaRoute
   '/admin/menu': typeof AuthenticatedAdminMenuRoute
   '/admin/studio': typeof AuthenticatedAdminStudioRoute
   '/admin/styles': typeof AuthenticatedAdminStylesRoute
@@ -165,6 +172,7 @@ export interface FileRoutesByTo {
   '/admin/discounts': typeof AuthenticatedAdminDiscountsRoute
   '/admin/homepage': typeof AuthenticatedAdminHomepageRoute
   '/admin/import': typeof AuthenticatedAdminImportRoute
+  '/admin/media': typeof AuthenticatedAdminMediaRoute
   '/admin/menu': typeof AuthenticatedAdminMenuRoute
   '/admin/studio': typeof AuthenticatedAdminStudioRoute
   '/admin/styles': typeof AuthenticatedAdminStylesRoute
@@ -187,6 +195,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/discounts': typeof AuthenticatedAdminDiscountsRoute
   '/_authenticated/admin/homepage': typeof AuthenticatedAdminHomepageRoute
   '/_authenticated/admin/import': typeof AuthenticatedAdminImportRoute
+  '/_authenticated/admin/media': typeof AuthenticatedAdminMediaRoute
   '/_authenticated/admin/menu': typeof AuthenticatedAdminMenuRoute
   '/_authenticated/admin/studio': typeof AuthenticatedAdminStudioRoute
   '/_authenticated/admin/styles': typeof AuthenticatedAdminStylesRoute
@@ -209,6 +218,7 @@ export interface FileRouteTypes {
     | '/admin/discounts'
     | '/admin/homepage'
     | '/admin/import'
+    | '/admin/media'
     | '/admin/menu'
     | '/admin/studio'
     | '/admin/styles'
@@ -229,6 +239,7 @@ export interface FileRouteTypes {
     | '/admin/discounts'
     | '/admin/homepage'
     | '/admin/import'
+    | '/admin/media'
     | '/admin/menu'
     | '/admin/studio'
     | '/admin/styles'
@@ -250,6 +261,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/discounts'
     | '/_authenticated/admin/homepage'
     | '/_authenticated/admin/import'
+    | '/_authenticated/admin/media'
     | '/_authenticated/admin/menu'
     | '/_authenticated/admin/studio'
     | '/_authenticated/admin/styles'
@@ -370,6 +382,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminImportRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/media': {
+      id: '/_authenticated/admin/media'
+      path: '/admin/media'
+      fullPath: '/admin/media'
+      preLoaderRoute: typeof AuthenticatedAdminMediaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/menu': {
       id: '/_authenticated/admin/menu'
       path: '/admin/menu'
@@ -413,6 +432,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminDiscountsRoute: typeof AuthenticatedAdminDiscountsRoute
   AuthenticatedAdminHomepageRoute: typeof AuthenticatedAdminHomepageRoute
   AuthenticatedAdminImportRoute: typeof AuthenticatedAdminImportRoute
+  AuthenticatedAdminMediaRoute: typeof AuthenticatedAdminMediaRoute
   AuthenticatedAdminMenuRoute: typeof AuthenticatedAdminMenuRoute
   AuthenticatedAdminStudioRoute: typeof AuthenticatedAdminStudioRoute
   AuthenticatedAdminStylesRoute: typeof AuthenticatedAdminStylesRoute
@@ -426,6 +446,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminDiscountsRoute: AuthenticatedAdminDiscountsRoute,
   AuthenticatedAdminHomepageRoute: AuthenticatedAdminHomepageRoute,
   AuthenticatedAdminImportRoute: AuthenticatedAdminImportRoute,
+  AuthenticatedAdminMediaRoute: AuthenticatedAdminMediaRoute,
   AuthenticatedAdminMenuRoute: AuthenticatedAdminMenuRoute,
   AuthenticatedAdminStudioRoute: AuthenticatedAdminStudioRoute,
   AuthenticatedAdminStylesRoute: AuthenticatedAdminStylesRoute,
