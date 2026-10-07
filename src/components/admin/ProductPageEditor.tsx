@@ -10,7 +10,7 @@ export function ProductPageEditor({ value, onChange }: { value: ProductPageConte
   const set = <K extends keyof ProductPageContent>(k: K, v: ProductPageContent[K]) => onChange({ ...value, [k]: v });
   const acc = value.accordions;
   const setAcc = (i: number, patch: Partial<ProductPageContent["accordions"][number]>) => set("accordions", acc.map((a, j) => (j === i ? { ...a, ...patch } : a)));
-  const moveAcc = (i: number, d: number) => { const a = [...acc]; const j = i + d; if (j < 0 || j >= a.length) return; [a[i], a[j]] = [a[j]!, a[i]!]; set("accordions", a); };
+  const moveAcc = (i: number, d: number) => { const a = [...acc]; const j = i + d; const first = a[i], second = a[j]; if (!first || !second) return; a[i] = second; a[j] = first; set("accordions", a); };
   const F = (label: string, k: keyof ProductPageContent) => (
     <div><Label>{label}</Label><Input value={value[k] as string} onChange={(e) => set(k, e.target.value as never)} /></div>
   );
@@ -42,7 +42,6 @@ export function ProductPageEditor({ value, onChange }: { value: ProductPageConte
               <button onClick={() => set("accordions", acc.filter((_, j) => j !== i))} aria-label="Verwijder"><Trash2 className="h-4 w-4 text-destructive" /></button>
             </div>
             <Textarea rows={4} value={a.html} placeholder="Inhoud (HTML, bijv. <ul><li>…</li></ul>)" onChange={(e) => setAcc(i, { html: e.target.value })} />
-            <label className="flex items-center gap-2 text-xs"><Switch checked={a.open} onCheckedChange={(c) => setAcc(i, { open: c })} /> Standaard open</label>
           </div>
         ))}
         <Button variant="outline" size="sm" onClick={() => set("accordions", [...acc, { title: "Nieuw blok", html: "", open: false }])}><Plus className="mr-1 h-4 w-4" /> Blok</Button>

@@ -38,9 +38,9 @@ export function defaultPage(p: P): ProductPageContent {
     featureLinkUrl: "/pages/de-hybr-polo",
     featureBadges: ["360° stretch", "Premium finish", "Smart-collar", "Kreukvrij & ademend"],
     accordions: [
-      { title: "Productdetails", open: true, html: p.fabric ? `<p><strong>Materiaal</strong></p><ul><li>${p.fabric}</li></ul>` : "" },
-      { title: "Verzending", open: true, html: "<p>Onze standaardproducten worden meestal binnen 1 tot 3 werkdagen verstuurd met PostNL.</p>" },
-      { title: "Onderhoudsinstructies", open: true, html: CARE },
+      { title: "Productdetails", open: false, html: p.fabric ? `<p><strong>Materiaal</strong></p><ul><li>${p.fabric}</li></ul>` : "" },
+      { title: "Verzending", open: false, html: "<p>Onze standaardproducten worden meestal binnen 1 tot 3 werkdagen verstuurd met PostNL.</p>" },
+      { title: "Onderhoudsinstructies", open: false, html: CARE },
     ],
   };
 }
