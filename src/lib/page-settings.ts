@@ -38,6 +38,7 @@ export type SectionConfig = {
   typography?: Partial<Record<RoleId, TypographyStyle>> | undefined;
   background?: BackgroundStyle | undefined;
   button?: ButtonStyle | undefined;
+  buttons?: Record<string, ButtonStyle> | undefined;
   spacing?: { top?: ResponsiveNumber | undefined; bottom?: ResponsiveNumber | undefined; x?: ResponsiveNumber | undefined } | undefined;
   extra?: Record<string, ResponsiveNumber> | undefined;
 };
@@ -189,6 +190,19 @@ export const PAGE_DEFS: PageDef[] = [
   },
 ];
 
+// Editorial copy is formatted per field, not through a shared heading/body style.
+for (const page of PAGE_DEFS.filter((p) => p.key === "story" || p.key === "hybr")) {
+  for (const section of page.sections) {
+    section.content = section.content?.map((f) =>
+      (f.type === "text" || f.type === "textarea") && !/^btn\d+_label$/.test(f.key) ? { ...f, type: "rich" } : f,
+    );
+  }
+}
+const technology = PAGE_DEFS.find((p) => p.key === "hybr")?.sections.find((s) => s.id === "hybr-2");
+if (technology?.content) {
+  for (let n = 1; n <= 4; n++) technology.content.push({ key: `f${n}_number`, label: `Kenmerk ${n} — nummer`, type: "rich", default: `0${n}` });
+}
+
 function valueFields(n: number, title: string, text: string): ContentFieldDef[] {
   return [txt(`v${n}_number`, `Kaart ${n} — nummer`, `0${n}`), txt(`v${n}_title`, `Kaart ${n} — titel`, title), area(`v${n}_text`, `Kaart ${n} — tekst`, text),
     { key: `v${n}_bg`, label: `Kaart ${n} — achtergrond`, type: "color", default: "" }, { key: `v${n}_color`, label: `Kaart ${n} — tekstkleur`, type: "color", default: "" }];
@@ -237,13 +251,15 @@ const typo = z.object({
   letterSpacing: num(-0.1, 0.5), transform: z.enum(["default", "uppercase", "lowercase", "capitalize"]).optional().catch(undefined),
   align: z.enum(["left", "center", "right"]).optional().catch(undefined), color,
 }).optional().catch(undefined);
+const buttonSchema = z.object({ variant: z.enum(["filled", "outline", "ghost"]).optional().catch(undefined), bg: color, color, border: color, size: num(8, 40), weight: num(100, 900), radius: num(0, 999), px: num(0, 80), py: num(0, 40) });
 const sectionSchema = z.object({
   visible: z.boolean().optional().catch(undefined), hideMobile: z.boolean().optional().catch(undefined), hideDesktop: z.boolean().optional().catch(undefined),
   content: z.record(z.string().max(20000)).optional().catch(undefined),
   media: z.record(z.object({ url: z.string().max(4000).optional().catch(undefined), alt: z.string().max(300).optional().catch(undefined), position: z.enum(POSITIONS as [Position, ...Position[]]).optional().catch(undefined) })).optional().catch(undefined),
   typography: z.record(typo).optional().catch(undefined),
   background: z.object({ color, image: z.string().max(4000).optional().catch(undefined), size: z.enum(["cover", "contain"]).optional().catch(undefined), position: z.enum(POSITIONS as [Position, ...Position[]]).optional().catch(undefined), overlay: color, overlayOpacity: num(0, 100) }).optional().catch(undefined),
-  button: z.object({ variant: z.enum(["filled", "outline", "ghost"]).optional().catch(undefined), bg: color, color, border: color, size: num(8, 40), weight: num(100, 900), radius: num(0, 999), px: num(0, 80), py: num(0, 40) }).optional().catch(undefined),
+  button: buttonSchema.optional().catch(undefined),
+  buttons: z.record(buttonSchema).optional().catch(undefined),
   spacing: z.object({ top: rn(0, 400), bottom: rn(0, 400), x: rn(0, 200) }).optional().catch(undefined),
   extra: z.record(rn(0, 400)).optional().catch(undefined),
 });
@@ -380,7 +396,7 @@ export function buildPageCss(key: PageKey, overrides: PageConfig | undefined): s
     for (const [role, selector] of ROLE_SELECTORS) {
       const st = c.typography?.[role];
       if (!st || !s.roles.includes(role)) continue;
-      const sel = selector.split(",").map((x) => `${root} :is(${x})`).join(",");
+      const sel = selector.split(",").map((x) => `${root} :is(${x}):not(.cms-rich *)`).join(",");
       const decl: string[] = [];
       if (st.font && FONTS[st.font]) decl.push(`font-family:${FONTS[st.font]}`);
       const w = clampN(st.weight, 100, 900); if (w) decl.push(`font-weight:${Math.round(w / 100) * 100}`);
@@ -393,9 +409,12 @@ export function buildPageCss(key: PageKey, overrides: PageConfig | undefined): s
       responsive(sel, "font-size", st.size, 8, 160, "px", out);
     }
     // Buttons
-    const b = c.button;
-    if (b && s.buttons) {
-      const sel = `${root} [data-slot=button]`;
+    const buttonEntries: [string, ButtonStyle | undefined][] = [[`${root} [data-slot=button]`, c.button]];
+    for (const [id, style] of Object.entries(c.buttons ?? {})) {
+      if (/^btn\d+$/.test(id) && s.content?.some((f) => f.key === `${id}_label`)) buttonEntries.push([`${root} [data-slot=button][data-page-button="${id}"]`, style]);
+    }
+    for (const [sel, b] of buttonEntries) {
+      if (!b || !s.buttons) continue;
       const decl: string[] = [];
       if (b.variant === "outline") decl.push("background:transparent", "border:1px solid currentColor", "box-shadow:none");
       if (b.variant === "ghost") decl.push("background:transparent", "border-color:transparent", "box-shadow:none");
