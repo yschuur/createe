@@ -199,7 +199,7 @@ function DrawerSection({ title, children, defaultOpen = true }: { title: string;
 
 function FilterDrawer({ count, colors, avail, min, max, color, sort, hasFilters, setSearch, onClose }: {
   count: number; colors: string[];
-  avail?: string; min?: number; max?: number; color?: string; sort?: string;
+  avail?: string | undefined; min?: number | undefined; max?: number | undefined; color?: string | undefined; sort?: string | undefined;
   hasFilters: boolean;
   setSearch: (patch: Record<string, unknown>) => void;
   onClose: () => void;
