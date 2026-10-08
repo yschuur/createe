@@ -67,6 +67,7 @@ function SportShopPage() {
   const setSearch = (patch: Record<string, unknown>) =>
     navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, ...patch }), replace: true });
 
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const chip = "rounded-full border border-border px-4 py-1.5 text-sm hover:border-primary";
   const on = "bg-primary text-primary-foreground border-primary";
   return (
