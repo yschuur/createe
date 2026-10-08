@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { RotateCcw } from "lucide-react";
 import { dragFocus, focusPosition, type ImageFocus } from "@/lib/image-focus";
 
-export function ImageFocusEditor({ url, value, onChange }: { url: string; value: ImageFocus; onChange: (focus: ImageFocus) => void }) {
+export function ImageFocusEditor({ url, value, onChange, aspectRatio = 4 / 3 }: { url: string; value: ImageFocus; onChange: (focus: ImageFocus) => void; aspectRatio?: number }) {
   const image = useRef<HTMLImageElement>(null);
   const gesture = useRef<{ id: number; x: number; y: number; focus: ImageFocus; ox: number; oy: number } | null>(null);
   const [dragging, setDragging] = useState(false);
@@ -19,7 +19,7 @@ export function ImageFocusEditor({ url, value, onChange }: { url: string; value:
   const end = () => { gesture.current = null; setDragging(false); };
   return <div className="space-y-2">
     <div role="group" aria-label="Afbeeldingsuitsnede" tabIndex={0}
-      className={`relative aspect-[4/3] w-full touch-none overflow-hidden rounded-sm bg-muted outline-none focus-visible:ring-2 focus-visible:ring-ring ${dragging ? "cursor-grabbing" : "cursor-grab"}`}
+      style={{ aspectRatio }} className={`relative w-full touch-none overflow-hidden rounded-sm bg-muted outline-none focus-visible:ring-2 focus-visible:ring-ring ${dragging ? "cursor-grabbing" : "cursor-grab"}`}
       onPointerDown={start} onPointerUp={end} onPointerCancel={end} onLostPointerCapture={end}
       onPointerMove={(e) => { const g = gesture.current; if (g && g.id === e.pointerId) onChange(dragFocus(g.focus, e.clientX - g.x, e.clientY - g.y, g.ox, g.oy)); }}
       onKeyDown={(e) => { const delta: Record<string, [number, number]> = { ArrowLeft: [-2, 0], ArrowRight: [2, 0], ArrowUp: [0, -2], ArrowDown: [0, 2] }; const d = delta[e.key]; if (d) { e.preventDefault(); onChange({ x: Math.max(0, Math.min(100, value.x + d[0])), y: Math.max(0, Math.min(100, value.y + d[1])) }); } }}>

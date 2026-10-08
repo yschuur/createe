@@ -13,7 +13,7 @@ import { ImageFocusEditor } from "@/components/admin/ImageFocusEditor";
 import { legacyFocus } from "@/lib/image-focus";
 import { FONTS } from "@/lib/section-styles";
 import {
-  COLOR_TOKENS, isValidColor, safeColor,
+  COLOR_TOKENS, isValidColor, safeColor, PAGE_DEFS,
   type ButtonStyle, type BackgroundStyle, type Position, type ResponsiveNumber, type RoleId, type SectionConfig, type SectionDef, type TypographyStyle,
 } from "@/lib/page-settings";
 
@@ -137,6 +137,8 @@ function SpacingRow({ label, value, onChange, max }: { label: string; value: Res
 }
 
 export function SectionEditor({ def, value, onChange, version }: { def: SectionDef; value: SectionConfig; onChange: (v: SectionConfig) => void; version: number }) {
+  const [frameRatios, setFrameRatios] = useState<Record<string, number>>({});
+  const editorialPage = PAGE_DEFS.find((p) => (p.key === "story" || p.key === "hybr") && p.sections.some((s) => s.id === def.id));
   const set = (patch: Partial<SectionConfig>) => onChange({ ...value, ...patch });
   const content = value.content ?? {};
   const setContent = (k: string, v: string | undefined) => { const c = { ...content }; if (v === undefined) delete c[k]; else c[k] = v; set({ content: c }); };
@@ -179,12 +181,24 @@ export function SectionEditor({ def, value, onChange, version }: { def: SectionD
     </TabsContent>}
 
     {!!def.media?.length && <TabsContent value="media" className="grid gap-4 pt-4 md:grid-cols-2">
+      {editorialPage && <iframe src={editorialPage.viewUrl} title="Afbeeldingskaders meten" aria-hidden="true" tabIndex={-1} className="pointer-events-none fixed left-0 top-0 invisible h-[1800px] w-[1280px] border-0" onLoad={(e) => {
+        const doc = e.currentTarget.contentDocument;
+        if (!doc) return;
+        const frames: Record<string, number> = {};
+        for (const f of def.media ?? []) {
+          const url = media[f.key]?.url ?? f.default;
+          const img = Array.from(doc.querySelectorAll<HTMLImageElement>(`[data-section="${def.id}"] img`)).find((i) => i.getAttribute("src") === url);
+          const rect = img?.parentElement?.getBoundingClientRect();
+          if (rect && rect.height > 0) frames[f.key] = rect.width / rect.height;
+        }
+        setFrameRatios(frames);
+      }} />}
       {def.media.map((f) => {
         const ov = media[f.key];
         const cur = { url: ov?.url ?? f.default, alt: ov?.alt ?? f.alt, position: ov?.position ?? "center" };
         return <div key={f.key} className="space-y-3 rounded-sm border border-border p-4">
           <div className="flex items-center justify-between"><p className="font-medium">{f.label}</p>{ov && <ResetLink onClick={() => setMedia(f.key, undefined)} />}</div>
-          {cur.url && (f.kind === "image" ? <ImageFocusEditor url={cur.url} value={ov?.focus ?? legacyFocus(cur.position)} onChange={(focus) => setMedia(f.key, { focus })} /> : <video src={cur.url} controls className="h-40 w-full rounded-sm bg-muted object-cover" />)}
+          {cur.url && (f.kind === "image" ? <ImageFocusEditor url={cur.url} aspectRatio={frameRatios[f.key]} value={ov?.focus ?? legacyFocus(cur.position)} onChange={(focus) => setMedia(f.key, { focus })} /> : <video src={cur.url} controls className="h-40 w-full rounded-sm bg-muted object-cover" />)}
           <MediaField kind={f.kind} value={ov?.url ?? ""} placeholder="Leeg = standaardfoto" onChange={(u) => setMedia(f.key, { url: u || undefined })} />
           <Field label="Omschrijving (voor zoekmachines en schermlezers)"><Input value={cur.alt} onChange={(e) => setMedia(f.key, { alt: e.target.value })} /></Field>
         </div>;
