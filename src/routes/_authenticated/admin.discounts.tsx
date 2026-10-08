@@ -25,11 +25,12 @@ function DiscountsAdmin() {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     const code = String(fd.get("code")).trim().toUpperCase();
-    const value = Number(fd.get("value"));
+    const type = String(fd.get("type"));
+    const value = type === "free_shipping" ? 0 : Number(fd.get("value"));
     if (!/^[A-Z0-9_-]{3,30}$/.test(code)) { toast.error("Code: 3–30 letters/cijfers"); return; }
-    if (!(value > 0)) { toast.error("Waarde moet groter dan 0 zijn"); return; }
+    if (type !== "free_shipping" && !(value > 0)) { toast.error("Waarde moet groter dan 0 zijn"); return; }
     const { error } = await supabase.from("discounts").insert({
-      code, value, type: String(fd.get("type")), description: String(fd.get("description") || "") || null,
+      code, value, type, description: String(fd.get("description") || "") || null,
       min_order_amount: fd.get("min") ? Number(fd.get("min")) : null,
       starts_at: fd.get("starts") ? new Date(String(fd.get("starts"))).toISOString() : null,
       ends_at: fd.get("ends") ? new Date(String(fd.get("ends"))).toISOString() : null,
@@ -46,8 +47,8 @@ function DiscountsAdmin() {
     <AdminLayout title="Acties & kortingscodes">
       <form onSubmit={create} className="mb-6 grid gap-3 rounded-sm bg-card p-5 md:grid-cols-4">
         <div><Label>Code</Label><Input name="code" placeholder="ZOMER20" required /></div>
-        <div><Label>Soort</Label><select name="type" className="h-9 w-full rounded-sm border border-input bg-background px-2 text-sm"><option value="percentage">Percentage</option><option value="fixed">Vast bedrag (€)</option></select></div>
-        <div><Label>Waarde</Label><Input name="value" type="number" step="0.01" required /></div>
+        <div><Label>Soort</Label><select name="type" className="h-9 w-full rounded-sm border border-input bg-background px-2 text-sm"><option value="percentage">Percentage</option><option value="fixed">Vast bedrag (€)</option><option value="free_shipping">Gratis bezorging</option></select></div>
+        <div><Label>Waarde</Label><Input name="value" type="number" step="0.01" placeholder="n.v.t. bij gratis bezorging" /></div>
         <div><Label>Min. bestelbedrag</Label><Input name="min" type="number" step="0.01" /></div>
         <div><Label>Start</Label><Input name="starts" type="date" /></div>
         <div><Label>Einde</Label><Input name="ends" type="date" /></div>
@@ -61,7 +62,7 @@ function DiscountsAdmin() {
             <div>
               <p className="font-mono text-base font-semibold">{d.code}</p>
               <p className="text-muted-foreground">
-                {d.type === "percentage" ? `${d.value}% korting` : `${formatPrice(d.value)} korting`}
+                {d.type === "free_shipping" ? "Gratis bezorging" : d.type === "percentage" ? `${d.value}% korting` : `${formatPrice(d.value)} korting`}
                 {d.min_order_amount ? ` · vanaf ${formatPrice(d.min_order_amount)}` : ""}
                 {d.ends_at ? ` · t/m ${new Date(d.ends_at).toLocaleDateString("nl-NL")}` : ""}
                 {` · ${d.times_used}${d.usage_limit ? `/${d.usage_limit}` : ""} gebruikt`}
@@ -75,7 +76,7 @@ function DiscountsAdmin() {
         ))}
         {data.length === 0 && <p className="text-sm text-muted-foreground">Nog geen acties.</p>}
       </div>
-      <p className="mt-4 text-xs text-muted-foreground">Kortingscodes worden toegepast zodra online afrekenen is gekoppeld.</p>
+      <p className="mt-4 text-xs text-muted-foreground">Codes voor gratis bezorging werken direct bij het afrekenen. Percentage- en bedragcodes worden online nog niet toegepast.</p>
     </AdminLayout>
   );
 }

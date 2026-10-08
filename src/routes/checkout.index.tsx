@@ -12,6 +12,7 @@ import { createCheckoutSession } from "@/lib/checkout.functions";
 import { getStripe, getStripeEnvironment } from "@/lib/stripe";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export const Route = createFileRoute("/checkout/")({
   head: () => ({ meta: [{ title: "Afrekenen — CREATEE" }, { name: "description", content: "Veilig afrekenen bij CREATEE." }, { property: "og:title", content: "Afrekenen — CREATEE" }, { property: "og:description", content: "Veilig afrekenen bij CREATEE." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
@@ -45,13 +46,14 @@ function CheckoutContent() {
   const [creating, setCreating] = useState(false);
   const startedRef = useRef(false);
   const { data: ship } = useQuery(shippingQuery());
+  const [code, setCode] = useState("");
+  const [freeShipping, setFreeShipping] = useState(false);
+  const [codeMsg, setCodeMsg] = useState("");
 
-  useEffect(() => {
-    if (startedRef.current) return;
-    if (cart.items.length === 0) return;
-    startedRef.current = true;
+  async function start(discountCode: string | null) {
     setCreating(true);
-    (async () => {
+    setClientSecret(null);
+    {
       const { data: { user } } = await supabase.auth.getUser();
       const res = await createCheckoutSession({
         data: {
@@ -59,12 +61,24 @@ function CheckoutContent() {
           userId: user?.id ?? null,
           returnUrl: `${window.location.origin}/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
           environment: getStripeEnvironment(),
+          discountCode,
         },
       });
       setCreating(false);
       if ("error" in res && res.error) setError(res.error);
-      else if ("clientSecret" in res) setClientSecret(res.clientSecret);
-    })();
+      else if ("clientSecret" in res) {
+        setClientSecret(res.clientSecret);
+        setFreeShipping(res.freeShipping);
+        setCodeMsg(res.discountError ?? (res.freeShipping ? "Gratis bezorging toegepast!" : ""));
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (startedRef.current) return;
+    if (cart.items.length === 0) return;
+    startedRef.current = true;
+    void start(null);
   }, [cart.items]);
 
   if (cart.items.length === 0 && !error) {
@@ -116,8 +130,13 @@ function CheckoutContent() {
         </div>
         {ship && <div className="flex justify-between border-t border-border px-5 py-3 text-sm text-muted-foreground">
           <span>Verzending</span>
-          <span>{shippingCost(cart.subtotal, ship) === 0 ? "Gratis" : formatPrice(shippingCost(cart.subtotal, ship))}</span>
+          <span>{freeShipping || shippingCost(cart.subtotal, ship) === 0 ? "Gratis" : formatPrice(shippingCost(cart.subtotal, ship))}</span>
         </div>}
+        <form className="flex flex-wrap items-center gap-2 border-t border-border px-5 py-3" onSubmit={(e) => { e.preventDefault(); if (code.trim()) void start(code.trim()); }}>
+          <Input value={code} onChange={(e) => setCode(e.target.value)} placeholder="Kortingscode" className="h-9 max-w-xs uppercase" aria-label="Kortingscode" />
+          <Button type="submit" variant="outline" size="sm" disabled={creating || !code.trim()}>Toepassen</Button>
+          {codeMsg && <span className={`text-sm ${freeShipping ? "text-primary" : "text-destructive"}`}>{codeMsg}</span>}
+        </form>
       </div>
       <div className="rounded-sm border border-border bg-card p-4 sm:p-6">
         {creating || !clientSecret ? (
