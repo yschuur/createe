@@ -15,10 +15,10 @@ export function ProductCard({ product, index = 0 }: { product: ProductWithRelati
   };
   const [active, setActive] = useState<string | null>(null);
   const activeImg = active ? colorImage(active) : undefined;
-  const tilt = index % 3 === 0 ? "md:-rotate-1" : index % 3 === 1 ? "md:rotate-1" : "";
+  void index;
   return (
     <div className="group block">
-      <div className={`relative aspect-[4/5] overflow-hidden rounded-sm bg-card shadow-sm transition-transform duration-300 group-hover:rotate-0 ${tilt}`}>
+      <div className="relative aspect-[4/5] overflow-hidden rounded-sm bg-card shadow-sm">
         <Link to="/products/$handle" params={{ handle: product.slug }} className="absolute inset-0" aria-label={product.name}>
           {activeImg ? (
             <img src={imgUrl(activeImg.url, 700)} alt={activeImg.alt_text ?? `${product.name} in ${prettyValue(active)}`} className="absolute inset-0 h-full w-full object-cover" />
