@@ -1,4 +1,5 @@
 # Roadmap
+- [x] Contact volgens screenshot: formulier links, beheerbare FAQ rechts; mobiel gestapeld en vragen standaard dicht; formulieropslag, beheer-teruglezing, FAQ opslaan/herladen en mobiele weergave getest. Testbericht verwijderd; e-mailmeldingen wachten op geverifieerd domein.
 - [x] Ons verhaal/HYBR: tekst bepaalt afbeeldingskader; uitsnede versleepbaar in paginabeheer met werkelijke kaderverhouding, opslaan/herladen en storefront-teruglezing getest; testuitsnede gecentreerd hersteld.
 - [x] Ons verhaal/HYBR compacter en paginabreed met kleinere afbeeldingen; kernwaarden ongewijzigd (zelfde hoogte), beide pagina’s gecontroleerd op brede en smalle schermen zonder overloop of fouten.
 - [x] Ons verhaal/HYBR volgens nieuwe screenshots met behoud van opmaakbeheer; normale/aanwijs-knopkleuren en randdikte opgeslagen en teruggelezen op homepage, HYBR en Studio; beide pagina's en smalle schermen gecontroleerd, testwijzigingen hersteld.
