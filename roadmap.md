@@ -1,4 +1,5 @@
 # Roadmap
+- [ ] Ons verhaal/HYBR exact volgens nieuwe screenshots, met behoud van tekst- en opmaakbeheer; volledige normale/aanwijs-knopopmaak voor gehele storefront testen.
 - [x] Ons verhaal/HYBR: alle teksten en titels met opmaakeditor, zelfstandige knopkleuren en teksten, Stijlen-tab verwijderd; opslaan/herladen en opmaak op beide pagina's getest met beheersessie, testwijzigingen hersteld.
 - [x] Productbeheer: fotoselectie en volgorde per kleur; opslaan/herladen, onafhankelijke kleurwissels en uitklapblokken getest met echte beheersessie, testinstellingen hersteld.
 - [x] Effen productswatches, eerste foto bij kleurkeuze en geen tweede foto bij product-hover; getest met twee gekoppelde kleurfoto's en homepage-preview.
