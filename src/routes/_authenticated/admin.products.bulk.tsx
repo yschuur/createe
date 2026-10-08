@@ -33,6 +33,7 @@ const FIELDS: FieldDef[] = [
   { key: "slug", label: "URL-handle", kind: "text" },
   { key: "seo_title", label: "SEO-titel", kind: "text" },
   { key: "seo_description", label: "SEO-omschrijving", kind: "text" },
+  { key: "size_chart_image", label: "Maattabel-afbeelding (URL)", kind: "text" },
 ];
 
 type Row = Record<string, unknown> & { id: string; name: string };
@@ -49,6 +50,7 @@ function BulkEdit() {
       if (p.error) throw p.error;
       const rows: Row[] = p.data.map(({ product_variants: v, ...x }) => ({
         ...x,
+        size_chart_image: (((x.metadata as Record<string, unknown> | null)?.["page"] as Record<string, unknown> | undefined)?.["sizeChartImage"] as string | undefined) ?? "",
         price: v.length ? Math.min(...v.map((y) => Number(y.price))) : 0,
         compare_at_price: v.find((y) => y.compare_at_price != null)?.compare_at_price ?? null,
       }));
@@ -78,7 +80,12 @@ function BulkEdit() {
     setSaving(true);
     try {
       for (const [id, e] of Object.entries(edits)) {
-        const { price: price, compare_at_price: compare_at_price, ...prod } = e as { price?: unknown; compare_at_price?: unknown } & Record<string, unknown>;
+        const { price: price, compare_at_price: compare_at_price, size_chart_image: chart, ...prod } = e as { price?: unknown; compare_at_price?: unknown; size_chart_image?: unknown } & Record<string, unknown>;
+        if (chart !== undefined) {
+          const meta = { ...((rows.find((r) => r.id === id)?.["metadata"] as Record<string, unknown> | null) ?? {}) };
+          meta["page"] = { ...((meta["page"] as Record<string, unknown> | undefined) ?? {}), sizeChartImage: String(chart ?? "") };
+          prod["metadata"] = meta;
+        }
         if (Object.keys(prod).length) {
           const { error } = await supabase.from("products").update(prod as never).eq("id", id);
           if (error) throw new Error(`${rows.find((r) => r.id === id)?.name}: ${error.message}`);

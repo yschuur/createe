@@ -22,8 +22,9 @@ export function ProductPageEditor({ value, onChange }: { value: ProductPageConte
       <div className="grid grid-cols-2 gap-3">
         {F("Label 1", "fitLabel")}{F("Waarde 1", "fitValue")}
         {F("Label 2", "modelLabel")}{F("Waarde 2", "modelValue")}
-        {F("Maattabel-knop", "sizeChartLabel")}{F("Maattabel-link (optioneel)", "sizeChartUrl")}
+        {F("Maattabel-knop", "sizeChartLabel")}{F("Maattabel-afbeelding (URL, opent als pop-up)", "sizeChartImage")}
       </div>
+      {value.sizeChartImage && <img src={value.sizeChartImage} alt="Maattabel" className="max-h-40 rounded-sm border border-border" />}
       <div className="space-y-3 rounded-sm border border-border p-3">
         <label className="flex items-center justify-between text-sm font-medium">Groen kenmerkenblok tonen<Switch checked={value.featureShow} onCheckedChange={(c) => set("featureShow", c)} /></label>
         {value.featureShow && (<>
