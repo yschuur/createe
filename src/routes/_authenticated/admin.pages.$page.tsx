@@ -19,7 +19,7 @@ function prune(v: unknown): unknown {
   if (Array.isArray(v)) return v;
   if (!isPlainObject(v)) return v;
   const out: Record<string, unknown> = {};
-  for (const [k, x] of Object.entries(v)) {
+  for (const [k, x] of Object.entries(v).sort(([a], [b]) => a.localeCompare(b))) {
     const p = prune(x);
     if (p === undefined || (isPlainObject(p) && Object.keys(p).length === 0)) continue;
     out[k] = p;

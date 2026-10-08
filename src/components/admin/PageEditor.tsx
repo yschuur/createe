@@ -97,12 +97,12 @@ function BackgroundEditor({ value, onChange, image }: { value: BackgroundStyle |
   </div>;
 }
 
-function ButtonEditor({ value, onChange }: { value: ButtonStyle | undefined; onChange: (v: ButtonStyle | undefined) => void }) {
+function ButtonEditor({ value, onChange, title = "Knoppen" }: { value: ButtonStyle | undefined; onChange: (v: ButtonStyle | undefined) => void; title?: string }) {
   const v = value ?? {};
   const set = (patch: Partial<ButtonStyle>) => onChange({ ...v, ...patch });
   const n = (k: keyof ButtonStyle, label: string, min: number, max: number) => <Field label={label}><Input type="number" min={min} max={max} value={(v[k] as number | undefined) ?? ""} placeholder="—" onChange={(e) => set({ [k]: num(e.target.value) })} /></Field>;
   return <div className="space-y-3 rounded-sm border border-border p-4">
-    <div className="flex items-center justify-between"><p className="font-medium">Knoppen</p>{value && <ResetLink onClick={() => onChange(undefined)} />}</div>
+    <div className="flex items-center justify-between"><p className="font-medium">{title}</p>{value && <ResetLink onClick={() => onChange(undefined)} />}</div>
     <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
       <Field label="Soort"><select className={sel} value={v.variant ?? ""} onChange={(e) => set({ variant: (e.target.value || undefined) as ButtonStyle["variant"] })}><option value="">Standaard</option><option value="filled">Gevuld</option><option value="outline">Omlijnd</option><option value="ghost">Alleen tekst</option></select></Field>
       {n("size", "Tekstgrootte (px)", 8, 40)}
@@ -133,11 +133,13 @@ export function SectionEditor({ def, value, onChange, version }: { def: SectionD
   const media = value.media ?? {};
   const setMedia = (k: string, patch: Record<string, unknown> | undefined) => { const m = { ...media }; if (!patch) delete m[k]; else m[k] = { ...m[k], ...patch }; set({ media: m }); };
   const hasContent = !!def.content?.length || !!def.contentLink;
+  const richCopy = def.content?.some((f) => f.type === "rich");
+  const buttonFields = def.content?.filter((f) => /^btn\d+_label$/.test(f.key)) ?? [];
   return <Tabs defaultValue={hasContent ? "content" : def.media?.length ? "media" : "style"} key={def.id}>
     <TabsList className="flex h-auto flex-wrap">
       {hasContent && <TabsTrigger value="content">Inhoud</TabsTrigger>}
       {!!def.media?.length && <TabsTrigger value="media">Afbeeldingen</TabsTrigger>}
-      <TabsTrigger value="style">Tekststijl & kleuren</TabsTrigger>
+      <TabsTrigger value="style">{richCopy ? "Achtergrond" : "Tekststijl & kleuren"}</TabsTrigger>
       {(def.spacing || !!def.extras?.length) && <TabsTrigger value="spacing">Ruimte & maten</TabsTrigger>}
       <TabsTrigger value="visibility">Zichtbaarheid</TabsTrigger>
     </TabsList>
@@ -151,10 +153,18 @@ export function SectionEditor({ def, value, onChange, version }: { def: SectionD
         return <Field key={f.key} label={f.label} changed={ov !== undefined} onReset={reset}>
           {f.type === "text" || f.type === "url" ? <Input value={val} placeholder={f.type === "url" ? "/collections/golf of https://…" : ""} onChange={(e) => setContent(f.key, e.target.value)} />
             : f.type === "textarea" ? <Textarea rows={3} value={val} onChange={(e) => setContent(f.key, e.target.value)} />
-            : f.type === "rich" ? <RichTextEditor key={`${f.key}-${version}-${ov === undefined}`} value={val} onChange={(h) => setContent(f.key, h)} />
+            : f.type === "rich" ? <RichTextEditor key={`${f.key}-${version}`} value={val} onChange={(h) => setContent(f.key, h)} />
             : f.type === "select" ? <select className={sel} value={val} onChange={(e) => setContent(f.key, e.target.value)}>{f.options?.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}</select>
             : <ColorField value={val || undefined} onChange={(c) => setContent(f.key, c)} />}
         </Field>;
+      })}
+      {buttonFields.map((f) => {
+        const id = f.key.replace("_label", "");
+        return <ButtonEditor key={id} title={`${f.label.replace(" — tekst", "")} — opmaak & kleuren`} value={value.buttons?.[id]} onChange={(style) => {
+          const buttons = { ...value.buttons };
+          if (style) buttons[id] = style; else delete buttons[id];
+          set({ buttons });
+        }} />;
       })}
     </TabsContent>}
 
@@ -174,8 +184,8 @@ export function SectionEditor({ def, value, onChange, version }: { def: SectionD
 
     <TabsContent value="style" className="space-y-4 pt-4">
       {def.background && <BackgroundEditor image={def.backgroundImage} value={value.background} onChange={(background) => set({ background })} />}
-      {def.buttons && <ButtonEditor value={value.button} onChange={(button) => set({ button })} />}
-      {def.roles.filter((r) => r !== "button" || !def.buttons).map((r) => <TypographyEditor key={r} role={r} value={value.typography?.[r]} onChange={(t) => { const ty = { ...value.typography }; if (t) ty[r] = t; else delete ty[r]; set({ typography: ty }); }} />)}
+      {def.buttons && !buttonFields.length && <ButtonEditor value={value.button} onChange={(button) => set({ button })} />}
+      {!richCopy && def.roles.filter((r) => r !== "button" || !def.buttons).map((r) => <TypographyEditor key={r} role={r} value={value.typography?.[r]} onChange={(t) => { const ty = { ...value.typography }; if (t) ty[r] = t; else delete ty[r]; set({ typography: ty }); }} />)}
     </TabsContent>
 
     {(def.spacing || !!def.extras?.length) && <TabsContent value="spacing" className="space-y-4 pt-4">
