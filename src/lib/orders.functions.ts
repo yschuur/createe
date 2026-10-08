@@ -31,8 +31,8 @@ export const updateOrderStatus = createServerFn({ method: "POST" })
   }).parse(d))
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
-    const patch: Record<string, unknown> = { status: data.status };
-    if (data.trackingUrl !== undefined) patch["tracking_url"] = data.trackingUrl || null;
+    const patch: { status: string; tracking_url?: string | null } = { status: data.status };
+    if (data.trackingUrl !== undefined) patch.tracking_url = data.trackingUrl || null;
     const { error } = await context.supabase.from("orders").update(patch).eq("id", data.orderId);
     if (error) throw new Error("Opslaan mislukt");
     let mailed = false;
