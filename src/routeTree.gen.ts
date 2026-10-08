@@ -46,6 +46,7 @@ import { Route as AuthenticatedAdminPagesIndexRouteImport } from './routes/_auth
 import { Route as AuthenticatedAdminPagesPageRouteImport } from './routes/_authenticated/admin.pages.$page'
 import { Route as AuthenticatedAdminProductsIndexRouteImport } from './routes/_authenticated/admin.products.index'
 import { Route as AuthenticatedAdminProductsIdRouteImport } from './routes/_authenticated/admin.products.$id'
+import { Route as AuthenticatedAdminProductsBulkRouteImport } from './routes/_authenticated/admin.products.bulk'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 
@@ -252,6 +253,12 @@ const AuthenticatedAdminProductsIdRoute =
     path: '/admin/products/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminProductsBulkRoute =
+  AuthenticatedAdminProductsBulkRouteImport.update({
+    id: '/admin/products/bulk',
+    path: '/admin/products/bulk',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const ApiPublicPaymentsWebhookRoute =
   ApiPublicPaymentsWebhookRouteImport.update({
     id: '/api/public/payments/webhook',
@@ -300,6 +307,7 @@ export interface FileRoutesByFullPath {
   '/admin/order/$id': typeof AuthenticatedAdminOrderIdRoute
   '/admin/pages/$page': typeof AuthenticatedAdminPagesPageRoute
   '/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
+  '/admin/products/bulk': typeof AuthenticatedAdminProductsBulkRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/admin/pages/': typeof AuthenticatedAdminPagesIndexRoute
@@ -340,6 +348,7 @@ export interface FileRoutesByTo {
   '/admin/order/$id': typeof AuthenticatedAdminOrderIdRoute
   '/admin/pages/$page': typeof AuthenticatedAdminPagesPageRoute
   '/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
+  '/admin/products/bulk': typeof AuthenticatedAdminProductsBulkRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/admin/pages': typeof AuthenticatedAdminPagesIndexRoute
@@ -382,6 +391,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/order/$id': typeof AuthenticatedAdminOrderIdRoute
   '/_authenticated/admin/pages/$page': typeof AuthenticatedAdminPagesPageRoute
   '/_authenticated/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
+  '/_authenticated/admin/products/bulk': typeof AuthenticatedAdminProductsBulkRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/_authenticated/admin/pages/': typeof AuthenticatedAdminPagesIndexRoute
@@ -424,6 +434,7 @@ export interface FileRouteTypes {
     | '/admin/order/$id'
     | '/admin/pages/$page'
     | '/admin/products/$id'
+    | '/admin/products/bulk'
     | '/api/public/payments/webhook'
     | '/lovable/email/transactional/preview'
     | '/admin/pages/'
@@ -464,6 +475,7 @@ export interface FileRouteTypes {
     | '/admin/order/$id'
     | '/admin/pages/$page'
     | '/admin/products/$id'
+    | '/admin/products/bulk'
     | '/api/public/payments/webhook'
     | '/lovable/email/transactional/preview'
     | '/admin/pages'
@@ -505,6 +517,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/order/$id'
     | '/_authenticated/admin/pages/$page'
     | '/_authenticated/admin/products/$id'
+    | '/_authenticated/admin/products/bulk'
     | '/api/public/payments/webhook'
     | '/lovable/email/transactional/preview'
     | '/_authenticated/admin/pages/'
@@ -791,6 +804,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminProductsIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/products/bulk': {
+      id: '/_authenticated/admin/products/bulk'
+      path: '/admin/products/bulk'
+      fullPath: '/admin/products/bulk'
+      preLoaderRoute: typeof AuthenticatedAdminProductsBulkRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/api/public/payments/webhook': {
       id: '/api/public/payments/webhook'
       path: '/api/public/payments/webhook'
@@ -830,6 +850,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminOrderIdRoute: typeof AuthenticatedAdminOrderIdRoute
   AuthenticatedAdminPagesPageRoute: typeof AuthenticatedAdminPagesPageRoute
   AuthenticatedAdminProductsIdRoute: typeof AuthenticatedAdminProductsIdRoute
+  AuthenticatedAdminProductsBulkRoute: typeof AuthenticatedAdminProductsBulkRoute
   AuthenticatedAdminPagesIndexRoute: typeof AuthenticatedAdminPagesIndexRoute
   AuthenticatedAdminProductsIndexRoute: typeof AuthenticatedAdminProductsIndexRoute
 }
@@ -856,6 +877,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminOrderIdRoute: AuthenticatedAdminOrderIdRoute,
   AuthenticatedAdminPagesPageRoute: AuthenticatedAdminPagesPageRoute,
   AuthenticatedAdminProductsIdRoute: AuthenticatedAdminProductsIdRoute,
+  AuthenticatedAdminProductsBulkRoute: AuthenticatedAdminProductsBulkRoute,
   AuthenticatedAdminPagesIndexRoute: AuthenticatedAdminPagesIndexRoute,
   AuthenticatedAdminProductsIndexRoute: AuthenticatedAdminProductsIndexRoute,
 }
