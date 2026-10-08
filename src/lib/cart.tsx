@@ -11,7 +11,11 @@ export type CartItem = {
   maxQuantity?: number | null;
 };
 
+export type CartDiscount = { code: string; type: string; value: number; label: string };
+
 type CartCtx = {
+  discount: CartDiscount | null;
+  setDiscount: (d: CartDiscount | null) => void;
   items: CartItem[];
   add: (item: CartItem) => void;
   update: (variantId: string, quantity: number) => void;
@@ -29,6 +33,14 @@ const KEY = "createe-cart-v1";
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [open, setOpen] = useState(false);
+  const [discount, setDiscountState] = useState<CartDiscount | null>(null);
+  useEffect(() => {
+    try { const raw = localStorage.getItem(KEY + "-discount"); if (raw) setDiscountState(JSON.parse(raw)); } catch { /* ignore */ }
+  }, []);
+  const setDiscount = (d: CartDiscount | null) => {
+    setDiscountState(d);
+    if (d) localStorage.setItem(KEY + "-discount", JSON.stringify(d)); else localStorage.removeItem(KEY + "-discount");
+  };
 
   useEffect(() => {
     try {
@@ -43,6 +55,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const clamp = (q: number, max?: number | null) => Math.max(1, max != null ? Math.min(q, max) : q);
 
   const value: CartCtx = {
+    discount,
+    setDiscount,
     items,
     add: (item) =>
       setItems((prev) => {
@@ -52,7 +66,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       }),
     update: (id, q) => setItems((prev) => prev.map((i) => (i.variantId === id ? { ...i, quantity: clamp(q, i.maxQuantity) } : i))),
     remove: (id) => setItems((prev) => prev.filter((i) => i.variantId !== id)),
-    clear: () => setItems([]),
+    clear: () => { setItems([]); setDiscount(null); },
     count: items.reduce((s, i) => s + i.quantity, 0),
     subtotal: items.reduce((s, i) => s + i.quantity * i.price, 0),
     open,

@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { LayoutDashboard, Package, Layers, Tag, Upload, LogOut, ExternalLink, Menu, Images, FileText, MessageSquare, Trophy, Truck, type LucideIcon } from "lucide-react";
+import { LayoutDashboard, Package, Layers, Tag, Upload, LogOut, ExternalLink, Menu, Images, FileText, MessageSquare, Trophy, Truck, Users, type LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { Logo } from "@/components/Logo";
 import { supabase } from "@/integrations/supabase/client";
@@ -14,6 +14,7 @@ const groups: NavGroup[] = [
     items: [
       { to: "/admin/orders", label: "Bestellingen", icon: Package },
       { to: "/admin/submissions", label: "Inzendingen", icon: MessageSquare },
+      { to: "/admin/customers", label: "Klanten", icon: Users },
       { to: "/admin/products", label: "Producten", icon: Package },
       { to: "/admin/collections", label: "Collecties", icon: Layers },
       { to: "/admin/sports", label: "Sporten", icon: Trophy },

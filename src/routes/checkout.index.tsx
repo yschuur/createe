@@ -69,7 +69,7 @@ function CheckoutContent() {
       else if ("clientSecret" in res) {
         setClientSecret(res.clientSecret);
         setFreeShipping(res.freeShipping);
-        setCodeMsg(res.discountError ?? (res.freeShipping ? "Gratis bezorging toegepast!" : ""));
+        setCodeMsg(res.discountError ?? (discountCode ? "Actiecode toegepast — je ziet de korting op de betaalpagina." : ""));
       }
     }
   }
@@ -78,7 +78,7 @@ function CheckoutContent() {
     if (startedRef.current) return;
     if (cart.items.length === 0) return;
     startedRef.current = true;
-    void start(null);
+    void start(cart.discount?.code ?? null);
   }, [cart.items]);
 
   if (cart.items.length === 0 && !error) {
@@ -135,7 +135,7 @@ function CheckoutContent() {
         <form className="flex flex-wrap items-center gap-2 border-t border-border px-5 py-3" onSubmit={(e) => { e.preventDefault(); if (code.trim()) void start(code.trim()); }}>
           <Input value={code} onChange={(e) => setCode(e.target.value)} placeholder="Kortingscode" className="h-9 max-w-xs uppercase" aria-label="Kortingscode" />
           <Button type="submit" variant="outline" size="sm" disabled={creating || !code.trim()}>Toepassen</Button>
-          {codeMsg && <span className={`text-sm ${freeShipping ? "text-primary" : "text-destructive"}`}>{codeMsg}</span>}
+          {codeMsg && <span className={`text-sm ${codeMsg.startsWith("Actiecode") ? "text-primary" : "text-destructive"}`}>{codeMsg}</span>}
         </form>
       </div>
       <div className="rounded-sm border border-border bg-card p-4 sm:p-6">

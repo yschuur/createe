@@ -41,10 +41,24 @@ function DiscountsAdmin() {
     qc.invalidateQueries({ queryKey: ["admin", "discounts"] });
   }
   async function toggle(id: string, active: boolean) { await supabase.from("discounts").update({ active }).eq("id", id); qc.invalidateQueries({ queryKey: ["admin", "discounts"] }); }
+  async function setNewsletter(id: string) {
+    await supabase.from("discounts").update({ newsletter: false }).neq("id", id);
+    if (id) await supabase.from("discounts").update({ newsletter: true }).eq("id", id);
+    qc.invalidateQueries({ queryKey: ["admin", "discounts"] });
+    toast.success("Nieuwsbriefcode opgeslagen");
+  }
   async function remove(id: string) { if (!confirm("Actie verwijderen?")) return; await supabase.from("discounts").delete().eq("id", id); qc.invalidateQueries({ queryKey: ["admin", "discounts"] }); }
 
   return (
     <AdminLayout title="Acties & kortingscodes">
+      <div className="mb-6 rounded-sm bg-card p-5">
+        <Label>Actiecode na aanmelden voor de nieuwsbrief (The Clubhouse)</Label>
+        <select value={data.find((d) => d.newsletter)?.id ?? ""} onChange={(e) => setNewsletter(e.target.value)} className="mt-1 h-9 w-full max-w-sm rounded-sm border border-input bg-background px-2 text-sm">
+          <option value="">Geen code tonen</option>
+          {data.filter((d) => d.active).map((d) => <option key={d.id} value={d.id}>{d.code} — {d.type === "free_shipping" ? "Gratis bezorging" : d.type === "percentage" ? `${d.value}%` : formatPrice(d.value)}</option>)}
+        </select>
+        <p className="mt-1 text-xs text-muted-foreground">Alleen actieve codes zijn te kiezen. Bezoekers zien deze code direct na het invullen van hun e-mailadres in de footer.</p>
+      </div>
       <form onSubmit={create} className="mb-6 grid gap-3 rounded-sm bg-card p-5 md:grid-cols-4">
         <div><Label>Code</Label><Input name="code" placeholder="ZOMER20" required /></div>
         <div><Label>Soort</Label><select name="type" className="h-9 w-full rounded-sm border border-input bg-background px-2 text-sm"><option value="percentage">Percentage</option><option value="fixed">Vast bedrag (€)</option><option value="free_shipping">Gratis bezorging</option></select></div>
@@ -60,7 +74,7 @@ function DiscountsAdmin() {
         {data.map((d) => (
           <div key={d.id} className="flex flex-wrap items-center justify-between gap-3 rounded-sm bg-card p-4 text-sm">
             <div>
-              <p className="font-mono text-base font-semibold">{d.code}</p>
+              <p className="font-mono text-base font-semibold">{d.code}{d.newsletter && <span className="ml-2 rounded-sm bg-primary/10 px-1.5 py-0.5 font-sans text-xs text-primary">Nieuwsbrief</span>}</p>
               <p className="text-muted-foreground">
                 {d.type === "free_shipping" ? "Gratis bezorging" : d.type === "percentage" ? `${d.value}% korting` : `${formatPrice(d.value)} korting`}
                 {d.min_order_amount ? ` · vanaf ${formatPrice(d.min_order_amount)}` : ""}
@@ -76,7 +90,7 @@ function DiscountsAdmin() {
         ))}
         {data.length === 0 && <p className="text-sm text-muted-foreground">Nog geen acties.</p>}
       </div>
-      <p className="mt-4 text-xs text-muted-foreground">Codes voor gratis bezorging werken direct bij het afrekenen. Percentage- en bedragcodes worden online nog niet toegepast.</p>
+      <p className="mt-4 text-xs text-muted-foreground">Klanten vullen actiecodes in via de winkelmand of op de afrekenpagina.</p>
     </AdminLayout>
   );
 }

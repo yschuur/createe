@@ -118,12 +118,27 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
       let shipping = shippingCost(total, shipSettings);
       let appliedCode: string | null = null;
       let discountError: string | undefined;
+      let freeShipping = false;
+      let couponId: string | null = null;
       if (data.discountCode) {
         const code = data.discountCode.toUpperCase();
         const { data: d } = await supabaseAdmin.from("discounts").select("*").eq("code", code).maybeSingle();
-        const { discountProblem } = await import("@/lib/discounts");
+        const { discountProblem, discountAmount } = await import("@/lib/discounts");
         discountError = discountProblem(d as never, total) ?? undefined;
-        if (!discountError) { shipping = 0; appliedCode = code; }
+        if (!discountError && d) {
+          appliedCode = code;
+          if (d.type === "free_shipping") { shipping = 0; freeShipping = true; }
+          const off = discountAmount(d as never, total);
+          if (off > 0) {
+            const coupon = await stripe.coupons.create({
+              name: code,
+              duration: "once",
+              max_redemptions: 1,
+              ...(d.type === "percentage" ? { percent_off: Math.min(100, Number(d.value)) } : { amount_off: Math.round(off * 100), currency: "eur" }),
+            });
+            couponId = coupon.id;
+          }
+        }
       }
       const session = await createSession(stripe, {
         resolved,
@@ -136,6 +151,7 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
         shipping,
         shippingLabel: shipping === 0 ? "Gratis verzending" : shipSettings.label,
         discountCode: appliedCode,
+        couponId,
       });
       if (!session.ok) {
         // Stripe Tax may not be enabled on the account yet — fall back to a
@@ -144,12 +160,12 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
           resolved, total, orderNumber, orderId: order.id,
           userId: data.userId ?? null, returnUrl: data.returnUrl, withAutomaticTax: false,
           shipping, shippingLabel: shipping === 0 ? "Gratis verzending" : shipSettings.label,
-          discountCode: appliedCode,
+          discountCode: appliedCode, couponId,
         });
         if (!retry.ok) return { error: retry.error };
-        return { clientSecret: retry.clientSecret, freeShipping: !!appliedCode, discountError };
+        return { clientSecret: retry.clientSecret, freeShipping, discountError };
       }
-      return { clientSecret: session.clientSecret, freeShipping: !!appliedCode, discountError };
+      return { clientSecret: session.clientSecret, freeShipping, discountError };
     } catch (error) {
       if (error instanceof z.ZodError) return { error: "Ongeldige aanvraag." };
       return { error: getStripeErrorMessage(error) };
@@ -167,6 +183,7 @@ type SessionArgs = {
   shipping: number;
   shippingLabel: string;
   discountCode: string | null;
+  couponId: string | null;
 };
 
 async function createSession(
@@ -207,6 +224,7 @@ async function createSession(
         description: `CREATEE bestelling ${args.orderNumber}`,
         metadata: { order_id: args.orderId },
       },
+      ...(args.couponId ? { discounts: [{ coupon: args.couponId }] } : {}),
       ...(args.withAutomaticTax ? { automatic_tax: { enabled: true } } : {}),
     } as Stripe.Checkout.SessionCreateParams);
     if (!session.client_secret) return { ok: false, error: "De betaalomgeving kon niet worden gestart. Probeer het opnieuw." };
@@ -235,4 +253,17 @@ export const getCheckoutStatus = createServerFn({ method: "GET" })
     } catch (error) {
       return { error: getStripeErrorMessage(error) };
     }
+  });
+
+/** Validate a discount code for the basket, without revealing inactive codes. */
+export const checkDiscount = createServerFn({ method: "POST" })
+  .validator((data: unknown) => z.object({ code: z.string().trim().min(1).max(30), subtotal: z.number().min(0).max(100000) }).parse(data))
+  .handler(async ({ data }): Promise<{ ok: true; code: string; type: string; value: number; label: string } | { ok: false; error: string }> => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const code = data.code.toUpperCase();
+    const { data: d } = await supabaseAdmin.from("discounts").select("*").eq("code", code).maybeSingle();
+    const { discountProblem, discountLabel } = await import("@/lib/discounts");
+    const problem = discountProblem(d as never, data.subtotal);
+    if (problem || !d) return { ok: false, error: problem ?? "Deze kortingscode is ongeldig." };
+    return { ok: true, code, type: d.type, value: Number(d.value), label: discountLabel(d as never) };
   });
