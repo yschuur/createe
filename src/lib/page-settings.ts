@@ -193,7 +193,8 @@ export const PAGE_DEFS: PageDef[] = [
 // Editorial copy is formatted per field, not through a shared heading/body style.
 for (const page of PAGE_DEFS.filter((p) => p.key === "story" || p.key === "hybr")) {
   for (const section of page.sections) {
-    section.content = section.content?.map((f) =>
+    if (!section.content) continue;
+    section.content = section.content.map((f) =>
       (f.type === "text" || f.type === "textarea") && !/^btn\d+_label$/.test(f.key) ? { ...f, type: "rich" } : f,
     );
   }

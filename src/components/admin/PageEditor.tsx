@@ -153,7 +153,7 @@ export function SectionEditor({ def, value, onChange, version }: { def: SectionD
         return <Field key={f.key} label={f.label} changed={ov !== undefined} onReset={reset}>
           {f.type === "text" || f.type === "url" ? <Input value={val} placeholder={f.type === "url" ? "/collections/golf of https://…" : ""} onChange={(e) => setContent(f.key, e.target.value)} />
             : f.type === "textarea" ? <Textarea rows={3} value={val} onChange={(e) => setContent(f.key, e.target.value)} />
-            : f.type === "rich" ? <RichTextEditor key={`${f.key}-${version}-${ov === undefined}`} value={val} onChange={(h) => setContent(f.key, h)} />
+            : f.type === "rich" ? <RichTextEditor key={`${f.key}-${version}`} value={val} onChange={(h) => setContent(f.key, h)} />
             : f.type === "select" ? <select className={sel} value={val} onChange={(e) => setContent(f.key, e.target.value)}>{f.options?.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}</select>
             : <ColorField value={val || undefined} onChange={(c) => setContent(f.key, c)} />}
         </Field>;

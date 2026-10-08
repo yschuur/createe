@@ -276,6 +276,8 @@
 .about-atelier .cms-rich ol { list-style: decimal; padding-left: 1.25em; }
 .about-atelier .cms-rich a { text-decoration: underline; }
 .about-atelier .cms-inline > span { display: block; }
+.about-headline > .cms-rich, .about-headline > em, .about-section-title > .cms-rich { display: block; }
+.about-value-copy > .cms-rich:not(h3) { font-size: 16px; line-height: 1.8; }
 .about-band { width: 100%; padding: 88px 5%; }
 .about-opening { padding-block: 64px 92px; }
 .about-opening-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 64px; align-items: center; max-width: 1400px; margin-inline: auto; }
