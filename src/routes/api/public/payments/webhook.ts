@@ -63,6 +63,12 @@ async function fulfillOrder(session: any, env: StripeEnv) {
     return;
   }
 
+  const code = session?.metadata?.discount_code;
+  if (code) {
+    const { data: d } = await db.from("discounts").select("id, times_used").eq("code", code).maybeSingle();
+    if (d) await db.from("discounts").update({ times_used: d.times_used + 1 }).eq("id", d.id);
+  }
+
   const { data: items } = await db
     .from("order_items")
     .select("variant_id, quantity")

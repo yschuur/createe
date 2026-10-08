@@ -14,9 +14,10 @@ const checkoutInput = z.object({
   environment: z.enum(["sandbox", "live"]),
   returnUrl: z.string().url(),
   userId: z.string().uuid().nullish(),
+  discountCode: z.string().trim().max(30).nullish(),
 });
 
-type CheckoutSessionResult = { clientSecret: string } | { error: string };
+type CheckoutSessionResult = { clientSecret: string; freeShipping: boolean; discountError?: string | undefined } | { error: string };
 
 type ResolvedItem = {
   productId: string | null;
@@ -114,7 +115,16 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
 
       const stripe = createStripeClient(data.environment);
       const shipSettings = await fetchShipping();
-      const shipping = shippingCost(total, shipSettings);
+      let shipping = shippingCost(total, shipSettings);
+      let appliedCode: string | null = null;
+      let discountError: string | undefined;
+      if (data.discountCode) {
+        const code = data.discountCode.toUpperCase();
+        const { data: d } = await supabaseAdmin.from("discounts").select("*").eq("code", code).maybeSingle();
+        const { discountProblem } = await import("@/lib/discounts");
+        discountError = discountProblem(d as never, total) ?? undefined;
+        if (!discountError) { shipping = 0; appliedCode = code; }
+      }
       const session = await createSession(stripe, {
         resolved,
         total,
@@ -125,6 +135,7 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
         withAutomaticTax: true,
         shipping,
         shippingLabel: shipping === 0 ? "Gratis verzending" : shipSettings.label,
+        discountCode: appliedCode,
       });
       if (!session.ok) {
         // Stripe Tax may not be enabled on the account yet — fall back to a
@@ -133,11 +144,12 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
           resolved, total, orderNumber, orderId: order.id,
           userId: data.userId ?? null, returnUrl: data.returnUrl, withAutomaticTax: false,
           shipping, shippingLabel: shipping === 0 ? "Gratis verzending" : shipSettings.label,
+          discountCode: appliedCode,
         });
         if (!retry.ok) return { error: retry.error };
-        return { clientSecret: retry.clientSecret };
+        return { clientSecret: retry.clientSecret, freeShipping: !!appliedCode, discountError };
       }
-      return { clientSecret: session.clientSecret };
+      return { clientSecret: session.clientSecret, freeShipping: !!appliedCode, discountError };
     } catch (error) {
       if (error instanceof z.ZodError) return { error: "Ongeldige aanvraag." };
       return { error: getStripeErrorMessage(error) };
@@ -154,6 +166,7 @@ type SessionArgs = {
   withAutomaticTax: boolean;
   shipping: number;
   shippingLabel: string;
+  discountCode: string | null;
 };
 
 async function createSession(
@@ -188,6 +201,7 @@ async function createSession(
         order_id: args.orderId,
         order_number: args.orderNumber,
         ...(args.userId ? { userId: args.userId } : {}),
+        ...(args.discountCode ? { discount_code: args.discountCode } : {}),
       },
       payment_intent_data: {
         description: `CREATEE bestelling ${args.orderNumber}`,
