@@ -127,6 +127,13 @@
       "when": 1791467669275,
       "tag": "0017_tighten_public_policies",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1791469342810,
+      "tag": "0018_blank_stock",
+      "breakpoints": true
     }
   ]
 }

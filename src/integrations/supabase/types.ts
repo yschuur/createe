@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      blank_stock: {
+        Row: {
+          color: string
+          model: string
+          quantity: number
+          size: string
+          updated_at: string
+        }
+        Insert: {
+          color: string
+          model: string
+          quantity?: number
+          size: string
+          updated_at?: string
+        }
+        Update: {
+          color?: string
+          model?: string
+          quantity?: number
+          size?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       collection_products: {
         Row: {
           collection_id: string
@@ -560,6 +584,7 @@ export type Database = {
       }
       products: {
         Row: {
+          blank_model: string | null
           created_at: string
           description_html: string | null
           fabric: string | null
@@ -585,6 +610,7 @@ export type Database = {
           vendor: string | null
         }
         Insert: {
+          blank_model?: string | null
           created_at?: string
           description_html?: string | null
           fabric?: string | null
@@ -610,6 +636,7 @@ export type Database = {
           vendor?: string | null
         }
         Update: {
+          blank_model?: string | null
           created_at?: string
           description_html?: string | null
           fabric?: string | null
