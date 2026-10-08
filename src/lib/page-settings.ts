@@ -105,7 +105,7 @@ export const PAGE_DEFS: PageDef[] = [
       { id: "home-ratings", label: "Beoordelingenbalk", roles: ["body", "link"], background: true, spacing: true,
         content: [txt("google_label", "Google-tekst", "Google ★★★★★"), url("google_url", "Google-link", ""), txt("trust_label", "Trustpilot-tekst", "Trustpilot ★★★★★"), url("trust_url", "Trustpilot-link", "https://nl.trustpilot.com/review/createe.nl")] },
       { id: "home-products", label: "Productcarrousel", roles: ["heading", "subheading", "body"], background: true, spacing: true, buttons: true,
-        contentLink: { to: "/admin/homepage", label: "Titel en uitgelichte producten" } },
+        contentLink: { to: "/admin/homepage", label: "Titel en uitgelichte producten" },
         extras: [{ key: "count", label: "Aantal producten", min: 2, max: 40, unit: "", default: 12 }] },
     ],
   },
