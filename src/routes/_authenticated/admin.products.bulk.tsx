@@ -6,6 +6,7 @@ import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
+import { MediaLibraryDialog } from "@/components/admin/MediaLibrary";
 import { BLANK_MODELS } from "@/lib/blank-stock";
 
 export const Route = createFileRoute("/_authenticated/admin/products/bulk")({
@@ -13,7 +14,7 @@ export const Route = createFileRoute("/_authenticated/admin/products/bulk")({
   component: BulkEdit,
 });
 
-type Kind = "text" | "number" | "bool" | "status" | "sport" | "blank" | "tags" | "price";
+type Kind = "text" | "number" | "bool" | "status" | "sport" | "blank" | "tags" | "price" | "image";
 type FieldDef = { key: string; label: string; kind: Kind };
 const FIELDS: FieldDef[] = [
   { key: "name", label: "Naam", kind: "text" },
@@ -33,7 +34,7 @@ const FIELDS: FieldDef[] = [
   { key: "slug", label: "URL-handle", kind: "text" },
   { key: "seo_title", label: "SEO-titel", kind: "text" },
   { key: "seo_description", label: "SEO-omschrijving", kind: "text" },
-  { key: "size_chart_image", label: "Maattabel-afbeelding (URL)", kind: "text" },
+  { key: "size_chart_image", label: "Maattabel-afbeelding", kind: "image" },
 ];
 
 type Row = Record<string, unknown> & { id: string; name: string };
@@ -112,6 +113,7 @@ function BulkEdit() {
       case "status": return <select className={sel} value={String(v)} onChange={(e) => setVal(r.id, f.key, e.target.value)}><option value="active">Actief</option><option value="draft">Concept</option><option value="unlisted">Verborgen</option><option value="archived">Gearchiveerd</option></select>;
       case "sport": return <select className={sel} value={String(v ?? "")} onChange={(e) => setVal(r.id, f.key, e.target.value || null)}><option value="">Geen</option>{data?.sports.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}</select>;
       case "blank": return <select className={sel} value={String(v ?? "")} onChange={(e) => setVal(r.id, f.key, e.target.value || null)}><option value="">Geen</option>{BLANK_MODELS.map((m) => <option key={m.key} value={m.key}>{m.label}</option>)}</select>;
+      case "image": return <ImagePick value={String(v ?? "")} changed={!!(edits[r.id] && f.key in edits[r.id]!)} onChange={(x) => setVal(r.id, f.key, x)} />;
       case "tags": return <Input className={cls} defaultValue={((v as string[]) ?? []).join(", ")} onBlur={(e) => setVal(r.id, f.key, e.target.value.split(",").map((t) => t.trim()).filter(Boolean))} />;
       case "number": case "price": return <Input className={cls + " w-28 min-w-0"} type="number" step={f.kind === "price" ? "0.01" : "1"} defaultValue={v == null ? "" : String(v)} onBlur={(e) => setVal(r.id, f.key, e.target.value === "" ? (f.kind === "price" ? null : 0) : Number(e.target.value))} />;
       default: return <Input className={cls} defaultValue={String(v ?? "")} onBlur={(e) => setVal(r.id, f.key, f.key === "slug" ? e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-") : e.target.value || (f.key === "name" ? r.name : null))} />;
@@ -168,6 +170,7 @@ function ColumnFill({ f, sports, onApply }: { f: FieldDef; sports: { id: string;
   else if (f.kind === "status") input = <select className={s} value={v} onChange={(e) => setV(e.target.value)}><option value="">-</option><option value="active">Actief</option><option value="draft">Concept</option><option value="unlisted">Verborgen</option><option value="archived">Gearchiveerd</option></select>;
   else if (f.kind === "sport") input = <select className={s} value={v} onChange={(e) => setV(e.target.value)}><option value="">-</option><option value="__none">Geen</option>{sports.map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}</select>;
   else if (f.kind === "blank") input = <select className={s} value={v} onChange={(e) => setV(e.target.value)}><option value="">-</option><option value="__none">Geen</option>{BLANK_MODELS.map((m) => <option key={m.key} value={m.key}>{m.label}</option>)}</select>;
+  else if (f.kind === "image") input = <ImagePick value={v} changed={false} onChange={setV} />;
   else input = <input className={s + " w-24"} type={f.kind === "price" || f.kind === "number" ? "number" : "text"} value={v} onChange={(e) => setV(e.target.value)} />;
   function apply() {
     if (v === "" && f.kind !== "text") return;
@@ -179,4 +182,16 @@ function ColumnFill({ f, sports, onApply }: { f: FieldDef; sports: { id: string;
     onApply(out);
   }
   return <div className="flex gap-1">{input}<button type="button" className="rounded-sm border border-input px-2 text-xs" onClick={apply}>Toepassen</button></div>;
+}
+
+function ImagePick({ value, changed, onChange }: { value: string; changed: boolean; onChange: (v: string) => void }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className={`flex items-center gap-1 rounded-sm ${changed ? "ring-1 ring-primary" : ""}`}>
+      {value ? <img src={value} alt="" className="h-8 w-8 rounded-sm border border-border object-cover" /> : <span className="text-xs text-muted-foreground">Geen</span>}
+      <button type="button" className="rounded-sm border border-input px-2 py-1 text-xs" onClick={() => setOpen(true)}>Kies</button>
+      {value && <button type="button" className="rounded-sm border border-input px-2 py-1 text-xs" onClick={() => onChange("")}>Wis</button>}
+      <MediaLibraryDialog open={open} onOpenChange={setOpen} kind="image" selected={value} onPick={(a) => { onChange(a.url); setOpen(false); }} />
+    </div>
+  );
 }
