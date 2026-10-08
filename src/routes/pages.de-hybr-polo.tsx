@@ -3,6 +3,7 @@ import { ShopLayout } from "@/components/shop/ShopLayout";
 import { Button } from "@/components/ui/button";
 import { PageText } from "@/components/shop/PageText";
 import { pageSettingsQuery, usePageSettings } from "@/lib/page-settings";
+import hybrGolf from "@/assets/hybr-golf.jpg.asset.json";
 
 export const Route = createFileRoute("/pages/de-hybr-polo")({
   head: () => ({ meta: [
