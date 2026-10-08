@@ -8,6 +8,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, ChevronUp, SlidersHorizontal, X } from "lucide-react";
 import { z } from "zod";
+import { seoFrom, seoMeta, seoQuery } from "@/lib/seo";
 import { ShopLayout } from "@/components/shop/ShopLayout";
 import { ProductCard } from "@/components/shop/ProductCard";
 
@@ -22,20 +23,19 @@ const searchSchema = z.object({
 
 export const Route = createFileRoute("/collections/$slug")({
   validateSearch: searchSchema,
-  loader: async ({ context, params }) => {
+  loaderDeps: ({ search }) => ({ collection: search.collection }),
+  loader: async ({ context, params, deps }) => {
     const data = await context.queryClient.ensureQueryData(collectionQuery(params.slug));
     if (!data) throw notFound();
     if ("redirect" in data && data.redirect) throw redirect({ to: "/collections/$slug", params: { slug: data.redirect.sport }, search: { collection: data.redirect.collection } });
-    return { name: "sport" in data ? data.sport.name : "Shop" };
+    const seo = await context.queryClient.ensureQueryData(seoQuery());
+    return { name: "sport" in data ? data.sport.name : "Shop", slug: params.slug, collection: deps.collection, seo };
   },
   head: ({ loaderData }) => {
-    const title = `${loaderData?.name ?? "Shop"} | CREATEE`;
-    const description = `Shop de CREATEE ${loaderData?.name ?? ""} collectie: unieke designs, technische stoffen.`.replace("  ", " ");
-    return { meta: [
-      { title }, { name: "description", content: description },
-      { property: "og:title", content: title }, { property: "og:description", content: description },
-      { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
-    ] };
+    const def = { title: `${loaderData?.name ?? "Shop"} | CREATEE`, description: `Shop de CREATEE ${loaderData?.name ?? ""} collectie: unieke designs, technische stoffen.`.replace("  ", " ") };
+    const sport = seoFrom(loaderData, `sport:${loaderData?.slug}`);
+    const col = loaderData?.collection ? seoFrom(loaderData, `collection:${loaderData.collection}`) : {};
+    return { meta: seoMeta({ title: col.title || sport.title, description: col.description || sport.description }, def) };
   },
   component: SportShopPage,
   notFoundComponent: () => <ShopLayout><p className="py-24 text-center">Collectie niet gevonden.</p></ShopLayout>,

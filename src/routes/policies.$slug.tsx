@@ -4,19 +4,19 @@ import { ShopLayout } from "@/components/shop/ShopLayout";
 import { PageText } from "@/components/shop/PageText";
 import { isPolicySlug, policiesQuery, defaultPolicies } from "@/lib/policies";
 import { pageSettingsQuery } from "@/lib/page-settings";
+import { seoFrom, seoMeta, seoQuery } from "@/lib/seo";
 
 export const Route = createFileRoute("/policies/$slug")({
   loader: async ({ params, context }) => {
     if (!isPolicySlug(params.slug)) throw notFound();
     await Promise.all([context.queryClient.ensureQueryData(policiesQuery()), context.queryClient.ensureQueryData(pageSettingsQuery("global"))]);
-    return { slug: params.slug };
+    const seo = await context.queryClient.ensureQueryData(seoQuery());
+    return { slug: params.slug, seo };
   },
-  head: ({ params }) => {
+  head: ({ params, loaderData }) => {
     const p = isPolicySlug(params.slug) ? defaultPolicies[params.slug] : null;
     if (!p) return { meta: [{ title: "Niet gevonden | CREATEE" }, { name: "robots", content: "noindex" }] };
-    const title = `${p.title} | CREATEE`;
-    const desc = `${p.title} van CREATEE: alles wat je moet weten over ${p.label.toLowerCase()}.`;
-    return { meta: [{ title }, { name: "description", content: desc }, { property: "og:title", content: title }, { property: "og:description", content: desc }, { property: "og:type", content: "article" }, { name: "twitter:card", content: "summary" }] };
+    return { meta: seoMeta(seoFrom(loaderData, `policy:${params.slug}`), { title: `${p.title} | CREATEE`, description: `${p.title} van CREATEE: alles wat je moet weten over ${p.label.toLowerCase()}.` }, { type: "article", card: "summary" }) };
   },
   notFoundComponent: () => <ShopLayout><p className="py-24 text-center">Pagina niet gevonden.</p></ShopLayout>,
   component: PolicyPage,

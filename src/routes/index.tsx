@@ -1,3 +1,4 @@
+import { pageMeta, seoQuery } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useRef } from "react";
@@ -16,22 +17,14 @@ import golfPoster from "@/assets/hero-golf-poster.jpg.asset.json";
 import padelPoster from "@/assets/hero-padel-poster.jpg.asset.json";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "CREATEE | Unieke Kleding & Exclusieve Designs" },
-      { name: "description", content: "Weg met de standaard kleding. Shop premium kleding met unieke designs of gebruik onze design studio voor jouw eigen masterpiece." },
-      { property: "og:title", content: "CREATEE | Unieke Kleding & Exclusieve Designs" },
-      { property: "og:description", content: "Weg met de standaard kleding. Shop premium kleding met unieke designs of gebruik onze design studio voor jouw eigen masterpiece." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: ({ loaderData }) => ({ meta: pageMeta(loaderData, "home") }),
   loader: ({ context }) => Promise.all([
     context.queryClient.ensureQueryData(listProductsQuery()),
     context.queryClient.ensureQueryData(homepageQuery()),
     context.queryClient.ensureQueryData(pageSettingsQuery("home")),
     context.queryClient.ensureQueryData(pageSettingsQuery("global")),
     context.queryClient.ensureQueryData(pageSettingsQuery("footer")),
+    context.queryClient.ensureQueryData(seoQuery()),
   ]),
   component: Home,
 });

@@ -1,3 +1,4 @@
+import { pageMeta, seoQuery } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { ShopLayout } from "@/components/shop/ShopLayout";
 import { Button } from "@/components/ui/button";
@@ -5,14 +6,8 @@ import { PageText } from "@/components/shop/PageText";
 import { pageSettingsQuery, usePageSettings } from "@/lib/page-settings";
 
 export const Route = createFileRoute("/pages/de-hybr-polo")({
-  head: () => ({ meta: [
-    { title: "De HYBR™ polo | CREATEE" },
-    { name: "description", content: "De HYBR™ polo: 360° stretch, premium finish, smart-collar en kreukvrij, ademend draagcomfort." },
-    { property: "og:title", content: "De HYBR™ polo | CREATEE" },
-    { property: "og:description", content: "Ontdek de ultieme veelzijdigheid van de CREATEE HYBR™ polo." },
-    { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
-  ] }),
-  loader: ({ context }) => Promise.all([context.queryClient.ensureQueryData(pageSettingsQuery("hybr")), context.queryClient.ensureQueryData(pageSettingsQuery("global"))]),
+  head: ({ loaderData }) => ({ meta: pageMeta(loaderData, "de-hybr-polo") }),
+  loader: ({ context }) => Promise.all([context.queryClient.ensureQueryData(pageSettingsQuery("hybr")), context.queryClient.ensureQueryData(pageSettingsQuery("global")), context.queryClient.ensureQueryData(seoQuery())]),
   component: Hybr,
 });
 

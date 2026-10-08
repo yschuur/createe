@@ -1,3 +1,4 @@
+import { pageMeta, seoQuery } from "@/lib/seo";
 import { sanitizeDescription } from "@/lib/shop";
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -17,14 +18,8 @@ import { formatPrice } from "@/lib/shop";
 import { discountedTiers, imageFor, studioProducts, studioQuery, tiersFor } from "@/lib/studio";
 
 export const Route = createFileRoute("/design-studio")({
-  head: () => ({ meta: [
-    { title: "CREATEE Design Studio - jouw eigen design" },
-    { name: "description", content: "Unieke premium kleding voor jouw groep. Drie persoonlijke designvoorstellen en twee feedbackrondes bij CREATEE Design Studio." },
-    { property: "og:title", content: "CREATEE Design Studio - jouw eigen design" },
-    { property: "og:description", content: "Breng je idee tot leven. Vraag jouw persoonlijke CREATEE ontwerp aan." },
-    { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
-  ] }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(studioQuery()),
+  head: ({ loaderData }) => ({ meta: pageMeta(loaderData, "design-studio") }),
+  loader: ({ context }) => Promise.all([context.queryClient.ensureQueryData(studioQuery()), context.queryClient.ensureQueryData(seoQuery())]),
   component: DesignStudio,
 });
 

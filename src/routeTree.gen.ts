@@ -35,6 +35,7 @@ import { Route as AuthenticatedAdminMediaRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAdminMenuRouteImport } from './routes/_authenticated/admin.menu'
 import { Route as AuthenticatedAdminOrdersRouteImport } from './routes/_authenticated/admin.orders'
 import { Route as AuthenticatedAdminPoliciesRouteImport } from './routes/_authenticated/admin.policies'
+import { Route as AuthenticatedAdminSeoRouteImport } from './routes/_authenticated/admin.seo'
 import { Route as AuthenticatedAdminShippingRouteImport } from './routes/_authenticated/admin.shipping'
 import { Route as AuthenticatedAdminSportsRouteImport } from './routes/_authenticated/admin.sports'
 import { Route as AuthenticatedAdminStockRouteImport } from './routes/_authenticated/admin.stock'
@@ -188,6 +189,11 @@ const AuthenticatedAdminPoliciesRoute =
     path: '/admin/policies',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminSeoRoute = AuthenticatedAdminSeoRouteImport.update({
+  id: '/admin/seo',
+  path: '/admin/seo',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAdminShippingRoute =
   AuthenticatedAdminShippingRouteImport.update({
     id: '/admin/shipping',
@@ -297,6 +303,7 @@ export interface FileRoutesByFullPath {
   '/admin/menu': typeof AuthenticatedAdminMenuRoute
   '/admin/orders': typeof AuthenticatedAdminOrdersRoute
   '/admin/policies': typeof AuthenticatedAdminPoliciesRoute
+  '/admin/seo': typeof AuthenticatedAdminSeoRoute
   '/admin/shipping': typeof AuthenticatedAdminShippingRoute
   '/admin/sports': typeof AuthenticatedAdminSportsRoute
   '/admin/stock': typeof AuthenticatedAdminStockRoute
@@ -338,6 +345,7 @@ export interface FileRoutesByTo {
   '/admin/menu': typeof AuthenticatedAdminMenuRoute
   '/admin/orders': typeof AuthenticatedAdminOrdersRoute
   '/admin/policies': typeof AuthenticatedAdminPoliciesRoute
+  '/admin/seo': typeof AuthenticatedAdminSeoRoute
   '/admin/shipping': typeof AuthenticatedAdminShippingRoute
   '/admin/sports': typeof AuthenticatedAdminSportsRoute
   '/admin/stock': typeof AuthenticatedAdminStockRoute
@@ -381,6 +389,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/menu': typeof AuthenticatedAdminMenuRoute
   '/_authenticated/admin/orders': typeof AuthenticatedAdminOrdersRoute
   '/_authenticated/admin/policies': typeof AuthenticatedAdminPoliciesRoute
+  '/_authenticated/admin/seo': typeof AuthenticatedAdminSeoRoute
   '/_authenticated/admin/shipping': typeof AuthenticatedAdminShippingRoute
   '/_authenticated/admin/sports': typeof AuthenticatedAdminSportsRoute
   '/_authenticated/admin/stock': typeof AuthenticatedAdminStockRoute
@@ -424,6 +433,7 @@ export interface FileRouteTypes {
     | '/admin/menu'
     | '/admin/orders'
     | '/admin/policies'
+    | '/admin/seo'
     | '/admin/shipping'
     | '/admin/sports'
     | '/admin/stock'
@@ -465,6 +475,7 @@ export interface FileRouteTypes {
     | '/admin/menu'
     | '/admin/orders'
     | '/admin/policies'
+    | '/admin/seo'
     | '/admin/shipping'
     | '/admin/sports'
     | '/admin/stock'
@@ -507,6 +518,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/menu'
     | '/_authenticated/admin/orders'
     | '/_authenticated/admin/policies'
+    | '/_authenticated/admin/seo'
     | '/_authenticated/admin/shipping'
     | '/_authenticated/admin/sports'
     | '/_authenticated/admin/stock'
@@ -727,6 +739,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminPoliciesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/seo': {
+      id: '/_authenticated/admin/seo'
+      path: '/admin/seo'
+      fullPath: '/admin/seo'
+      preLoaderRoute: typeof AuthenticatedAdminSeoRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/shipping': {
       id: '/_authenticated/admin/shipping'
       path: '/admin/shipping'
@@ -840,6 +859,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminMenuRoute: typeof AuthenticatedAdminMenuRoute
   AuthenticatedAdminOrdersRoute: typeof AuthenticatedAdminOrdersRoute
   AuthenticatedAdminPoliciesRoute: typeof AuthenticatedAdminPoliciesRoute
+  AuthenticatedAdminSeoRoute: typeof AuthenticatedAdminSeoRoute
   AuthenticatedAdminShippingRoute: typeof AuthenticatedAdminShippingRoute
   AuthenticatedAdminSportsRoute: typeof AuthenticatedAdminSportsRoute
   AuthenticatedAdminStockRoute: typeof AuthenticatedAdminStockRoute
@@ -867,6 +887,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminMenuRoute: AuthenticatedAdminMenuRoute,
   AuthenticatedAdminOrdersRoute: AuthenticatedAdminOrdersRoute,
   AuthenticatedAdminPoliciesRoute: AuthenticatedAdminPoliciesRoute,
+  AuthenticatedAdminSeoRoute: AuthenticatedAdminSeoRoute,
   AuthenticatedAdminShippingRoute: AuthenticatedAdminShippingRoute,
   AuthenticatedAdminSportsRoute: AuthenticatedAdminSportsRoute,
   AuthenticatedAdminStockRoute: AuthenticatedAdminStockRoute,

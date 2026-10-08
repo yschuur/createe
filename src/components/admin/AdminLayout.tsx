@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { LayoutDashboard, Package, Layers, Tag, Upload, LogOut, ExternalLink, Menu, Images, FileText, MessageSquare, Trophy, Truck, Users, type LucideIcon } from "lucide-react";
+import { LayoutDashboard, Package, Layers, Tag, Upload, LogOut, ExternalLink, Menu, Images, FileText, MessageSquare, Trophy, Truck, Users, Search, type LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { Logo } from "@/components/Logo";
 import { supabase } from "@/integrations/supabase/client";
@@ -28,6 +28,7 @@ const groups: NavGroup[] = [
       { to: "/admin/pages", label: "Pagina's", icon: FileText },
       { to: "/admin/menu", label: "Menu", icon: Menu },
       { to: "/admin/media", label: "Mediabibliotheek", icon: Images },
+      { to: "/admin/seo", label: "SEO", icon: Search },
     ],
   },
   {
