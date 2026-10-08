@@ -1,4 +1,5 @@
 # Roadmap
+- [x] Ons verhaal/HYBR: tekst bepaalt afbeeldingskader; uitsnede versleepbaar in paginabeheer met werkelijke kaderverhouding, opslaan/herladen en storefront-teruglezing getest; testuitsnede gecentreerd hersteld.
 - [x] Ons verhaal/HYBR compacter en paginabreed met kleinere afbeeldingen; kernwaarden ongewijzigd (zelfde hoogte), beide pagina’s gecontroleerd op brede en smalle schermen zonder overloop of fouten.
 - [x] Ons verhaal/HYBR volgens nieuwe screenshots met behoud van opmaakbeheer; normale/aanwijs-knopkleuren en randdikte opgeslagen en teruggelezen op homepage, HYBR en Studio; beide pagina's en smalle schermen gecontroleerd, testwijzigingen hersteld.
 - [x] Ons verhaal/HYBR: alle teksten en titels met opmaakeditor, zelfstandige knopkleuren en teksten, Stijlen-tab verwijderd; opslaan/herladen en opmaak op beide pagina's getest met beheersessie, testwijzigingen hersteld.

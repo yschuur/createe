@@ -33,3 +33,4 @@
 - The router serializes and hydrates its request-scoped QueryClient — saved page content must match on server render and the first browser render.
 - Storefront button styles use the page CMS with global defaults, registered section/action targets and per-button overrides, including hover/focus colors — one validated CSS builder covers native buttons and portaled shop dialogs while admin stays unchanged.
 - RichTextEditor renders EditorContent as soon as its editor exists, with toolbar state fallbacks — remounting a populated field must not leave an invisible editor waiting for its first transaction.
+- Page media stores validated percentage focus coordinates beside legacy positions; ImageFocusEditor drags crops and makePageView resolves object-position — preserves source images without schema changes.

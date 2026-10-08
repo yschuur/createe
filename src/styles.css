@@ -282,17 +282,18 @@
 .about-reference .about-section-title { font-family: var(--font-display); font-size: 28px; font-weight: 700; text-transform: uppercase; line-height: 1.25; margin-bottom: 16px; }
 .about-lead { font-size: 16px; line-height: 1.6; }
 .about-mission-quote { font-size: 12px; font-style: italic; margin-top: 16px; padding: 6px 0 6px 16px; border-left: 2px solid color-mix(in oklab,var(--primary-foreground) 40%,transparent); }
-.about-history-grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 32px; align-items: center; }
+.about-history-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; align-items: stretch; }
 .about-history-copy { order: -1; }
-.about-history-image { width: 100%; max-height: 280px; aspect-ratio: 4 / 3; object-fit: cover; }
+.about-editorial-photo { position: relative; min-width: 0; overflow: hidden; }
+.about-editorial-photo :is(.about-history-image, .about-hybr-image) { position: absolute; inset: 0; width: 100%; height: 100%; max-height: none; object-fit: cover; }
 .about-prose, .about-prose .about-lead { font-size: 14px; line-height: 1.6; }
 .about-prose > .contents > p { margin-top: 18px; }
 .about-reference .about-values-title { text-align: center; font-size: 54px; margin: 12px 0 48px; }
 .about-values-grid { display: grid; gap: 36px; max-width: 900px; margin-inline: auto; }
 .about-value { display: grid; grid-template-columns: 1fr 1fr; min-width: 0; border: 1px solid var(--border); }
 .about-value:nth-child(2) .about-value-photo { order: 2; }
-.about-value-photo { background: var(--muted); min-height: 300px; }
-.about-value-photo img { width: 100%; height: 100%; object-fit: cover; }
+.about-value-photo { position: relative; overflow: hidden; background: var(--muted); min-height: 300px; }
+.about-value-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .about-value-copy { padding: 54px 48px; align-self: center; }
 .about-value h3 { font-family: var(--font-display); font-weight: 700; font-size: 19px; text-transform: uppercase; margin-bottom: 14px; }
 .about-value-copy > div { font-size: 14px; line-height: 1.6; }
@@ -306,18 +307,17 @@
 .about-hybr { padding-top: 16px; }
 .about-hybr .about-band.about-opening { padding: 0; margin-bottom: 16px; }
 .about-opening-grid, .about-technology-grid { display: grid; grid-template-columns: 1fr 1fr; }
-.about-hybr .about-opening-copy { min-width: 0; padding: 28px 32px; align-self: center; }
+.about-hybr .about-opening-copy { min-width: 0; padding: 28px 32px; }
 .about-hybr .about-headline { line-height: 1.08; margin-bottom: 18px; }
 .about-hybr .about-headline > .cms-inline { display: block; }
 .about-hybr .about-lead { font-size: 16px; line-height: 1.6; }
-.about-hybr-image { width: 100%; height: 420px; min-width: 0; object-fit: cover; }
-.about-technology-copy { min-width: 0; align-self: center; padding: 28px 32px; }
+.about-technology-copy { min-width: 0; padding: 28px 32px; }
 .about-technology-copy .about-section-title { font-size: 24px; }
 .about-technology-copy .about-section-title > span { display: block; }
 .about-features { display: grid; gap: 18px; }
 .about-features dt { font-family: var(--font-display); text-transform: uppercase; font-size: 15px; font-weight: 700; margin-bottom: 6px; }
 .about-features dd { font-size: 13px; line-height: 1.6; }
-@media (max-width: 1023px) { .about-band { padding: 48px; } .about-band:not([data-section="story-values"]) { padding: 28px; } .about-history-grid { gap: 28px; } .about-value-copy { padding: 32px; } .about-hybr .about-opening-copy, .about-technology-copy { padding: 24px; } .about-hybr-image { height: 460px; } .about-reference > section { width: 100%; max-width: 100%; } }
+@media (max-width: 1023px) { .about-band { padding: 48px; } .about-band:not([data-section="story-values"]) { padding: 28px; } .about-history-grid { gap: 28px; } .about-value-copy { padding: 32px; } .about-hybr .about-opening-copy, .about-technology-copy { padding: 24px; } .about-reference > section { width: 100%; max-width: 100%; } }
 @media (max-width: 767px) {
  .about-reference { padding: 0 8px 24px; }
  .about-band { padding: 36px 24px; }
@@ -327,7 +327,7 @@
  .about-reference .about-values-title { font-size: 30px; margin: 0 0 28px; }
  .about-history-grid, .about-value, .about-opening-grid, .about-technology-grid { grid-template-columns: minmax(0,1fr); }
  .about-history-grid { gap: 20px; }
- .about-history-image { max-height: 220px; }
+ .about-editorial-photo { aspect-ratio: 4 / 3; }
  .about-value-photo { min-height: 0; aspect-ratio: 4 / 3; }
  .about-value-copy { padding: 28px; }
  .about-value:nth-child(2) .about-value-photo { order: 0; }
@@ -335,8 +335,7 @@
  .about-cta { margin-inline: 0; padding: 24px 20px; }
  .about-hybr { padding-top: 8px; }
  .about-hybr .about-opening-copy, .about-technology-copy { padding: 24px 20px; }
- .about-hybr-image { height: 260px; }
- .about-technology-grid .about-hybr-image { order: 2; }
+ .about-technology-grid .about-editorial-photo { order: 2; }
 }
 
 /* Design Studio atelier restyle — luxe, creative, spontaneous. */

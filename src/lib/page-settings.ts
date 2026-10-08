@@ -8,6 +8,7 @@ import creativity from "@/assets/story-creativity.jpg.asset.json";
 import personal from "@/assets/story-personal.jpg.asset.json";
 import hybrGolf from "@/assets/hybr-golf.jpg.asset.json";
 import hybrDetail from "@/assets/hybr-detail.jpg.asset.json";
+import { focusPosition, type ImageFocus } from "@/lib/image-focus";
 
 /* ------------------------------------------------------------------ */
 /* Types                                                               */
@@ -21,7 +22,7 @@ export type TypographyStyle = {
   letterSpacing?: number | undefined; transform?: "default" | "uppercase" | "lowercase" | "capitalize" | undefined;
   align?: "left" | "center" | "right" | undefined; color?: string | undefined;
 };
-export type MediaValue = { url?: string | undefined; alt?: string | undefined; position?: Position | undefined };
+export type MediaValue = { url?: string | undefined; alt?: string | undefined; position?: Position | undefined; focus?: ImageFocus | undefined };
 export type Position = "center" | "top" | "bottom" | "left" | "right";
 export type ButtonStyle = {
   variant?: "filled" | "outline" | "ghost" | undefined; bg?: string | undefined; color?: string | undefined; border?: string | undefined;
@@ -277,7 +278,7 @@ const buttonSchema = z.object({ variant: z.enum(["filled", "outline", "ghost"]).
 const sectionSchema = z.object({
   visible: z.boolean().optional().catch(undefined), hideMobile: z.boolean().optional().catch(undefined), hideDesktop: z.boolean().optional().catch(undefined),
   content: z.record(z.string().max(20000)).optional().catch(undefined),
-  media: z.record(z.object({ url: z.string().max(4000).optional().catch(undefined), alt: z.string().max(300).optional().catch(undefined), position: z.enum(POSITIONS as [Position, ...Position[]]).optional().catch(undefined) })).optional().catch(undefined),
+  media: z.record(z.object({ url: z.string().max(4000).optional().catch(undefined), alt: z.string().max(300).optional().catch(undefined), position: z.enum(POSITIONS as [Position, ...Position[]]).optional().catch(undefined), focus: z.object({ x: z.number().min(0).max(100), y: z.number().min(0).max(100) }).optional().catch(undefined) })).optional().catch(undefined),
   typography: z.record(typo).optional().catch(undefined),
   background: z.object({ color, image: z.string().max(4000).optional().catch(undefined), size: z.enum(["cover", "contain"]).optional().catch(undefined), position: z.enum(POSITIONS as [Position, ...Position[]]).optional().catch(undefined), overlay: color, overlayOpacity: num(0, 100) }).optional().catch(undefined),
   button: buttonSchema.optional().catch(undefined),
@@ -340,7 +341,7 @@ export function makePageView(key: PageKey, overrides: PageConfig | undefined): P
     t: (s, k) => sec(s).content?.[k] ?? "",
     m: (s, k) => {
       const v = sec(s).media?.[k] ?? {};
-      const pos = v.position && POSITIONS.includes(v.position) && v.position !== "center" ? v.position : undefined;
+      const pos = v.focus ? focusPosition(v.focus) : v.position && POSITIONS.includes(v.position) && v.position !== "center" ? v.position : undefined;
       return { url: safeUrl(v.url) ?? "", alt: v.alt ?? "", style: pos ? { objectPosition: pos } : undefined };
     },
     n: (s, k) => sec(s).extra?.[k]?.desktop ?? sec(s).extra?.[k]?.mobile,
