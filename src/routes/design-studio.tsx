@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
+import { submitStudio } from "@/lib/contact.functions";
 import { formatPrice } from "@/lib/shop";
 import { discountedTiers, imageFor, studioProducts, studioQuery, tiersFor } from "@/lib/studio";
 
@@ -87,9 +88,9 @@ function DesignStudio() {
     const shownColor = other ? otherColor : color;
     const details = [`Doelgroep: ${gender}`, `Product: ${other ? `Anders – ${otherProduct}` : selectedOption?.name ?? "Niet gekozen"}`, shownColor ? `Kleur: ${shownColor}` : "", unit ? `Indicatie kleding: ${qty} × ${formatPrice(unit)}` : "", ...paths.map(p=>`Bestand: ${p}`), fd.get("meeting") ? "Online afspraak gewenst" : ""].filter(Boolean).join("\n");
     const { other_product: _a, other_color: _b, ...rest } = parsed.data as Record<string, unknown>;
-    const { error } = await supabase.from("design_requests").insert({ ...rest, message: `${parsed.data.message}\n\n${details}` } as never);
+    const res = await submitStudio({ data: { ...(rest as any), message: `${parsed.data.message}\n\n${details}` } }).catch(() => ({ ok: false }));
     setBusy(false);
-    if (error) { toast.error("Versturen mislukt, probeer opnieuw."); return; }
+    if (!res.ok) { toast.error("Versturen mislukt, probeer opnieuw."); return; }
     setSent(true);
   }
 

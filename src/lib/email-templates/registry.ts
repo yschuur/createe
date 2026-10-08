@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react'
 import { template as orderEmail } from './order-email'
+import { template as formEmail } from './form-email'
 
 export interface TemplateEntry {
   component: ComponentType<any>
@@ -13,4 +14,5 @@ export interface TemplateEntry {
 /** Template registry — maps template names to their React Email components. */
 export const TEMPLATES: Record<string, TemplateEntry> = {
   'order-email': orderEmail,
+  'form-email': formEmail,
 }
