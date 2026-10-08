@@ -81,7 +81,17 @@ function SportShopPage() {
         </div>
       </section>
       <div data-section="collection-filters" className="mt-8 bg-[#F5F5F5]">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-8 gap-y-2 px-4 py-3.5 md:px-8" aria-label="Filters">
+        {/* Mobiel: filterknop die de zijbalk opent */}
+        <div className="flex items-center justify-between px-4 py-3.5 md:hidden">
+          <button type="button" onClick={() => setDrawerOpen(true)} aria-haspopup="dialog"
+            className="flex items-center gap-2 text-[15px] font-medium hover:opacity-70">
+            <SlidersHorizontal className="h-4 w-4" />
+            Filter{hasFilters ? ` (${[avail, min != null || max != null ? "prijs" : "", color, sort].filter(Boolean).length})` : ""}
+          </button>
+          <span className="text-sm text-foreground/80">{products.length} artikelen</span>
+        </div>
+        {/* Desktop: horizontale filterbalk */}
+        <div className="mx-auto hidden max-w-7xl flex-wrap items-center gap-x-8 gap-y-2 px-4 py-3.5 md:flex md:px-8" aria-label="Filters">
           <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
             <FilterMenu label="Beschikbaarheid" active={!!avail}>
               {[{ v: "", l: "Alles" }, { v: "in", l: "Op voorraad" }, { v: "out", l: "Uitverkocht" }].map((o) => (
