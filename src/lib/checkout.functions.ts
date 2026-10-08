@@ -36,7 +36,7 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
       const ids = data.items.map((i) => i.variantId);
       const { data: rows, error: rErr } = await supabase
         .from("product_variants")
-        .select("id, price, active, track_inventory, allow_backorder, inventory_quantity, product_id, products!inner(id, name, status, published, is_service)")
+        .select("id, price, active, track_inventory, allow_backorder, inventory_quantity, option1_value, option2_value, option3_value, product_id, products!inner(id, name, status, published, is_service)")
         .in("id", ids);
       if (rErr) return { error: "Kon de producten niet ophalen. Probeer het opnieuw." };
 
