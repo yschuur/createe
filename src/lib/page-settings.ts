@@ -14,7 +14,7 @@ import { focusPosition, type ImageFocus } from "@/lib/image-focus";
 /* Types                                                               */
 /* ------------------------------------------------------------------ */
 
-export type PageKey = "home" | "story" | "hybr" | "studio" | "collection" | "product" | "contact" | "global";
+export type PageKey = "home" | "story" | "hybr" | "studio" | "collection" | "product" | "contact" | "global" | "footer";
 export type RoleId = "kicker" | "heading" | "subheading" | "body" | "label" | "link" | "price" | "button" | "faq-category" | "faq-question" | "faq-answer";
 export type ResponsiveNumber = { mobile?: number | undefined; desktop?: number | undefined };
 export type TypographyStyle = {
@@ -191,7 +191,7 @@ export const PAGE_DEFS: PageDef[] = [
   },
   {
     key: "global", slug: "global", label: "Algemene layout", storageKey: "page_global", viewUrl: "/",
-    description: "Aankondigingsbalk, menu-balk, USP-balk, reviews en footer op alle pagina's.",
+    description: "Aankondigingsbalk, menu-balk, USP-balk en reviews op alle pagina's.",
     sections: [
       { id: "site-buttons", label: "Alle knoppen", roles: [], buttons: true, buttonTargets: [
         { id: "filled", label: "Gevulde knoppen", selector: '[data-slot=button][data-variant=default]' },
@@ -206,15 +206,21 @@ export const PAGE_DEFS: PageDef[] = [
       { id: "site-usps", label: "USP-balk", roles: ["body"], background: true, spacing: true,
         content: [...usp(1, "Binnen 1-3 werkdagen verzonden"), ...usp(2, "Gratis verzending vanaf €75"), ...usp(3, "Eenvoudig retourneren & gratis ruilen")] },
       { id: "site-reviews", label: "Reviews", roles: ["heading", "body", "label"], background: true, spacing: true },
-      { id: "site-footer", label: "Footer", roles: ["heading", "body", "link"], background: true, spacing: true,
+    ],
+  },
+  {
+    key: "footer", slug: "footer", label: "Footer", storageKey: "page_footer", viewUrl: "/",
+    description: "Logo, teksten, eigen links, nieuwsbrief, tekstgroottes, kleuren en ruimte op alle pagina's.",
+    sections: [
+      { id: "footer-main", label: "Footer", roles: ["heading", "body", "link"], background: true, spacing: true,
         content: [{ key: "logo", label: "Logo", type: "select", default: "white", options: [{ value: "white", label: "Wit" }, { value: "green", label: "Groen" }] },
           area("about", "Tekst onder logo", "Tradities zijn er om te eren, niet om te dragen. Wij geloven dat sportkleding meer mag zijn dan standaard. Je techniek is uniek, je tactiek is uniek, dus waarom zou je kleding dat niet zijn? CREATEE combineert de luxe van een premium fit met het lef van uniek design."),
           txt("h_discover", "Kop kolom 1", "Ontdek"),
-          ...([["Home", "/"], ["Golf", "/collections/golf"], ["Padel", "/collections/padel"], ["CREATEE Design Studio", "/design-studio"], ["De HYBR™ Polo", "/pages/de-hybr-polo"], ["Over ons", "/pages/ons-verhaal"], ["", ""], ["", ""]] as const).flatMap(([l, u], i) => [txt(`d${i + 1}_label`, `Kolom 1 link ${i + 1} — tekst`, l), url(`d${i + 1}_url`, `Kolom 1 link ${i + 1} — adres`, u)]), txt("h_info", "Kop kolom 2", "Informatie"),
-          txt("info1", "Informatie regel 1", "Binnen 1-3 werkdagen verzonden"), txt("info2", "Informatie regel 2", "Gratis verzending vanaf €75"),
-          txt("info3_label", "Informatie link — tekst", "Reviews op Trustpilot"), url("info3_url", "Informatie link — adres", "https://nl.trustpilot.com/review/createe.nl"),
+          ...Array.from({ length: 8 }, (_, i) => [txt(`d${i + 1}_label`, `Ontdek link ${i + 1} — tekst`, ""), url(`d${i + 1}_url`, `Ontdek link ${i + 1} — adres`, "")]).flat(),
+          txt("h_info", "Kop kolom 2", "Informatie"),
+          ...Array.from({ length: 8 }, (_, i) => [txt(`i${i + 1}_label`, `Informatie link ${i + 1} — tekst`, ""), url(`i${i + 1}_url`, `Informatie link ${i + 1} — adres`, "")]).flat(),
           txt("club_title", "Nieuwsbrief — kop", "The Clubhouse"),
-          { key: "club_text", label: "Nieuwsbrief — tekst", type: "rich", default: "<p>Word lid van The Clubhouse en ontvang direct <strong>gratis bezorging</strong> op je volgende bestelling.</p>" },
+           { key: "club_text", label: "Nieuwsbrief — tekst", type: "rich", default: "<p>Word lid van The Clubhouse.</p>" },
           { key: "club_show", label: "Nieuwsbrief — invulveld tonen", type: "select", default: "yes", options: [{ value: "yes", label: "Ja" }, { value: "no", label: "Nee" }] },
           txt("club_placeholder", "Nieuwsbrief — tekst in invulveld", "Je e-mailadres"),
           txt("club_button", "Nieuwsbrief — knoptekst", "Aanmelden"),
@@ -231,7 +237,7 @@ const actionTargets: Record<string, { id: string; label: string; selector: strin
   "studio-form": [{ id: "submit", label: "Verzend aanvraag", selector: '[type=submit]' }, { id: "gender", label: "Heren / Dames", selector: '.atelier-toggle button' }, { id: "product", label: "Productkeuzes", selector: '.atelier-sample' }, { id: "color", label: "Kleurkeuzes", selector: '.atelier-swatch' }],
   "product-main": [{ id: "add", label: "Aan winkelwagen toevoegen", selector: '[data-page-button=add]' }, { id: "size", label: "Maatkeuzes", selector: '[data-page-button=size]' }, { id: "chart", label: "Maattabel", selector: '[data-page-button=chart]' }],
   "site-header": [{ id: "menu", label: "Mobiel menu", selector: '[aria-label="Menu openen"]' }, { id: "account", label: "Mijn account", selector: '[aria-label="Mijn account"]' }, { id: "basket", label: "Winkelmand", selector: '[aria-label="Winkelmand"]' }],
-  "site-footer": [{ id: "subscribe", label: "Nieuwsbrief aanmelden", selector: "[data-page-button=subscribe]" }],
+   "footer-main": [{ id: "subscribe", label: "Nieuwsbrief aanmelden", selector: "[data-page-button=subscribe]" }],
   "site-reviews": [{ id: "previous", label: "Vorige review", selector: '[aria-label="Vorige reviews"]' }, { id: "next", label: "Volgende review", selector: '[aria-label="Volgende reviews"]' }, { id: "expand", label: "Lees meer / minder", selector: '[data-page-button=expand]' }],
 };
 for (const page of PAGE_DEFS) for (const section of page.sections) {
@@ -455,7 +461,9 @@ export function buildPageCss(key: PageKey, overrides: PageConfig | undefined): s
       if ((key === "story" || key === "hybr") && role !== "button") continue;
       const st = c.typography?.[role];
       if (!st || !s.roles.includes(role)) continue;
-      const sel = selector.split(",").map((x) => `${root} :is(${x})${role.startsWith("faq-") ? "" : ":not(.cms-rich *)"}`).join(",");
+       const sel = s.id === "footer-main"
+         ? `${root} [data-role="${role}"],${root} [data-role="${role}"] *`
+         : selector.split(",").map((x) => `${root} :is(${x})${role.startsWith("faq-") ? "" : ":not(.cms-rich *)"}`).join(",");
       const decl: string[] = [];
       if (st.font && FONTS[st.font]) decl.push(`font-family:${FONTS[st.font]}`);
       const w = clampN(st.weight, 100, 900); if (w) decl.push(`font-weight:${Math.round(w / 100) * 100}`);
@@ -468,10 +476,11 @@ export function buildPageCss(key: PageKey, overrides: PageConfig | undefined): s
       responsive(sel, "font-size", st.size, 8, 160, "px", out);
     }
     // Buttons
-    const buttonEntries: [string, ButtonStyle | undefined][] = [[`${root} :is(button,[data-slot=button])`, c.button]];
+     const excludeFooter = s.id === "site-buttons" ? ':not([data-section="footer-main"] *)' : "";
+     const buttonEntries: [string, ButtonStyle | undefined][] = [[`${root} :is(button,[data-slot=button])${excludeFooter}`, c.button]];
     for (const [id, style] of Object.entries(c.buttons ?? {})) {
       const target = s.buttonTargets?.find((t) => t.id === id);
-      if (target) buttonEntries.push([`${root} ${target.selector}`, style]);
+       if (target) buttonEntries.push([`${root} ${target.selector}${excludeFooter}`, style]);
       else if (/^btn\d+$/.test(id) && s.content?.some((f) => f.key === `${id}_label`)) buttonEntries.push([`${root} [data-page-button="${id}"]`, style]);
     }
     for (const [sel, b] of buttonEntries) {
