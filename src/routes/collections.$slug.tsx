@@ -136,6 +136,16 @@ function SportShopPage() {
           </div>
         </div>
       </div>
+      {drawerOpen && (
+        <FilterDrawer
+          count={products.length}
+          colors={colors}
+          avail={avail} min={min} max={max} color={color} sort={sort}
+          hasFilters={hasFilters}
+          setSearch={setSearch}
+          onClose={() => setDrawerOpen(false)}
+        />
+      )}
       <section data-section="collection-grid" className="mx-auto max-w-7xl px-4 pb-12 md:px-8">
         <div data-role="grid" className="mt-10 grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-4 md:gap-x-6">
           {products.map((p, i) => <ProductCard key={p.id} product={p} index={i} />)}
