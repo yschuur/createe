@@ -1,7 +1,7 @@
 # Roadmap
 - [x] Productbeheer: fotoselectie en volgorde per kleur; opslaan/herladen, onafhankelijke kleurwissels en uitklapblokken getest met echte beheersessie, testinstellingen hersteld.
 - [x] Effen productswatches, eerste foto bij kleurkeuze en geen tweede foto bij product-hover; getest met twee gekoppelde kleurfoto's en homepage-preview.
-- [x] Over ons: selected Sportief magazine restyle of Ons verhaal and HYBR polo; desktop/mobile images and Studio links verified, original section IDs retained
+- [x] Over ons: Creative Atelier revamp of Ons verhaal and HYBR polo; original copy and section IDs retained, images and Studio links verified on desktop/mobile, no overflow or runtime errors.
 - [x] Match CREATEE menu and screenshot pages (home, story, studio, HYBR polo), verify desktop/mobile and studio request readback
 - [x] Shop front (home, collections, product pages, cart) with CREATEE logos and real catalog
 - [x] Admin: products, variants/stock, collections, discounts, Design Studio requests, Shopify CSV import

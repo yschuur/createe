@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ShopLayout } from "@/components/shop/ShopLayout";
 import { Button } from "@/components/ui/button";
+import { AboutCollage } from "@/components/shop/AboutCollage";
 import golf from "@/assets/hybr-golf.jpg.asset.json";
 import detail from "@/assets/hybr-detail.jpg.asset.json";
 
@@ -15,10 +16,19 @@ export const Route = createFileRoute("/pages/de-hybr-polo")({
 });
 
 function Hybr() {
-  return <ShopLayout page="story"><div className="about-magazine">
-    <section data-section="hybr-1" className="about-band bg-muted">
-      <div className="about-heading-grid"><div><p className="about-kicker text-primary">CREATEE · Signature HYBR™</p><h1 className="about-headline">De HYBR™<br />polo.</h1></div><div className="about-heading-aside"><h2 className="about-secondary-title text-primary">Ultieme<br />veelzijdigheid.</h2><p className="about-lead italic">Het comfort van een sportpolo met de uitstraling van premium kwaliteit.</p></div></div>
-      <div className="about-media-grid"><img src={golf.url} alt="Golfer in de groene CREATEE HYBR polo" className="about-portrait" /><div className="about-media-copy"><p className="about-lead">Ontdek de ultieme veelzijdigheid. De HYBR™ Polo is ontwikkeld voor de golfer die prestatie niet zonder in te leveren op een volmaakte look. Onze unieke hybride stof biedt volledige bewegingsvrijheid, maar keert daarna direct terug naar de perfecte pasvorm. Ervaar het comfort van een sportpolo met de uitstraling van premium kwaliteit.</p><div className="mt-8 flex flex-wrap gap-3"><Button asChild><Link to="/collections/$slug" params={{ slug: "polos" }}>Ontdek HYBR</Link></Button><Button asChild variant="outline"><Link to="/design-studio">Personaliseer nu</Link></Button></div></div></div>
+  return <ShopLayout page="story"><div className="about-atelier">
+    <section data-section="hybr-1" className="about-band about-opening">
+      <div className="about-opening-grid">
+        <AboutCollage image={golf.url} alt="Golfer in de groene CREATEE HYBR polo" detail={detail.url} detailAlt="Detail van de kraag en het CREATEE borduursel" />
+        <div className="about-opening-copy">
+          <p className="about-kicker text-primary">CREATEE · Signature HYBR™</p>
+          <h1 className="about-headline">De HYBR™<br /><em>polo.</em></h1>
+          <h2 className="about-secondary-title text-primary">Ultieme veelzijdigheid.</h2>
+          <p className="about-lead">Ontdek de ultieme veelzijdigheid. De HYBR™ Polo is ontwikkeld voor de golfer die prestatie niet zonder in te leveren op een volmaakte look. Onze unieke hybride stof biedt volledige bewegingsvrijheid, maar keert daarna direct terug naar de perfecte pasvorm. Ervaar het comfort van een sportpolo met de uitstraling van premium kwaliteit.</p>
+          <div className="about-actions"><Button asChild><Link to="/collections/$slug" params={{ slug: "polos" }}>Ontdek HYBR</Link></Button><Button asChild variant="ghost"><Link to="/design-studio">Personaliseer nu</Link></Button></div>
+          <p className="about-signature">Het comfort van een sportpolo met de uitstraling van premium kwaliteit.</p>
+        </div>
+      </div>
     </section>
     <section data-section="hybr-2" className="bg-primary text-primary-foreground">
       <div className="about-band about-technology-heading"><p className="about-kicker">De details maken het verschil</p><h2 className="about-section-title">De kracht van<br />HYBR™ technologie</h2></div>
