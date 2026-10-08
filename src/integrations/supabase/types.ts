@@ -333,10 +333,12 @@ export type Database = {
       }
       orders: {
         Row: {
+          admin_note: string
           created_at: string
           currency: string
           email: string | null
           environment: string
+          events: Json
           id: string
           name: string | null
           order_number: string
@@ -351,10 +353,12 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          admin_note?: string
           created_at?: string
           currency?: string
           email?: string | null
           environment?: string
+          events?: Json
           id?: string
           name?: string | null
           order_number: string
@@ -369,10 +373,12 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          admin_note?: string
           created_at?: string
           currency?: string
           email?: string | null
           environment?: string
+          events?: Json
           id?: string
           name?: string | null
           order_number?: string
