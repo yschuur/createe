@@ -40,7 +40,7 @@ function StockAdmin() {
     setSaving(true);
     const { error } = await supabase.from("blank_stock").upsert(rows);
     setSaving(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setEdits({}); toast.success("Voorraad opgeslagen — alle gekoppelde producten zijn bijgewerkt");
     qc.invalidateQueries();
   }
@@ -49,7 +49,7 @@ function StockAdmin() {
     const color = blankKey(newColor[model] ?? "");
     if (!color) return;
     const { error } = await supabase.from("blank_stock").upsert(DEFAULT_SIZES.map((size) => ({ model, color, size, quantity: 0 })), { ignoreDuplicates: true });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setNewColor({ ...newColor, [model]: "" });
     qc.invalidateQueries({ queryKey: ["admin", "blank-stock"] });
   }
