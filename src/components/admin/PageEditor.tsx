@@ -145,7 +145,7 @@ export function SectionEditor({ def, value, onChange, version }: { def: SectionD
   const media = value.media ?? {};
   const setMedia = (k: string, patch: Record<string, unknown> | undefined) => { const m = { ...media }; if (!patch) delete m[k]; else m[k] = { ...m[k], ...patch }; set({ media: m }); };
   const hasContent = !!def.content?.length || !!def.contentLink;
-  const richCopy = def.content?.some((f) => f.type === "rich");
+  const richCopy = def.id !== "site-footer" && def.content?.some((f) => f.type === "rich");
   const buttonFields = def.content?.filter((f) => /^btn\d+_label$/.test(f.key)) ?? [];
   return <Tabs defaultValue={hasContent ? "content" : def.media?.length ? "media" : "style"} key={def.id}>
     <TabsList className="flex h-auto flex-wrap">
