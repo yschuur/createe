@@ -40,6 +40,7 @@ import { Route as AuthenticatedAdminPagesPageRouteImport } from './routes/_authe
 import { Route as AuthenticatedAdminProductsIndexRouteImport } from './routes/_authenticated/admin.products.index'
 import { Route as AuthenticatedAdminProductsIdRouteImport } from './routes/_authenticated/admin.products.$id'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
+import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -210,6 +211,12 @@ const ApiPublicPaymentsWebhookRoute =
     path: '/api/public/payments/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const LovableEmailTransactionalPreviewRoute =
+  LovableEmailTransactionalPreviewRouteImport.update({
+    id: '/lovable/email/transactional/preview',
+    path: '/lovable/email/transactional/preview',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -240,6 +247,7 @@ export interface FileRoutesByFullPath {
   '/admin/pages/$page': typeof AuthenticatedAdminPagesPageRoute
   '/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/admin/pages/': typeof AuthenticatedAdminPagesIndexRoute
   '/admin/products/': typeof AuthenticatedAdminProductsIndexRoute
 }
@@ -272,6 +280,7 @@ export interface FileRoutesByTo {
   '/admin/pages/$page': typeof AuthenticatedAdminPagesPageRoute
   '/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/admin/pages': typeof AuthenticatedAdminPagesIndexRoute
   '/admin/products': typeof AuthenticatedAdminProductsIndexRoute
 }
@@ -306,6 +315,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/pages/$page': typeof AuthenticatedAdminPagesPageRoute
   '/_authenticated/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
   '/_authenticated/admin/pages/': typeof AuthenticatedAdminPagesIndexRoute
   '/_authenticated/admin/products/': typeof AuthenticatedAdminProductsIndexRoute
 }
@@ -340,6 +350,7 @@ export interface FileRouteTypes {
     | '/admin/pages/$page'
     | '/admin/products/$id'
     | '/api/public/payments/webhook'
+    | '/lovable/email/transactional/preview'
     | '/admin/pages/'
     | '/admin/products/'
   fileRoutesByTo: FileRoutesByTo
@@ -372,6 +383,7 @@ export interface FileRouteTypes {
     | '/admin/pages/$page'
     | '/admin/products/$id'
     | '/api/public/payments/webhook'
+    | '/lovable/email/transactional/preview'
     | '/admin/pages'
     | '/admin/products'
   id:
@@ -405,6 +417,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/pages/$page'
     | '/_authenticated/admin/products/$id'
     | '/api/public/payments/webhook'
+    | '/lovable/email/transactional/preview'
     | '/_authenticated/admin/pages/'
     | '/_authenticated/admin/products/'
   fileRoutesById: FileRoutesById
@@ -424,6 +437,7 @@ export interface RootRouteChildren {
   ProductsHandleRoute: typeof ProductsHandleRoute
   CheckoutIndexRoute: typeof CheckoutIndexRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
+  LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -645,6 +659,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lovable/email/transactional/preview': {
+      id: '/lovable/email/transactional/preview'
+      path: '/lovable/email/transactional/preview'
+      fullPath: '/lovable/email/transactional/preview'
+      preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -706,6 +727,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProductsHandleRoute: ProductsHandleRoute,
   CheckoutIndexRoute: CheckoutIndexRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
+  LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
