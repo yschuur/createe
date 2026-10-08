@@ -38,7 +38,7 @@ export function defaultPage(p: P): ProductPageContent {
     featureLinkUrl: "/pages/de-hybr-polo",
     featureBadges: ["360° stretch", "Premium finish", "Smart-collar", "Kreukvrij & ademend"],
     accordions: [
-      { title: "Productdetails", open: false, html: p.fabric ? `<p><strong>Materiaal</strong></p><ul><li>${p.fabric}</li></ul>` : "" },
+      { title: "Productdetails", open: false, html: '<p><strong>Materiaal</strong></p><ul><li>95% Organisch Katoen</li><li>5% Dynamisch Elastaan</li></ul><p><strong>Specificaties</strong></p><ul><li>215g/m²</li><li>Glad afgewerkte sluiting</li><li>Dubbel voorgekrompen</li><li>Plat gebreide kraag met elastaan</li></ul>' },
       { title: "Verzending", open: false, html: "<p>Onze standaardproducten worden meestal binnen 1 tot 3 werkdagen verstuurd met PostNL.</p>" },
       { title: "Onderhoudsinstructies", open: false, html: CARE },
     ],
