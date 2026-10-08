@@ -99,8 +99,8 @@ function SportShopPage() {
               <FilterMenu label="Kleur" active={!!color}>
                 <div className="flex flex-wrap gap-2 px-4 py-3" role="listbox" aria-label="Kleur">
                   {colors.map((c) => (
-                    <button key={c} type="button" title={colorGroupLabel(c)} aria-label={colorGroupLabel(c)} aria-pressed={color === c} onClick={() => setSearch({ color: color === c ? undefined : c })}
-                      className={`h-7 w-7 rounded-full border transition ${color === c ? "ring-2 ring-primary ring-offset-2" : "border-black/15 hover:scale-110"}`}
+                    <button key={c} type="button" title={colorGroupLabel(c)} aria-label={colorGroupLabel(c)} aria-pressed={!!color && colorGroupKey(color) === c} onClick={() => setSearch({ color: !!color && colorGroupKey(color) === c ? undefined : c })}
+                      className={`h-7 w-7 rounded-full border transition ${!!color && colorGroupKey(color) === c ? "ring-2 ring-primary ring-offset-2" : "border-black/15 hover:scale-110"}`}
                       style={{ background: productColor(c) }} />
                   ))}
                 </div>
