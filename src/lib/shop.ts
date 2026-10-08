@@ -101,6 +101,34 @@ export const collectionQuery = (slug: string) =>
     },
   });
 
+export type ShopFilters = { avail?: string | undefined; min?: number | undefined; max?: number | undefined; color?: string | undefined };
+
+/** Shop filters: availability, price range and color apply within the current sport/collection selection. */
+export function filterProducts(products: ProductWithRelations[], f: ShopFilters): ProductWithRelations[] {
+  return products.filter((p) => {
+    if (f.avail === "in" && !p.product_variants.some(isPurchasable)) return false;
+    if (f.avail === "out" && p.product_variants.some(isPurchasable)) return false;
+    const price = priceRange(p).min;
+    if (f.min != null && price < f.min) return false;
+    if (f.max != null && price > f.max) return false;
+    if (f.color && !p.product_variants.some((v) => v.color === f.color)) return false;
+    return true;
+  });
+}
+
+/** Shop sorting: alphabetical, price or date; anything else keeps the existing order. */
+export function sortProducts(products: ProductWithRelations[], sort: string | undefined): ProductWithRelations[] {
+  const list = [...products];
+  switch (sort) {
+    case "alpha": return list.sort((a, b) => a.name.localeCompare(b.name, "nl"));
+    case "price-asc": return list.sort((a, b) => priceRange(a).min - priceRange(b).min);
+    case "price-desc": return list.sort((a, b) => priceRange(b).min - priceRange(a).min);
+    case "date-desc": return list.sort((a, b) => +new Date(b.created_at) - +new Date(a.created_at));
+    case "date-asc": return list.sort((a, b) => +new Date(a.created_at) - +new Date(b.created_at));
+    default: return list;
+  }
+}
+
 export function formatPrice(v: number | string | null | undefined) {
   return new Intl.NumberFormat("nl-NL", { style: "currency", currency: "EUR" }).format(Number(v ?? 0));
 }
