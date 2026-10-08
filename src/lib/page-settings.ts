@@ -14,7 +14,7 @@ import { focusPosition, type ImageFocus } from "@/lib/image-focus";
 /* Types                                                               */
 /* ------------------------------------------------------------------ */
 
-export type PageKey = "home" | "story" | "hybr" | "studio" | "collection" | "product" | "global";
+export type PageKey = "home" | "story" | "hybr" | "studio" | "collection" | "product" | "contact" | "global";
 export type RoleId = "kicker" | "heading" | "subheading" | "body" | "label" | "link" | "price" | "button";
 export type ResponsiveNumber = { mobile?: number | undefined; desktop?: number | undefined };
 export type TypographyStyle = {
@@ -57,7 +57,7 @@ export type SectionDef = {
   content?: ContentFieldDef[]; media?: MediaFieldDef[]; roles: RoleId[];
   background?: boolean; backgroundImage?: boolean; buttons?: boolean; spacing?: boolean; extras?: ExtraDef[];
   buttonTargets?: { id: string; label: string; selector: string }[];
-  contentLink?: { to: "/admin/homepage" | "/admin/studio" | "/admin/menu"; label: string };
+  contentLink?: { to: "/admin/homepage" | "/admin/studio" | "/admin/menu" | "/admin/contact"; label: string };
 };
 export type PageDef = { key: PageKey; slug: string; label: string; storageKey: string; viewUrl: string; description: string; sections: SectionDef[] };
 
@@ -73,6 +73,28 @@ const img = (key: string, label: string, d: string, alt: string): MediaFieldDef 
 const allText: RoleId[] = ["kicker", "heading", "subheading", "body", "link", "button"];
 
 export const PAGE_DEFS: PageDef[] = [
+  {
+    key: "contact", slug: "contact", label: "Contact", storageKey: "page_contact", viewUrl: "/pages/contact",
+    description: "Contactformulier en veelgestelde vragen.",
+    sections: [
+      { id: "contact-form", label: "Contactformulier", roles: ["body", "label", "button"], background: true, spacing: true, buttons: true,
+        content: [
+          { key: "intro", label: "Tekst boven formulier", type: "rich", default: "Wij streven ernaar om binnen 2 werkdagen te reageren." },
+          { key: "description", label: "Formuliertekst", type: "rich", default: "Of je nu meer wilt weten over onze huidige designs of interesse hebt in een custom design: dat horen wij heel graag, we denken graag met je mee. Heb je vragen over de status van je order, vergeet dan niet je ordernummer door te geven." },
+          txt("name_label", "Naam — label", "Naam"), txt("name_placeholder", "Naam — voorbeeld", "Je naam"),
+          txt("email_label", "E-mail — label", "E-mailadres"), txt("email_placeholder", "E-mail — voorbeeld", "naam@voorbeeld.nl"),
+          txt("phone_label", "Telefoon — label", "Telefoonnummer"), txt("phone_placeholder", "Telefoon — voorbeeld", "Bijv. 06 12345678"),
+          txt("order_label", "Order — label", "Ordernummer"), txt("order_placeholder", "Order — voorbeeld", "#12345"),
+          txt("message_label", "Bericht — label", "Jouw bericht"), txt("message_placeholder", "Bericht — voorbeeld", "Waarmee kunnen we je helpen?"),
+          txt("submit_label", "Verzendknop", "Verstuur bericht"), txt("privacy", "Privacytekst", "Respect voor jouw privacy"),
+          { key: "success", label: "Bevestiging", type: "rich", default: "Bedankt! Je bericht is ontvangen." },
+        ], buttonTargets: [{ id: "submit", label: "Verstuur bericht", selector: '[data-page-button=submit]' }] },
+      { id: "contact-faq", label: "Veelgestelde vragen", roles: ["heading", "body", "button"], background: true, spacing: true, buttons: true,
+        content: [{ key: "intro", label: "Tekst boven FAQ", type: "rich", default: "Klik op een onderwerp om de veelgestelde vragen te bekijken." }],
+        contentLink: { to: "/admin/contact", label: "Categorieën, vragen en antwoorden beheren" },
+        buttonTargets: [{ id: "toggle", label: "FAQ openen / sluiten", selector: '[data-page-button=faq-toggle]' }] },
+    ],
+  },
   {
     key: "home", slug: "homepage", label: "Homepage", storageKey: "page_home", viewUrl: "/",
     description: "Header met video's, beoordelingenbalk en productcarrousel.",
