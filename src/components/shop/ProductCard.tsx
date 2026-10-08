@@ -46,7 +46,7 @@ export function ProductCard({ product, index = 0 }: { product: ProductWithRelati
           <p className="text-xs uppercase tracking-wider text-muted-foreground">{product.product_type}</p>
         </div>
         <div className="shrink-0 text-right text-sm">
-          <p className="font-medium">{formatPrice(min)}</p>
+          <p data-role="price" className="font-medium">{formatPrice(min)}</p>
           {compareAt && <p className="text-xs text-muted-foreground line-through">{formatPrice(compareAt)}</p>}
         </div>
       </Link>
