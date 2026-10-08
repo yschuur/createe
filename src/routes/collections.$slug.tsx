@@ -182,3 +182,99 @@ function FilterMenu({ label, active, align, children }: { label: string; active?
     </div>
   );
 }
+
+function DrawerSection({ title, children, defaultOpen = true }: { title: string; children: React.ReactNode; defaultOpen?: boolean }) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="border-b border-border">
+      <button type="button" aria-expanded={open} onClick={() => setOpen((o) => !o)}
+        className="flex w-full items-center justify-between py-4 text-[15px] font-medium">
+        {title}
+        {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+      </button>
+      {open && <div className="pb-5">{children}</div>}
+    </div>
+  );
+}
+
+function FilterDrawer({ count, colors, avail, min, max, color, sort, hasFilters, setSearch, onClose }: {
+  count: number; colors: string[];
+  avail?: string; min?: number; max?: number; color?: string; sort?: string;
+  hasFilters: boolean;
+  setSearch: (patch: Record<string, unknown>) => void;
+  onClose: () => void;
+}) {
+  useEffect(() => {
+    const esc = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", esc);
+    document.body.style.overflow = "hidden";
+    return () => { document.removeEventListener("keydown", esc); document.body.style.overflow = ""; };
+  }, [onClose]);
+  return (
+    <div className="fixed inset-0 z-50 md:hidden" role="dialog" aria-modal="true" aria-label="Filters">
+      <button type="button" aria-label="Sluiten" onClick={onClose} className="absolute inset-0 bg-black/40" />
+      <div className="absolute inset-y-0 right-0 flex w-[85%] max-w-sm flex-col bg-[#F5F5F5] shadow-xl">
+        <div className="flex items-center justify-between border-b border-border px-5 py-4">
+          <h2 className="text-2xl font-bold">Filter</h2>
+          <button type="button" aria-label="Sluiten" onClick={onClose} className="p-1 hover:opacity-70"><X className="h-5 w-5" /></button>
+        </div>
+        <div className="flex-1 overflow-y-auto px-5">
+          <DrawerSection title="Beschikbaarheid">
+            {[{ v: "in", l: "Op voorraad" }, { v: "out", l: "Niet op voorraad" }].map((o) => (
+              <label key={o.v} className={`flex items-center gap-3 py-2 text-[15px] ${avail === o.v ? "" : "text-foreground/70"}`}>
+                <input type="checkbox" checked={avail === o.v} onChange={() => setSearch({ avail: avail === o.v ? undefined : o.v })}
+                  className="h-5 w-5 rounded border-border accent-primary" />
+                {o.l}
+              </label>
+            ))}
+          </DrawerSection>
+          <DrawerSection title="Prijs">
+            <div className="flex items-center gap-3">
+              <div className="flex flex-1 items-center rounded border border-border bg-background px-3 py-2.5">
+                <span className="mr-2 text-foreground/60">€</span>
+                <input type="number" min={0} placeholder="0" aria-label="Prijs van" className="w-full bg-transparent text-sm outline-none" value={min ?? ""} onChange={(e) => setSearch({ min: e.target.value ? Number(e.target.value) : undefined })} />
+              </div>
+              <span className="text-sm text-foreground/60">aan</span>
+              <div className="flex flex-1 items-center rounded border border-border bg-background px-3 py-2.5">
+                <span className="mr-2 text-foreground/60">€</span>
+                <input type="number" min={0} aria-label="Prijs tot" className="w-full bg-transparent text-sm outline-none" value={max ?? ""} onChange={(e) => setSearch({ max: e.target.value ? Number(e.target.value) : undefined })} />
+              </div>
+            </div>
+          </DrawerSection>
+          {colors.length > 0 && (
+            <DrawerSection title="Kleur">
+              <div className="flex flex-wrap gap-2.5" role="listbox" aria-label="Kleur">
+                {colors.map((c) => (
+                  <button key={c} type="button" title={colorGroupLabel(c)} aria-label={colorGroupLabel(c)} aria-pressed={!!color && colorGroupKey(color) === c}
+                    onClick={() => setSearch({ color: !!color && colorGroupKey(color) === c ? undefined : c })}
+                    className={`h-9 w-9 rounded-sm border transition ${!!color && colorGroupKey(color) === c ? "ring-2 ring-primary ring-offset-2" : "border-black/20"}`}
+                    style={{ background: productColor(c) }} />
+                ))}
+              </div>
+            </DrawerSection>
+          )}
+          <div className="flex items-center justify-between py-5">
+            <span className="text-xl font-bold">Sorteren</span>
+            <select aria-label="Sorteren" value={sort ?? "default"} onChange={(e) => setSearch({ sort: e.target.value === "default" ? undefined : e.target.value })}
+              className="rounded border border-border bg-background px-3 py-2 text-sm">
+              {SORTS.map((s) => <option key={s.id} value={s.id}>{s.label}</option>)}
+            </select>
+          </div>
+          {hasFilters && (
+            <button type="button" onClick={() => setSearch({ avail: undefined, min: undefined, max: undefined, color: undefined, sort: undefined })}
+              className="mb-4 flex items-center gap-1.5 text-sm font-semibold underline underline-offset-4 hover:opacity-70">
+              <X className="h-4 w-4" />
+              Alles wissen
+            </button>
+          )}
+        </div>
+        <div className="p-5">
+          <button type="button" onClick={onClose}
+            className="w-full rounded-full bg-foreground py-4 text-center text-[15px] font-semibold text-background hover:opacity-90">
+            {count} artikelen weergeven
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
