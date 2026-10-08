@@ -27,7 +27,7 @@ function SeoAdmin() {
         qc.fetchQuery({ ...seoQuery(), staleTime: 0 }),
         supabase.from("sports").select("name, slug").order("sort_order"),
         supabase.from("collections").select("name, slug").order("sort_order"),
-        supabase.from("products").select("id, name, handle, seo_title, seo_description").order("name"),
+        supabase.from("products").select("id, name, slug, seo_title, seo_description").order("name"),
       ]);
       const rows: Row[] = [];
       const fromMap = (id: string) => ({ title: seo[id]?.title ?? "", description: seo[id]?.description ?? "" });
@@ -35,7 +35,7 @@ function SeoAdmin() {
       for (const s of POLICY_SLUGS) { const p = defaultPolicies[s]; rows.push({ id: `policy:${s}`, kind: "Pagina", label: p.title, path: `/policies/${s}`, defTitle: `${p.title} | CREATEE`, defDesc: `${p.title} van CREATEE: alles wat je moet weten over ${p.label.toLowerCase()}.`, ...fromMap(`policy:${s}`) }); }
       for (const s of sports.data ?? []) rows.push({ id: `sport:${s.slug}`, kind: "Sport", label: s.name, path: `/collections/${s.slug}`, defTitle: `${s.name} | CREATEE`, defDesc: `Shop de CREATEE ${s.name} collectie: unieke designs, technische stoffen.`, ...fromMap(`sport:${s.slug}`) });
       for (const c of cols.data ?? []) rows.push({ id: `collection:${c.slug}`, kind: "Collectie", label: c.name, path: `?collection=${c.slug}`, defTitle: `${c.name} | CREATEE`, defDesc: `Shop de CREATEE ${c.name} collectie: unieke designs, technische stoffen.`, ...fromMap(`collection:${c.slug}`) });
-      for (const p of prods.data ?? []) rows.push({ id: `product:${p.id}`, productId: p.id, kind: "Product", label: p.name, path: `/products/${p.handle}`, defTitle: `${p.name} | CREATEE`, defDesc: `${p.name} van CREATEE.`, title: p.seo_title ?? "", description: p.seo_description ?? "" });
+      for (const p of prods.data ?? []) rows.push({ id: `product:${p.id}`, productId: p.id, kind: "Product", label: p.name, path: `/products/${p.slug}`, defTitle: `${p.name} | CREATEE`, defDesc: `${p.name} van CREATEE.`, title: p.seo_title ?? "", description: p.seo_description ?? "" });
       return { rows, seo };
     },
   });
