@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useRef } from "react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
 import { ShopLayout } from "@/components/shop/ShopLayout";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { RatingsBar } from "@/components/shop/RatingsBar";
@@ -49,6 +48,30 @@ function Home() {
   const { data: products } = useSuspenseQuery(listProductsQuery());
   const { data: home } = useSuspenseQuery(homepageQuery());
   const row = useRef<HTMLDivElement>(null);
+  const drag = useRef({ down: false, moved: false, startX: 0, scrollLeft: 0 });
+  const onPointerDown = (e: React.PointerEvent) => {
+    if (e.pointerType !== "mouse" || !row.current) return;
+    drag.current = { down: true, moved: false, startX: e.clientX, scrollLeft: row.current.scrollLeft };
+  };
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (!drag.current.down || !row.current) return;
+    const dx = e.clientX - drag.current.startX;
+    if (Math.abs(dx) > 4) {
+      drag.current.moved = true;
+      row.current.classList.add("dragging");
+    }
+    if (drag.current.moved) row.current.scrollLeft = drag.current.scrollLeft - dx;
+  };
+  const onPointerUp = () => {
+    drag.current.down = false;
+    row.current?.classList.remove("dragging");
+  };
+  const onClickCapture = (e: React.MouseEvent) => {
+    if (!drag.current.moved) return;
+    drag.current.moved = false;
+    e.preventDefault();
+    e.stopPropagation();
+  };
   const cms = usePageSettings("home");
   const count = Math.round(cms.n("home-products", "count") ?? 12);
   const preferred = home.featured_slugs;
@@ -69,10 +92,17 @@ function Home() {
       </div>
     </section>
     {home.show_ratings && <RatingsBar googleLabel={cms.t("home-ratings", "google_label")} trustLabel={cms.t("home-ratings", "trust_label")} trustUrl={cms.t("home-ratings", "trust_url")} googleUrl={cms.t("home-ratings", "google_url")} />}
-    <section data-section="home-products" aria-label="CREATEE collectie" className="px-4 py-7 md:px-6">
-      {home.carousel_title && <h2 className="mb-5 font-display text-2xl text-primary md:text-3xl">{home.carousel_title}</h2>}
-      <div ref={row} className="home-product-carousel">{featured.slice(0,count).map(p=><ProductCard key={p.id} product={p} index={2} />)}</div>
-      <div className="mt-6 flex items-center justify-between gap-3"><a href={cms.t("home-products", "collection_url")} className="text-sm font-medium underline underline-offset-4">{home.collection_link_label}</a><div className="flex gap-2"><Button variant="outline" size="icon" aria-label="Vorige producten" onClick={()=>row.current?.scrollBy({left:-row.current.clientWidth,behavior:"smooth"})}><ArrowLeft /></Button><Button variant="outline" size="icon" aria-label="Volgende producten" onClick={()=>row.current?.scrollBy({left:row.current.clientWidth,behavior:"smooth"})}><ArrowRight /></Button></div></div>
+    <section data-section="home-products" aria-label="CREATEE collectie" className="px-4 pt-7 pb-3 md:px-6">
+      {home.carousel_title && <h2 className="mb-4 font-display text-2xl text-primary md:text-3xl">{home.carousel_title}</h2>}
+      <div
+        ref={row}
+        className="home-product-carousel"
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerLeave={onPointerUp}
+        onClickCapture={onClickCapture}
+      >{featured.slice(0,count).map(p=><ProductCard key={p.id} product={p} index={2} />)}</div>
     </section>
   </ShopLayout>;
 }

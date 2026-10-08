@@ -76,7 +76,6 @@ function HomepageAdmin() {
         <h2 className="mb-4 text-lg font-semibold">Productcarrousel</h2>
         <div className="grid gap-4 md:grid-cols-2">
           <div><Label>Titel boven carrousel (optioneel)</Label><Input value={s.carousel_title} onChange={e => set({ carousel_title: e.target.value })} /></div>
-          <div><Label>Linktekst onder carrousel</Label><Input value={s.collection_link_label} onChange={e => set({ collection_link_label: e.target.value })} /></div>
           <div className="md:col-span-2"><Label>Uitgelichte producten eerst (productlinks, één per regel)</Label>
             <textarea className="mt-1 min-h-32 w-full rounded-sm border border-input bg-background p-2 text-sm" value={s.featured_slugs.join("\n")} onChange={e => set({ featured_slugs: e.target.value.split("\n") })} /></div>
         </div>

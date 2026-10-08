@@ -172,7 +172,9 @@
 .editorial-copy p + p { margin-top: 16px; }
 .home-hero { height: min(68vh, 680px); min-height: 380px; }
 .home-product-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
-.home-product-carousel { display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 48px) / 5); gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.home-product-carousel { display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 48px) / 5); gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; cursor: grab; user-select: none; }
+.home-product-carousel.dragging { scroll-snap-type: none; cursor: grabbing; }
+.home-product-carousel.dragging * { pointer-events: none; }
 .home-product-carousel > * { min-width: 0; scroll-snap-align: start; }
 .home-product-carousel h3 { font-size: 13px; }
 .home-product-carousel > a > div:last-child { display: block; }

@@ -11,7 +11,6 @@ export type HomepageSettings = {
   show_ratings: boolean;
   carousel_title: string;
   featured_slugs: string[];
-  collection_link_label: string;
 };
 
 export const defaultHomepage: HomepageSettings = {
@@ -28,7 +27,6 @@ export const defaultHomepage: HomepageSettings = {
   show_ratings: true,
   carousel_title: "",
   featured_slugs: ["padelo-picasso", "red-hot-chili-putters", "bogeymian-rhapsody", "bandeja-vu", "at-the-19th"],
-  collection_link_label: "Bekijk de collectie",
 };
 
 export const homepageQuery = () => queryOptions({
