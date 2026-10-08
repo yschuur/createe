@@ -94,7 +94,7 @@ function Detail({ item: i, onRemove }: { item: Item; onRemove: () => void }) {
     enabled: i.files.length > 0,
     queryFn: async () => {
       const { data } = await supabase.storage.from("studio-assets").createSignedUrls(i.files, 3600);
-      return (data ?? []).map((d) => ({ path: d.path ?? "", url: d.signedUrl }));
+      return (data ?? []).map((d) => ({ path: d.path ?? "", url: d.signedUrl ?? "" }));
     },
   });
 
