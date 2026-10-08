@@ -3,6 +3,7 @@ import { z } from "zod";
 import type Stripe from "stripe";
 import { supabase } from "@/integrations/supabase/client";
 import { optionLabel } from "@/lib/shop";
+import { fetchShipping, shippingCost } from "@/lib/shipping";
 import { type StripeEnv, createStripeClient, getStripeErrorMessage } from "@/lib/stripe.server";
 
 const checkoutInput = z.object({
@@ -112,6 +113,8 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
       if (iErr) return { error: "Kon de bestelling niet starten. Probeer het opnieuw." };
 
       const stripe = createStripeClient(data.environment);
+      const shipSettings = await fetchShipping();
+      const shipping = shippingCost(total, shipSettings);
       const session = await createSession(stripe, {
         resolved,
         total,
@@ -120,6 +123,8 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
         userId: data.userId ?? null,
         returnUrl: data.returnUrl,
         withAutomaticTax: true,
+        shipping,
+        shippingLabel: shipping === 0 ? "Gratis verzending" : shipSettings.label,
       });
       if (!session.ok) {
         // Stripe Tax may not be enabled on the account yet — fall back to a
@@ -127,6 +132,7 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
         const retry = await createSession(stripe, {
           resolved, total, orderNumber, orderId: order.id,
           userId: data.userId ?? null, returnUrl: data.returnUrl, withAutomaticTax: false,
+          shipping, shippingLabel: shipping === 0 ? "Gratis verzending" : shipSettings.label,
         });
         if (!retry.ok) return { error: retry.error };
         return { clientSecret: retry.clientSecret };
@@ -146,6 +152,8 @@ type SessionArgs = {
   userId: string | null;
   returnUrl: string;
   withAutomaticTax: boolean;
+  shipping: number;
+  shippingLabel: string;
 };
 
 async function createSession(
@@ -168,6 +176,14 @@ async function createSession(
         },
       })),
       shipping_address_collection: { allowed_countries: ["NL", "BE"] },
+      shipping_options: [{
+        shipping_rate_data: {
+          type: "fixed_amount",
+          display_name: args.shippingLabel,
+          fixed_amount: { amount: Math.round(args.shipping * 100), currency: "eur" },
+          tax_behavior: "inclusive",
+        },
+      }],
       metadata: {
         order_id: args.orderId,
         order_number: args.orderNumber,
