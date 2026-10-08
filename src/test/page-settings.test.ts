@@ -18,7 +18,7 @@ describe("missing page definition", () => {
     } finally { PAGE_DEFS.splice(index, 0, definition); }
   });
   it("preserves registered contact defaults and custom styles", () => {
-    expect(pageDefaults("contact").sections["contact-form"]?.content?.submit_label).toBe("Verstuur bericht");
+    expect(pageDefaults("contact").sections["contact-form"]?.content?.["submit_label"]).toBe("Verstuur bericht");
     expect(buildPageCss("contact", { sections: { "contact-form": { visible: false } } })).toContain("display:none");
   });
 });
