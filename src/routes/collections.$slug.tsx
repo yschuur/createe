@@ -58,16 +58,7 @@ function SportShopPage() {
   if (order) base.sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
 
   const colors = [...new Set(base.flatMap((p) => p.product_variants.map((v) => v.color).filter((c): c is string => !!c)))].sort((a, b) => a.localeCompare(b, "nl"));
-  const filtered = base.filter((p) => {
-    if (avail === "in" && !p.product_variants.some(isPurchasable)) return false;
-    if (avail === "out" && p.product_variants.some(isPurchasable)) return false;
-    const price = priceRange(p).min;
-    if (min != null && price < min) return false;
-    if (max != null && price > max) return false;
-    if (color && !p.product_variants.some((v) => v.color === color)) return false;
-    return true;
-  });
-  const products = sortProducts(filtered, sort);
+  const products = sortProducts(filterProducts(base, { avail, min, max, color }), sort);
 
   const setSearch = (patch: Record<string, unknown>) =>
     navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, ...patch }), replace: true });
