@@ -199,7 +199,7 @@ export const getCheckoutStatus = createServerFn({ method: "GET" })
       const session = await stripe.checkout.sessions.retrieve(data.sessionId);
       return {
         status: session.payment_status,
-        orderNumber: session.metadata?.order_number ?? null,
+        orderNumber: session.metadata?.['order_number'] ?? null,
         email: session.customer_details?.email ?? null,
       };
     } catch (error) {
