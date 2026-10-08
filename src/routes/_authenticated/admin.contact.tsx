@@ -5,6 +5,8 @@ import { ArrowUp, ArrowDown, Plus, Trash2, Save } from "lucide-react";
 import { toast } from "sonner";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
+import { TypographyEditor } from "@/components/admin/PageEditor";
+import { pageSettingsQuery, parsePageConfig, type PageConfig, type RoleId } from "@/lib/page-settings";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { contactFaqQuery, faqSchema, type FaqConfig } from "@/lib/contact";
@@ -18,6 +20,9 @@ export const Route = createFileRoute("/_authenticated/admin/contact")({
 function ContactAdmin() {
   const qc = useQueryClient();
   const query = useQuery(contactFaqQuery());
+  const pageQuery = useQuery(pageSettingsQuery("contact"));
+  const [pageDraft, setPageDraft] = useState<PageConfig | null>(null);
+  const pageConfig = pageDraft ?? pageQuery.data ?? { sections: {} };
   const [draft, setDraft] = useState<FaqConfig | null>(null);
   const [busy, setBusy] = useState(false);
   const config = draft ?? query.data;
@@ -34,13 +39,27 @@ function ContactAdmin() {
     const result = faqSchema.safeParse(config);
     if (!result.success) { toast.error("Vul alle categorieën, vragen en antwoorden in."); return; }
     setBusy(true);
-    const { error } = await supabase.from("site_settings").upsert({ key: "contact_faq", value: result.data, updated_at: new Date().toISOString() });
+    const savedPage = parsePageConfig(pageConfig);
+    const { error } = await supabase.from("site_settings").upsert([
+      { key: "contact_faq", value: result.data, updated_at: new Date().toISOString() },
+      { key: "page_contact", value: savedPage as never, updated_at: new Date().toISOString() },
+    ]);
     setBusy(false);
     if (error) { toast.error("Opslaan mislukt."); return; }
     qc.setQueryData(contactFaqQuery().queryKey, result.data); setDraft(null); toast.success("FAQ opgeslagen");
+    qc.setQueryData(pageSettingsQuery("contact").queryKey, savedPage); setPageDraft(null);
   }
   return <AdminLayout title="Contact & FAQ" actions={<Button onClick={save} disabled={busy || !config}><Save />{busy ? "Opslaan…" : "FAQ opslaan"}</Button>}>
-    <Tabs defaultValue="faq"><TabsList><TabsTrigger value="faq">Veelgestelde vragen</TabsTrigger><TabsTrigger value="messages">Berichten</TabsTrigger></TabsList>
+    <Tabs defaultValue="faq"><TabsList><TabsTrigger value="faq">Veelgestelde vragen</TabsTrigger><TabsTrigger value="typography">FAQ-opmaak</TabsTrigger><TabsTrigger value="messages">Berichten</TabsTrigger></TabsList>
+      <TabsContent value="typography" className="space-y-4">
+        <p className="text-sm text-muted-foreground">Elke instelling geldt voor alle categorieën, alle vragen of alle antwoorden. De teksten zelf blijven afzonderlijk bewerkbaar.</p>
+        {(["faq-category", "faq-question", "faq-answer"] as RoleId[]).map(role => <div key={role} data-faq-editor={role}><TypographyEditor role={role} value={pageConfig.sections["contact-faq"]?.typography?.[role]} onChange={style => {
+          const section = pageConfig.sections["contact-faq"] ?? {};
+          const typography = { ...section.typography };
+          if (style) typography[role] = style; else delete typography[role];
+          setPageDraft({ ...pageConfig, sections: { ...pageConfig.sections, "contact-faq": { ...section, typography } } });
+        }} /></div>)}
+      </TabsContent>
       <TabsContent value="faq" className="space-y-6">
         <p className="text-sm text-muted-foreground">Categorieën en vragen verschijnen in deze volgorde. Alle antwoorden starten gesloten. <Link className="underline" to="/admin/pages/$page" params={{ page: "contact" }}>Formulierteksten en knopopmaak aanpassen</Link></p>
         {query.isError && <p role="alert">De FAQ kon niet worden geladen. Probeer het opnieuw.</p>}
