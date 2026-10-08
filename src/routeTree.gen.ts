@@ -36,6 +36,7 @@ import { Route as AuthenticatedAdminPagesIndexRouteImport } from './routes/_auth
 import { Route as AuthenticatedAdminPagesPageRouteImport } from './routes/_authenticated/admin.pages.$page'
 import { Route as AuthenticatedAdminProductsIndexRouteImport } from './routes/_authenticated/admin.products.index'
 import { Route as AuthenticatedAdminProductsIdRouteImport } from './routes/_authenticated/admin.products.$id'
+import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -184,6 +185,12 @@ const AuthenticatedAdminProductsIdRoute =
     path: '/admin/products/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ApiPublicPaymentsWebhookRoute =
+  ApiPublicPaymentsWebhookRouteImport.update({
+    id: '/api/public/payments/webhook',
+    path: '/api/public/payments/webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -210,6 +217,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/admin/pages/$page': typeof AuthenticatedAdminPagesPageRoute
   '/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
+  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/admin/pages/': typeof AuthenticatedAdminPagesIndexRoute
   '/admin/products/': typeof AuthenticatedAdminProductsIndexRoute
 }
@@ -238,6 +246,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/admin/pages/$page': typeof AuthenticatedAdminPagesPageRoute
   '/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
+  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/admin/pages': typeof AuthenticatedAdminPagesIndexRoute
   '/admin/products': typeof AuthenticatedAdminProductsIndexRoute
 }
@@ -268,6 +277,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/admin/pages/$page': typeof AuthenticatedAdminPagesPageRoute
   '/_authenticated/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
+  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/_authenticated/admin/pages/': typeof AuthenticatedAdminPagesIndexRoute
   '/_authenticated/admin/products/': typeof AuthenticatedAdminProductsIndexRoute
 }
@@ -298,6 +308,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/admin/pages/$page'
     | '/admin/products/$id'
+    | '/api/public/payments/webhook'
     | '/admin/pages/'
     | '/admin/products/'
   fileRoutesByTo: FileRoutesByTo
@@ -326,6 +337,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/admin/pages/$page'
     | '/admin/products/$id'
+    | '/api/public/payments/webhook'
     | '/admin/pages'
     | '/admin/products'
   id:
@@ -355,6 +367,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/'
     | '/_authenticated/admin/pages/$page'
     | '/_authenticated/admin/products/$id'
+    | '/api/public/payments/webhook'
     | '/_authenticated/admin/pages/'
     | '/_authenticated/admin/products/'
   fileRoutesById: FileRoutesById
@@ -371,6 +384,7 @@ export interface RootRouteChildren {
   PagesOnsVerhaalRoute: typeof PagesOnsVerhaalRoute
   PoliciesSlugRoute: typeof PoliciesSlugRoute
   ProductsHandleRoute: typeof ProductsHandleRoute
+  ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -564,6 +578,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminProductsIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/payments/webhook': {
+      id: '/api/public/payments/webhook'
+      path: '/api/public/payments/webhook'
+      fullPath: '/api/public/payments/webhook'
+      preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -620,6 +641,7 @@ const rootRouteChildren: RootRouteChildren = {
   PagesOnsVerhaalRoute: PagesOnsVerhaalRoute,
   PoliciesSlugRoute: PoliciesSlugRoute,
   ProductsHandleRoute: ProductsHandleRoute,
+  ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
