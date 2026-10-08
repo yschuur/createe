@@ -29,6 +29,7 @@ import { Route as AuthenticatedAdminImportRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAdminMediaRouteImport } from './routes/_authenticated/admin.media'
 import { Route as AuthenticatedAdminMenuRouteImport } from './routes/_authenticated/admin.menu'
 import { Route as AuthenticatedAdminPoliciesRouteImport } from './routes/_authenticated/admin.policies'
+import { Route as AuthenticatedAdminSportsRouteImport } from './routes/_authenticated/admin.sports'
 import { Route as AuthenticatedAdminStudioRouteImport } from './routes/_authenticated/admin.studio'
 import { Route as AuthenticatedAdminStylesRouteImport } from './routes/_authenticated/admin.styles'
 import { Route as AuthenticatedAdminPagesIndexRouteImport } from './routes/_authenticated/admin.pages.index'
@@ -141,6 +142,12 @@ const AuthenticatedAdminPoliciesRoute =
     path: '/admin/policies',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminSportsRoute =
+  AuthenticatedAdminSportsRouteImport.update({
+    id: '/admin/sports',
+    path: '/admin/sports',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminStudioRoute =
   AuthenticatedAdminStudioRouteImport.update({
     id: '/admin/studio',
@@ -197,6 +204,7 @@ export interface FileRoutesByFullPath {
   '/admin/media': typeof AuthenticatedAdminMediaRoute
   '/admin/menu': typeof AuthenticatedAdminMenuRoute
   '/admin/policies': typeof AuthenticatedAdminPoliciesRoute
+  '/admin/sports': typeof AuthenticatedAdminSportsRoute
   '/admin/studio': typeof AuthenticatedAdminStudioRoute
   '/admin/styles': typeof AuthenticatedAdminStylesRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
@@ -224,6 +232,7 @@ export interface FileRoutesByTo {
   '/admin/media': typeof AuthenticatedAdminMediaRoute
   '/admin/menu': typeof AuthenticatedAdminMenuRoute
   '/admin/policies': typeof AuthenticatedAdminPoliciesRoute
+  '/admin/sports': typeof AuthenticatedAdminSportsRoute
   '/admin/studio': typeof AuthenticatedAdminStudioRoute
   '/admin/styles': typeof AuthenticatedAdminStylesRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
@@ -253,6 +262,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/media': typeof AuthenticatedAdminMediaRoute
   '/_authenticated/admin/menu': typeof AuthenticatedAdminMenuRoute
   '/_authenticated/admin/policies': typeof AuthenticatedAdminPoliciesRoute
+  '/_authenticated/admin/sports': typeof AuthenticatedAdminSportsRoute
   '/_authenticated/admin/studio': typeof AuthenticatedAdminStudioRoute
   '/_authenticated/admin/styles': typeof AuthenticatedAdminStylesRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
@@ -282,6 +292,7 @@ export interface FileRouteTypes {
     | '/admin/media'
     | '/admin/menu'
     | '/admin/policies'
+    | '/admin/sports'
     | '/admin/studio'
     | '/admin/styles'
     | '/admin/'
@@ -309,6 +320,7 @@ export interface FileRouteTypes {
     | '/admin/media'
     | '/admin/menu'
     | '/admin/policies'
+    | '/admin/sports'
     | '/admin/studio'
     | '/admin/styles'
     | '/admin'
@@ -337,6 +349,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/media'
     | '/_authenticated/admin/menu'
     | '/_authenticated/admin/policies'
+    | '/_authenticated/admin/sports'
     | '/_authenticated/admin/studio'
     | '/_authenticated/admin/styles'
     | '/_authenticated/admin/'
@@ -502,6 +515,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminPoliciesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/sports': {
+      id: '/_authenticated/admin/sports'
+      path: '/admin/sports'
+      fullPath: '/admin/sports'
+      preLoaderRoute: typeof AuthenticatedAdminSportsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/studio': {
       id: '/_authenticated/admin/studio'
       path: '/admin/studio'
@@ -556,6 +576,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminMediaRoute: typeof AuthenticatedAdminMediaRoute
   AuthenticatedAdminMenuRoute: typeof AuthenticatedAdminMenuRoute
   AuthenticatedAdminPoliciesRoute: typeof AuthenticatedAdminPoliciesRoute
+  AuthenticatedAdminSportsRoute: typeof AuthenticatedAdminSportsRoute
   AuthenticatedAdminStudioRoute: typeof AuthenticatedAdminStudioRoute
   AuthenticatedAdminStylesRoute: typeof AuthenticatedAdminStylesRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
@@ -574,6 +595,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminMediaRoute: AuthenticatedAdminMediaRoute,
   AuthenticatedAdminMenuRoute: AuthenticatedAdminMenuRoute,
   AuthenticatedAdminPoliciesRoute: AuthenticatedAdminPoliciesRoute,
+  AuthenticatedAdminSportsRoute: AuthenticatedAdminSportsRoute,
   AuthenticatedAdminStudioRoute: AuthenticatedAdminStudioRoute,
   AuthenticatedAdminStylesRoute: AuthenticatedAdminStylesRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
