@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ShoppingBag, Minus, Plus, X, Menu, UserRound, Truck, PackageCheck, RefreshCw } from "lucide-react";
+import { ShoppingBag, Minus, Plus, X, Menu, Truck, PackageCheck, RefreshCw } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { Logo } from "@/components/Logo";
 import { useCart } from "@/lib/cart";
@@ -53,8 +53,7 @@ export function ShopLayout({ children, page, cms }: { children: ReactNode; page?
           </Link>
           <div className="flex shrink-0 items-center justify-end gap-1 md:gap-3">
             <span className="hidden font-label text-[10px] font-semibold uppercase tracking-widest text-muted-foreground sm:block">NL · EUR €</span>
-            <Button asChild variant="ghost" size="icon" aria-label="Mijn account"><Link to="/auth"><UserRound /></Link></Button>
-            <Button variant="ghost" size="icon" onClick={() => cart.setOpen(true)} className="relative" aria-label="Winkelmand">
+            <Button variant="ghost" size="icon" onClick={() => cart.setOpen(true)} className="relative hover:bg-primary hover:text-primary-foreground" aria-label="Winkelmand">
               <ShoppingBag className="h-5 w-5" />
               {cart.count > 0 && (
                 <span className="absolute -right-0.5 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-accent-foreground">{cart.count}</span>
