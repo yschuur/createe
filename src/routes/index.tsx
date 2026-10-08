@@ -24,6 +24,7 @@ export const Route = createFileRoute("/")({
       { property: "og:description", content: "Polo's en T-shirts van organisch katoen voor golf en padel." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+       { property: "og:image", content: golfPoster.url }, { name: "twitter:image", content: golfPoster.url },
     ],
   }),
   loader: ({ context }) => Promise.all([

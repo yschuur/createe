@@ -32,3 +32,4 @@
 - Editorial page button overrides are keyed by button ID in each section and compiled by the validated page CSS builder — individual buttons can change independently while existing section-wide defaults remain compatible.
 - The router serializes and hydrates its request-scoped QueryClient — saved page content must match on server render and the first browser render.
 - Storefront button styles use the page CMS with global defaults, registered section/action targets and per-button overrides, including hover/focus colors — one validated CSS builder covers native buttons and portaled shop dialogs while admin stays unchanged.
+- RichTextEditor renders EditorContent as soon as its editor exists, with toolbar state fallbacks — remounting a populated field must not leave an invisible editor waiting for its first transaction.
