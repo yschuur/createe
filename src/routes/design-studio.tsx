@@ -132,7 +132,7 @@ function DesignStudio() {
       <div className="mx-auto max-w-[1400px] px-5 pt-10 sm:px-10 sm:pt-12">
         <div className="mb-7 flex flex-wrap items-center justify-center gap-4"><h2 className="atelier-section-title !mb-0 text-primary">Onze scorecard</h2><Stars /></div>
       </div>
-      <div className="studio-marquee pb-10 sm:pb-12" style={{ ["--marquee-duration" as string]: `${Math.max(20, studio.reviews.length * 7)}s` }}>
+      <div className="studio-marquee pb-4 sm:pb-5" style={{ ["--marquee-duration" as string]: `${Math.max(20, studio.reviews.length * 7)}s` }}>
         <div className="studio-marquee-track">{[0, 1].map((copy) => studio.reviews.map((r, i) => <ScoreCard key={`${copy}-${r.id}`} r={r} i={i} hidden={copy === 1} />))}</div>
       </div>
       <div>
