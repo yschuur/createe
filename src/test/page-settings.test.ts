@@ -22,3 +22,19 @@ describe("missing page definition", () => {
     expect(buildPageCss("contact", { sections: { "contact-form": { visible: false } } })).toContain("display:none");
   });
 });
+
+describe("independent footer configuration", () => {
+  it("starts both owner-managed link columns empty", () => {
+    const footer = makePageView("footer", undefined);
+    for (const prefix of ["d", "i"]) for (let n = 1; n <= 8; n++) {
+      expect(footer.t("footer-main", `${prefix}${n}_label`)).toBe("");
+      expect(footer.t("footer-main", `${prefix}${n}_url`)).toBe("");
+    }
+  });
+  it("has exactly one footer management entry and does not inherit the global footer", () => {
+    expect(PAGE_DEFS.filter((p) => p.sections.some((s) => s.id === "footer-main")).map((p) => p.slug)).toEqual(["footer"]);
+    expect(pageDefaults("global").sections["site-footer"]).toBeUndefined();
+    const legacy = { sections: { "site-footer": { content: { d1_label: "Home", d1_url: "/" } } } };
+    expect(makePageView("footer", legacy).t("footer-main", "d1_label")).toBe("");
+  });
+});
