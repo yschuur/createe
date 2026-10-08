@@ -2,7 +2,7 @@ import { queryOptions } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
 /** SEO overrides for pages, sports and collections live in site_settings "seo", keyed "page:<key>", "policy:<slug>", "sport:<slug>", "collection:<slug>". Products use their own seo_title/seo_description columns. */
-export type SeoEntry = { title?: string; description?: string };
+export type SeoEntry = { title?: string | undefined; description?: string | undefined };
 export type SeoMap = Record<string, SeoEntry>;
 
 export const seoQuery = () => queryOptions({
@@ -39,7 +39,7 @@ export function seoFrom(loaderData: unknown, key: string): SeoEntry {
 }
 
 /** Title/description meta tags with the override winning over the default. */
-export function seoMeta(override: SeoEntry, def: { title: string; description: string }, opts: { type?: string; card?: string } = {}) {
+export function seoMeta(override: SeoEntry, def: { title: string; description: string }, opts: { type?: string | undefined; card?: string | undefined } = {}) {
   const title = override.title?.trim() || def.title;
   const description = override.description?.trim() || def.description;
   return [

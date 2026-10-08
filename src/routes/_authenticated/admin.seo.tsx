@@ -64,7 +64,7 @@ function SeoAdmin() {
     const { error } = await saveSeo(map);
     if (error) errors.push("pagina's/collecties");
     setSaving(false);
-    if (errors.length) return toast.error(`Opslaan mislukt voor: ${errors.join(", ")}`);
+    if (errors.length) { toast.error(`Opslaan mislukt voor: ${errors.join(", ")}`); return; }
     setEdits({});
     await Promise.all([qc.invalidateQueries({ queryKey: ["admin-seo"] }), qc.invalidateQueries({ queryKey: ["site-settings", "seo"] })]);
     toast.success("SEO-teksten opgeslagen");
