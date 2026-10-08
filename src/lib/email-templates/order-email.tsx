@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Body, Button, Column, Container, Head, Heading, Hr, Html, Img, Preview, Row, Section, Text } from '@react-email/components'
 import type { TemplateEntry } from './registry'
+import whiteLogo from '@/assets/logo_golf_wit.png.asset.json'
 
 export interface OrderLine { name: string; label?: string; quantity: number; total: number }
 export interface OrderEmailProps {
@@ -22,7 +23,7 @@ export interface OrderEmailProps {
 
 const eur = (n?: number) => `€${(n ?? 0).toFixed(2).replace('.', ',')}`
 const GREEN = '#275C38'
-const LOGO = 'https://createe.lovable.app/favicon.png'
+const LOGO = new URL(whiteLogo.url, 'https://createe.lovable.app').href
 
 export const OrderEmail = (p: OrderEmailProps) => (
   <Html lang="nl" dir="ltr">
@@ -31,8 +32,7 @@ export const OrderEmail = (p: OrderEmailProps) => (
     <Body style={main}>
       <Container style={container}>
         <Section style={header}>
-          <Img src={LOGO} width="44" height="44" alt="CREATEE" style={{ margin: '0 auto' }} />
-          <Text style={brand}>CREATEE</Text>
+          <Img src={LOGO} width="240" height="36" alt="CREATEE" style={{ margin: '0 auto', maxWidth: '100%', height: 'auto' }} />
         </Section>
         <Section style={content}>
           {p.orderNumber && <Text style={label}>Bestelling {p.orderNumber}</Text>}
@@ -61,7 +61,7 @@ export const OrderEmail = (p: OrderEmailProps) => (
           </>}
         </Section>
         <Section style={footer}>
-          <Text style={footerText}>CREATEE — kleding met karakter voor op de baan.</Text>
+          <Text style={footerText}>Heb je vragen over je bestelling, neem contact op via contact@createe.nl.</Text>
         </Section>
       </Container>
     </Body>
@@ -83,8 +83,7 @@ export const template = {
 
 const main = { backgroundColor: '#ffffff', fontFamily: 'Georgia, "Times New Roman", serif', margin: 0 }
 const container = { maxWidth: '560px', margin: '0 auto', border: '1px solid #e5e5e5' }
-const header = { backgroundColor: GREEN, padding: '24px 0 12px', textAlign: 'center' as const }
-const brand = { color: '#ffffff', fontFamily: 'Arial, sans-serif', fontWeight: 700, letterSpacing: '4px', fontSize: '18px', margin: '8px 0 0' }
+const header = { backgroundColor: GREEN, padding: '24px 16px', textAlign: 'center' as const }
 const content = { padding: '32px 32px 16px' }
 const label = { fontFamily: 'Arial, sans-serif', fontSize: '11px', letterSpacing: '2px', textTransform: 'uppercase' as const, color: GREEN, fontWeight: 700, margin: '0 0 8px' }
 const h1 = { fontFamily: 'Arial, sans-serif', fontSize: '26px', lineHeight: '1.25', fontWeight: 800, color: '#1A1A1A', margin: '0 0 20px' }
