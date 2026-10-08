@@ -97,7 +97,7 @@ function BackgroundEditor({ value, onChange, image }: { value: BackgroundStyle |
   </div>;
 }
 
-function ButtonEditor({ value, onChange, title = "Knoppen" }: { value: ButtonStyle | undefined; onChange: (v: ButtonStyle | undefined) => void; title?: string }) {
+export function ButtonEditor({ value, onChange, title = "Knoppen" }: { value: ButtonStyle | undefined; onChange: (v: ButtonStyle | undefined) => void; title?: string }) {
   const v = value ?? {};
   const set = (patch: Partial<ButtonStyle>) => onChange({ ...v, ...patch });
   const n = (k: keyof ButtonStyle, label: string, min: number, max: number) => <Field label={label}><Input type="number" min={min} max={max} value={(v[k] as number | undefined) ?? ""} placeholder="—" onChange={(e) => set({ [k]: num(e.target.value) })} /></Field>;
@@ -107,12 +107,20 @@ function ButtonEditor({ value, onChange, title = "Knoppen" }: { value: ButtonSty
       <Field label="Soort"><select className={sel} value={v.variant ?? ""} onChange={(e) => set({ variant: (e.target.value || undefined) as ButtonStyle["variant"] })}><option value="">Standaard</option><option value="filled">Gevuld</option><option value="outline">Omlijnd</option><option value="ghost">Alleen tekst</option></select></Field>
       {n("size", "Tekstgrootte (px)", 8, 40)}
       <Field label="Dikte"><select className={sel} value={v.weight ?? ""} onChange={(e) => set({ weight: num(e.target.value) })}><option value="">Standaard</option>{[300, 400, 500, 600, 700, 800].map((w) => <option key={w} value={w}>{w}</option>)}</select></Field>
-      {n("radius", "Afronding (px)", 0, 999)}{n("px", "Ruimte links/rechts", 0, 80)}{n("py", "Ruimte boven/onder", 0, 40)}
+      <Field label="Lettertype"><select className={sel} value={v.font ?? ""} onChange={(e) => set({ font: e.target.value || undefined })}><option value="">Standaard</option>{Object.keys(FONTS).map((f) => <option key={f}>{f}</option>)}</select></Field>
+       <Field label="Randstijl"><select className={sel} value={v.borderStyle ?? ""} onChange={(e) => set({ borderStyle: (e.target.value || undefined) as ButtonStyle["borderStyle"] })}><option value="">Standaard</option><option value="solid">Doorlopend</option><option value="dashed">Gestreept</option><option value="dotted">Gestippeld</option><option value="none">Geen rand</option></select></Field>
+       {n("borderWidth", "Randdikte (px)", 0, 12)}
+       {n("radius", "Afronding (px)", 0, 999)}{n("px", "Ruimte links/rechts", 0, 80)}{n("py", "Ruimte boven/onder", 0, 40)}
     </div>
     <div className="grid gap-3 md:grid-cols-3">
       <Field label="Achtergrond"><ColorField value={v.bg} onChange={(bg) => set({ bg })} /></Field>
       <Field label="Tekstkleur"><ColorField value={v.color} onChange={(color) => set({ color })} /></Field>
       <Field label="Randkleur"><ColorField value={v.border} onChange={(border) => set({ border })} /></Field>
+    </div>
+    <div className="grid gap-3 md:grid-cols-3">
+      <Field label="Aanwijzen — achtergrond"><ColorField value={v.hoverBg} onChange={(hoverBg) => set({ hoverBg })} /></Field>
+      <Field label="Aanwijzen — tekstkleur"><ColorField value={v.hoverColor} onChange={(hoverColor) => set({ hoverColor })} /></Field>
+      <Field label="Aanwijzen — randkleur"><ColorField value={v.hoverBorder} onChange={(hoverBorder) => set({ hoverBorder })} /></Field>
     </div>
   </div>;
 }
@@ -184,7 +192,8 @@ export function SectionEditor({ def, value, onChange, version }: { def: SectionD
 
     <TabsContent value="style" className="space-y-4 pt-4">
       {def.background && <BackgroundEditor image={def.backgroundImage} value={value.background} onChange={(background) => set({ background })} />}
-      {def.buttons && !buttonFields.length && <ButtonEditor value={value.button} onChange={(button) => set({ button })} />}
+      {def.buttons && <ButtonEditor title="Alle knoppen in dit onderdeel" value={value.button} onChange={(button) => set({ button })} />}
+       {def.buttonTargets?.map((target) => <ButtonEditor key={target.id} title={target.label} value={value.buttons?.[target.id]} onChange={(style) => { const buttons = { ...value.buttons }; if (style) buttons[target.id] = style; else delete buttons[target.id]; set({ buttons }); }} />)}
       {!richCopy && def.roles.filter((r) => r !== "button" || !def.buttons).map((r) => <TypographyEditor key={r} role={r} value={value.typography?.[r]} onChange={(t) => { const ty = { ...value.typography }; if (t) ty[r] = t; else delete ty[r]; set({ typography: ty }); }} />)}
     </TabsContent>
 
