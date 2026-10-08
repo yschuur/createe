@@ -1,0 +1,57 @@
+const GOOGLE_COLORS = ["#4285F4", "#EA4335", "#FBBC05", "#4285F4", "#34A853", "#EA4335"];
+
+function GoogleWordmark() {
+  return <span aria-hidden className="flex text-[22px] font-medium leading-none tracking-tight" style={{ fontFamily: "Arial, 'Helvetica Neue', sans-serif" }}>
+    {"Google".split("").map((letter, i) => <span key={i} style={{ color: GOOGLE_COLORS[i] }}>{letter}</span>)}
+  </span>;
+}
+
+function TrustpilotWordmark() {
+  return <span aria-hidden className="text-[21px] font-bold leading-none tracking-tight text-[#191919]" style={{ fontFamily: "Arial, 'Helvetica Neue', sans-serif" }}>Trustpilot</span>;
+}
+
+function GoogleStars() {
+  return <span aria-hidden className="flex gap-[3px]">
+    {Array.from({ length: 5 }, (_, i) => (
+      <svg key={i} className="size-[19px]" viewBox="0 0 24 24" fill="#FBBC04"><path d="M12 2l2.94 6.26 6.88.6-5.22 4.55 1.56 6.74L12 16.9l-6.16 3.21 1.56-6.74L2.18 8.86l6.88-.6L12 2z" /></svg>
+    ))}
+  </span>;
+}
+
+function TrustpilotStars() {
+  const star = "M12 3.4l2.5 5.6 6.1.6-4.6 4.1 1.3 6-5.3-3.1-5.3 3.1 1.3-6-4.6-4.1 6.1-.6L12 3.4z";
+  const cell = (fill: string) => (
+    <svg key={fill} className="size-[19px]" viewBox="0 0 24 24">
+      <rect width="24" height="24" rx="2" fill={fill === "half" ? "#DCDCE6" : "#00B67A"} />
+      {fill !== "empty" && (
+        <g clipPath={fill === "half" ? "url(#tp-half)" : undefined}>
+          <path d={star} fill="#fff" />
+          {fill === "half" && <rect width="12" height="24" fill="#00B67A" />}
+        </g>
+      )}
+    </svg>
+  );
+  return <span aria-hidden className="flex gap-[3px]">
+    <svg width="0" height="0" className="absolute"><clipPath id="tp-half"><rect width="12" height="24" /></clipPath></svg>
+    {[0, 1, 2, 3].map((i) => <span key={i}>{cell("full")}</span>)}
+    {cell("half")}
+  </span>;
+}
+
+export function RatingsBar({ googleLabel, trustLabel, trustUrl }: { googleLabel: string; trustLabel: string; trustUrl?: string }) {
+  const block = "flex items-center gap-3 rounded-md bg-white px-6 py-3.5 shadow-[0_1px_3px_rgba(0,0,0,0.08)] ring-1 ring-black/5";
+  return (
+    <div data-section="home-ratings" className="flex flex-wrap items-center justify-center gap-3 bg-shop-surface px-4 py-4 sm:gap-5">
+      <div className={block}>
+        <GoogleWordmark />
+        <GoogleStars />
+        <span className="sr-only">{googleLabel}</span>
+      </div>
+      <a href={trustUrl || undefined} target="_blank" rel="noreferrer" className={`${block} transition hover:shadow-[0_2px_8px_rgba(0,0,0,0.12)]`}>
+        <TrustpilotWordmark />
+        <TrustpilotStars />
+        <span className="sr-only">{trustLabel}</span>
+      </a>
+    </div>
+  );
+}
