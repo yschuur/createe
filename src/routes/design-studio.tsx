@@ -131,12 +131,11 @@ function DesignStudio() {
     {studio.reviews.length > 0 && <section data-section="studio-scorecard" className="atelier-board">
       <div className="mx-auto max-w-[1400px] px-5 py-20 sm:px-10">
         <div className="mb-12 flex flex-wrap items-center justify-center gap-4"><h2 className="atelier-section-title !mb-0 text-primary">Onze scorecard</h2><Stars /></div>
-        <div className="atelier-moodboard">{studio.reviews.map((r,i)=><figure key={r.id} className="atelier-polaroid" style={{ ["--tilt" as string]: `${[-2.5,1.8,-1.2,2.4,-1.8,1.2][i%6]}deg` }}>
-          {r.image && <img src={r.image} alt={r.name ? `CREATEE ontwerp voor ${r.name}` : `Persoonlijk CREATEE ontwerp voor een klant ${i+1}`} className="aspect-square w-full object-cover" loading="lazy" />}
-          <figcaption className="px-1 pb-1 pt-4"><div className="flex">{Array.from({length:5}).map((_,n)=><span key={n} className={`mr-0.5 inline-block size-3.5 ${n<r.rating?"bg-primary":"bg-muted"}`} style={{clipPath:"polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)"}} />)}</div>
-            {r.text && <div className="prose-shop mt-2 text-sm leading-snug" dangerouslySetInnerHTML={{ __html: sanitizeDescription(r.text) }} />}
-            <span className="mt-2 block text-[10px] font-semibold uppercase tracking-wider text-primary">{r.name || "CREATEE Design Studio"}</span></figcaption>
-        </figure>)}</div>
+      </div>
+      <div className="studio-marquee pb-20" style={{ ["--marquee-duration" as string]: `${Math.max(20, studio.reviews.length * 7)}s` }}>
+        <div className="studio-marquee-track">{[0, 1].map((copy) => studio.reviews.map((r, i) => <ScoreCard key={`${copy}-${r.id}`} r={r} i={i} hidden={copy === 1} />))}</div>
+      </div>
+      <div>
       </div>
     </section>}
 
