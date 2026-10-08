@@ -9,10 +9,11 @@ function formatAddress(a: any): string {
 }
 
 /** Send one order email (customer) and, for confirmations, the owner notice. Never throws. */
-export async function sendOrderEmail(db: Db, orderId: string, kind: EmailKey) {
+export async function sendOrderEmail(db: Db, orderId: string, kind: EmailKey, opts: { nonce?: string; owner?: boolean } = {}): Promise<boolean> {
+  let sent = false;
   try {
     const { data: order } = await db.from("orders").select("*").eq("id", orderId).maybeSingle();
-    if (!order) return;
+    if (!order) return false;
     const { data: items } = await db.from("order_items").select("product_name, variant_label, quantity, line_total").eq("order_id", orderId);
     const { data: s } = await db.from("site_settings").select("value").eq("key", "order_emails").maybeSingle();
     const cfg = parseOrderEmails(s?.value);
@@ -27,7 +28,7 @@ export async function sendOrderEmail(db: Db, orderId: string, kind: EmailKey) {
     };
     if (order.email) {
       const r = await sendTemplateEmail("order-email", order.email, {
-        idempotencyKey: `order-${kind}-${orderId}`,
+        idempotencyKey: `order-${kind}-${orderId}${opts.nonce ? `-${opts.nonce}` : ""}`,
         replyTo: cfg.owner_email,
         templateData: {
           ...base,
@@ -35,9 +36,10 @@ export async function sendOrderEmail(db: Db, orderId: string, kind: EmailKey) {
           button: e.button, buttonUrl: kind === "shipped" ? order.tracking_url ?? undefined : undefined,
         },
       });
+      sent = r.sent;
       if (!r.sent) console.log("Order email suppressed", kind, order.order_number);
     }
-    if (kind === "confirmation") {
+    if (kind === "confirmation" && opts.owner !== false) {
       await sendTemplateEmail("order-email", cfg.owner_email, {
         idempotencyKey: `order-owner-${orderId}`,
         templateData: {
@@ -52,4 +54,5 @@ export async function sendOrderEmail(db: Db, orderId: string, kind: EmailKey) {
   } catch (err) {
     console.error("Order email failed:", kind, err);
   }
+  return sent;
 }
