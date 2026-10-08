@@ -1,4 +1,5 @@
 # Roadmap
+- [ ] Footer opnieuw opbouwen: zelfstandige tegel, oude beheerplekken verwijderen, Ontdek/Informatie leeg, opslaan en tekstgroottes verifiëren.
 - [x] Contact volgens screenshot: formulier links, beheerbare FAQ rechts; mobiel gestapeld en vragen standaard dicht; formulieropslag, beheer-teruglezing, FAQ opslaan/herladen en mobiele weergave getest. Testbericht verwijderd; e-mailmeldingen wachten op geverifieerd domein.
 - [x] Ons verhaal/HYBR: tekst bepaalt afbeeldingskader; uitsnede versleepbaar in paginabeheer met werkelijke kaderverhouding, opslaan/herladen en storefront-teruglezing getest; testuitsnede gecentreerd hersteld.
 - [x] Ons verhaal/HYBR compacter en paginabreed met kleinere afbeeldingen; kernwaarden ongewijzigd (zelfde hoogte), beide pagina’s gecontroleerd op brede en smalle schermen zonder overloop of fouten.
