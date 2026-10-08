@@ -32,7 +32,7 @@ export function ShopLayout({ children, page, cms }: { children: ReactNode; page?
   const items = (home ?? defaultHomepage).announcements.filter(a => a.text.trim());
   return (
     <div className={`storefront ${page ? `page-${page}` : ""} flex min-h-screen flex-col bg-background text-foreground`}>
-      {customCss && <style dangerouslySetInnerHTML={{ __html: customCss }} />}
+      <style suppressHydrationWarning dangerouslySetInnerHTML={{ __html: customCss }} />
       {items.length > 0 && <div data-section="site-announcement" className="overflow-hidden bg-primary py-1.5 text-[10px] font-medium uppercase text-primary-foreground">
         <div className="animate-marquee flex w-max gap-12 whitespace-nowrap">
           {Array.from({ length: 2 }).map((_, k) => (
