@@ -12,6 +12,7 @@
 - [x] Echte reviews, footer en aankondigingsbalk uit Shopify-thema
 - [x] Design Studio: producten, kleuren en staffelprijzen uit originele configurator
 - [ ] Clubhouse-aanmelding (e-mail) — wachten op keuze nieuwsbriefdienst
+- [x] Pagina-CMS: /admin/pages met inhoud, foto's, stijl, ruimte en zichtbaarheid per onderdeel
 - [ ] Stripe, verzendbeleid-pagina's, redirects, domeinswitch
 - [x] Design Studio luxe restyle + beheerbare scorecard & kleurfoto's
 - [ ] Foto's uploaden in Design Studio-beheer (geblokkeerd: openbare opslag staat uit in werkruimte-instellingen)

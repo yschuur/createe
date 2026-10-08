@@ -88,13 +88,13 @@ function ProductPage() {
   const isColor = (n: string | null) => !!n && /kleur|color|colour|vanille/i.test(n);
 
   return (
-    <ShopLayout>
-      <div className="pdp grid gap-8 md:grid-cols-[1.9fr_1fr] md:gap-10 md:pr-4">
+    <ShopLayout cms="product">
+      <div data-section="product-main" className="pdp grid gap-8 md:grid-cols-[1.9fr_1fr] md:gap-10 md:pr-4">
         <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
           {images.length === 0 && <div className="aspect-[3/4] bg-card" />}
            {images.map((im) => {
              return (
-             <div key={im.id} className="aspect-[3/4] overflow-hidden bg-card">
+             <div key={im.id} data-role="pdp-image" className="aspect-[3/4] overflow-hidden bg-card">
               <img src={imgUrl(im.url, 1000)} alt={im.alt_text ?? product.name} className="h-full w-full object-cover" loading="lazy" />
             </div>
            ); })}
@@ -102,7 +102,7 @@ function ProductPage() {
         <div className="px-4 pb-10 md:sticky md:top-24 md:self-start md:px-0 md:pt-6">
           <div className="flex items-baseline justify-between gap-4">
             <h1 className="pdp-title text-3xl">{product.name}</h1>
-            <div className="text-right text-base">
+            <div data-role="price" className="text-right text-base">
               <span>{formatPrice(variant?.price ?? variants[0]?.price)}</span>
               {compareAt && <span className="ml-2 text-sm text-muted-foreground line-through">{formatPrice(compareAt)}</span>}
             </div>

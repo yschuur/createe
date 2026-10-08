@@ -36,8 +36,8 @@ function CollectionPage() {
   const { data: collections } = useSuspenseQuery(collectionsQuery());
   if (!data) return null;
   return (
-    <ShopLayout>
-      <section className="mx-auto max-w-7xl px-4 py-12 md:px-8">
+    <ShopLayout cms="collection">
+      <section data-section="collection-header" className="mx-auto max-w-7xl px-4 pt-12 md:px-8">
         <h1 className="text-5xl font-extrabold md:text-7xl">{data.collection.name}</h1>
         {data.collection.description && <div className="prose-shop mt-2 max-w-xl text-muted-foreground" dangerouslySetInnerHTML={{ __html: sanitizeDescription(data.collection.description) }} />}
         <div className="mt-6 flex flex-wrap gap-2">
@@ -49,7 +49,9 @@ function CollectionPage() {
             </Link>
           ))}
         </div>
-        <div className="mt-10 grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-4 md:gap-x-6">
+      </section>
+      <section data-section="collection-grid" className="mx-auto max-w-7xl px-4 pb-12 md:px-8">
+        <div data-role="grid" className="mt-10 grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-4 md:gap-x-6">
           {data.products.map((p, i) => <ProductCard key={p.id} product={p} index={i} />)}
         </div>
         {data.products.length === 0 && <p className="py-16 text-center text-muted-foreground">Nog geen producten in deze collectie.</p>}

@@ -1,9 +1,8 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { ShopLayout } from "@/components/shop/ShopLayout";
 import { Button } from "@/components/ui/button";
 import { AboutCollage } from "@/components/shop/AboutCollage";
-import golf from "@/assets/hybr-golf.jpg.asset.json";
-import detail from "@/assets/hybr-detail.jpg.asset.json";
+import { pageSettingsQuery, usePageSettings } from "@/lib/page-settings";
 
 export const Route = createFileRoute("/pages/de-hybr-polo")({
   head: () => ({ meta: [
@@ -12,32 +11,32 @@ export const Route = createFileRoute("/pages/de-hybr-polo")({
     { property: "og:title", content: "De HYBR™ polo — CREATEE" },
     { property: "og:description", content: "Ontdek de ultieme veelzijdigheid van de CREATEE HYBR™ polo." },
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
-  ] }), component: Hybr,
+  ] }),
+  loader: ({ context }) => Promise.all([context.queryClient.ensureQueryData(pageSettingsQuery("hybr")), context.queryClient.ensureQueryData(pageSettingsQuery("global"))]),
+  component: Hybr,
 });
 
 function Hybr() {
-  return <ShopLayout page="story"><div className="about-atelier">
+  const { t, m } = usePageSettings("hybr");
+  const main = m("hybr-1", "main"), detail = m("hybr-1", "detail"), tech = m("hybr-2", "image");
+  const features = [1, 2, 3, 4].map((n) => ({ n, title: t("hybr-2", `f${n}_title`), text: t("hybr-2", `f${n}_text`) })).filter((f) => f.title.trim());
+  return <ShopLayout page="story" cms="hybr"><div className="about-atelier">
     <section data-section="hybr-1" className="about-band about-opening">
       <div className="about-opening-grid">
-        <AboutCollage image={golf.url} alt="Golfer in de groene CREATEE HYBR polo" detail={detail.url} detailAlt="Detail van de kraag en het CREATEE borduursel" />
+        <AboutCollage image={main.url} alt={main.alt} detail={detail.url} detailAlt={detail.alt} imageStyle={main.style} detailStyle={detail.style} />
         <div className="about-opening-copy">
-          <p className="about-kicker text-primary">CREATEE · Signature HYBR™</p>
-          <h1 className="about-headline">De HYBR™<br /><em>polo.</em></h1>
-          <h2 className="about-secondary-title text-primary">Ultieme veelzijdigheid.</h2>
-          <p className="about-lead">Ontdek de ultieme veelzijdigheid. De HYBR™ Polo is ontwikkeld voor de golfer die prestatie niet zonder in te leveren op een volmaakte look. Onze unieke hybride stof biedt volledige bewegingsvrijheid, maar keert daarna direct terug naar de perfecte pasvorm. Ervaar het comfort van een sportpolo met de uitstraling van premium kwaliteit.</p>
-          <div className="about-actions"><Button asChild><Link to="/collections/$slug" params={{ slug: "polos" }}>Ontdek HYBR</Link></Button><Button asChild variant="ghost"><Link to="/design-studio">Personaliseer nu</Link></Button></div>
-          <p className="about-signature">Het comfort van een sportpolo met de uitstraling van premium kwaliteit.</p>
+          <p className="about-kicker text-primary">{t("hybr-1", "kicker")}</p>
+          <h1 className="about-headline">{t("hybr-1", "headline")}<br /><em>{t("hybr-1", "headline_em")}</em></h1>
+          <h2 className="about-secondary-title text-primary">{t("hybr-1", "subtitle")}</h2>
+          <p className="about-lead">{t("hybr-1", "lead")}</p>
+          <div className="about-actions">{t("hybr-1", "btn1_label") && <Button asChild><a href={t("hybr-1", "btn1_url")}>{t("hybr-1", "btn1_label")}</a></Button>}{t("hybr-1", "btn2_label") && <Button asChild variant="ghost"><a href={t("hybr-1", "btn2_url")}>{t("hybr-1", "btn2_label")}</a></Button>}</div>
+          {t("hybr-1", "signature") && <p className="about-signature">{t("hybr-1", "signature")}</p>}
         </div>
       </div>
     </section>
     <section data-section="hybr-2" className="bg-primary text-primary-foreground">
-      <div className="about-band about-technology-heading"><p className="about-kicker">De details maken het verschil</p><h2 className="about-section-title">De kracht van<br />HYBR™ technologie</h2></div>
-      <div className="about-band bg-shop-surface text-shop-ink about-technology-grid"><img src={detail.url} alt="Detail van de kraag en het CREATEE borduursel" loading="lazy" className="about-history-image" /><dl className="about-features">{[
-        ["360° stretch", "Maximale flexibiliteit voor een krachtige swing, waarna de stof direct weer herstelt naar de perfecte fit. Volledige vrijheid, zonder vormverlies."],
-        ["Premium finish", "Vergeet de glimmende, plastic look van standaard sportpolo’s. Ervaar een rijke, matte textuur met luxe micro-details voor een verfijnde uitstraling."],
-        ["Smart-collar", "Een kraag die nooit inzakt. Of je nu afslaat of proost op de overwinning, je ziet er de hele dag haarscherp uit."],
-        ["Kreukvrij & ademend", "Optimale ventilatie en kreukvrij. Zelfs na 18 holes zie je er fris uit."],
-      ].map(([title, text], i) => <div key={title}><dt className="text-primary"><span className="about-feature-number" aria-hidden="true">0{i + 1}</span>{title}</dt><dd>{text}</dd></div>)}</dl></div>
+      <div className="about-band about-technology-heading"><p className="about-kicker">{t("hybr-2", "kicker")}</p><h2 className="about-section-title">{t("hybr-2", "title_1")}<br />{t("hybr-2", "title_2")}</h2></div>
+      <div className="about-band bg-shop-surface text-shop-ink about-technology-grid">{tech.url && <img src={tech.url} alt={tech.alt} style={tech.style} loading="lazy" className="about-history-image" />}<dl className="about-features">{features.map((f, i) => <div key={f.n}><dt className="text-primary"><span className="about-feature-number" aria-hidden="true">0{i + 1}</span>{f.title}</dt><dd>{f.text}</dd></div>)}</dl></div>
     </section>
   </div></ShopLayout>;
 }

@@ -3,7 +3,7 @@ import { ShoppingBag, Minus, Plus, X, Menu, UserRound, Truck, PackageCheck, Refr
 import { useState, type ReactNode } from "react";
 import { Logo } from "@/components/Logo";
 import { useCart } from "@/lib/cart";
-import { formatPrice } from "@/lib/shop";
+import { formatPrice, sanitizeDescription } from "@/lib/shop";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Reviews } from "@/components/shop/Reviews";
@@ -12,22 +12,28 @@ import { homepageQuery, defaultHomepage } from "@/lib/site-settings";
 import { menuQuery, defaultMenu } from "@/lib/menu";
 import { sectionStylesQuery, buildCss } from "@/lib/section-styles";
 import { DesktopMenu, MobileMenu } from "@/components/shop/SiteMenu";
+import { buildPageCss, makePageView, pageSettingsQuery, type PageKey } from "@/lib/page-settings";
 
 
 
-export function ShopLayout({ children, page }: { children: ReactNode; page?: "home" | "studio" | "story" }) {
+export function ShopLayout({ children, page, cms }: { children: ReactNode; page?: "home" | "studio" | "story"; cms?: PageKey }) {
   const cart = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
   const { data: home } = useQuery(homepageQuery());
   const { data: menu } = useQuery(menuQuery());
   const menuItems = menu ?? defaultMenu;
   const { data: sectionStyles } = useQuery(sectionStylesQuery());
-  const customCss = sectionStyles ? buildCss(sectionStyles) : "";
+  const pageKey: PageKey | undefined = cms ?? (page === "home" ? "home" : page === "studio" ? "studio" : undefined);
+  const { data: globalCfg } = useQuery(pageSettingsQuery("global"));
+  const { data: pageCfg } = useQuery({ ...pageSettingsQuery(pageKey ?? "global"), enabled: !!pageKey });
+  const g = makePageView("global", globalCfg);
+  const customCss = [sectionStyles ? buildCss(sectionStyles) : "", buildPageCss("global", globalCfg), pageKey ? buildPageCss(pageKey, pageCfg) : ""].filter(Boolean).join("\n");
+  const usps = [Truck, PackageCheck, RefreshCw].map((Icon, i) => ({ Icon, text: g.t("site-usps", `u${i + 1}_text`), link: g.t("site-usps", `u${i + 1}_link`), show: g.t("site-usps", `u${i + 1}_show`) !== "no" })).filter((u) => u.show && u.text.trim());
   const items = (home ?? defaultHomepage).announcements.filter(a => a.text.trim());
   return (
     <div className={`storefront ${page ? `page-${page}` : ""} flex min-h-screen flex-col bg-background text-foreground`}>
-      {customCss && <style dangerouslySetInnerHTML={{ __html: customCss }} />}
-      {items.length > 0 && <div className="overflow-hidden bg-primary py-1.5 text-[10px] font-medium uppercase text-primary-foreground">
+      <style suppressHydrationWarning dangerouslySetInnerHTML={{ __html: customCss }} />
+      {items.length > 0 && <div data-section="site-announcement" className="overflow-hidden bg-primary py-1.5 text-[10px] font-medium uppercase text-primary-foreground">
         <div className="animate-marquee flex w-max gap-12 whitespace-nowrap">
           {Array.from({ length: 2 }).map((_, k) => (
             <div key={k} className="flex gap-12" aria-hidden={k === 1}>
@@ -41,7 +47,7 @@ export function ShopLayout({ children, page }: { children: ReactNode; page?: "ho
           <Button variant="ghost" size="icon" className="md:hidden" aria-label="Menu openen" onClick={() => setMenuOpen(true)}><Menu /></Button>
           <nav aria-label="Hoofdmenu" className="hidden md:block"><DesktopMenu items={menuItems} /></nav>
           <Link to="/" className="shrink-0" aria-label="CREATEE home">
-            <Logo variant="green" />
+            <Logo variant={g.t("site-header", "logo") === "white" ? "white" : "green"} />
           </Link>
           <div className="flex shrink-0 items-center justify-end gap-1 md:gap-3">
             <span className="hidden text-xs sm:block">NL · EUR €</span>
@@ -58,20 +64,18 @@ export function ShopLayout({ children, page }: { children: ReactNode; page?: "ho
       <main className="flex-1">{children}</main>
       <div className="border-t border-border bg-muted/40">
         <Reviews />
-        <div data-section="site-usps" className="grid divide-y divide-border border-t border-border bg-background text-[15px] text-primary sm:grid-cols-3 sm:divide-x sm:divide-y-0">
-          <span className="flex items-center justify-center gap-3 py-5"><Truck className="size-5" strokeWidth={1.5} />Binnen 1-3 werkdagen verzonden</span>
-          <span className="flex items-center justify-center gap-3 py-5"><PackageCheck className="size-5" strokeWidth={1.5} />Gratis verzending vanaf €75</span>
-          <span className="flex items-center justify-center gap-3 py-5"><RefreshCw className="size-5" strokeWidth={1.5} />Eenvoudig retourneren & gratis ruilen</span>
-        </div>
+        {usps.length > 0 && <div data-section="site-usps" className={`grid divide-y divide-border border-t border-border bg-background text-[15px] text-primary sm:divide-x sm:divide-y-0 ${usps.length === 3 ? "sm:grid-cols-3" : usps.length === 2 ? "sm:grid-cols-2" : ""}`}>
+          {usps.map(({ Icon, text, link }) => { const inner = <><Icon className="size-5" strokeWidth={1.5} /><span>{text}</span></>; return link ? <a key={text} href={link} className="flex items-center justify-center gap-3 py-5">{inner}</a> : <p key={text} className="flex items-center justify-center gap-3 py-5">{inner}</p>; })}
+        </div>}
       </div>
       <footer data-section="site-footer" className="bg-primary text-primary-foreground">
         <div className="mx-auto grid max-w-7xl gap-10 px-6 py-14 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1.3fr] md:px-8">
           <div className="space-y-4">
-            <Logo variant="white" className="h-7 md:h-8" />
-            <p className="max-w-sm text-sm leading-relaxed opacity-80">Tradities zijn er om te eren, niet om te dragen. Wij geloven dat sportkleding meer mag zijn dan standaard. Je techniek is uniek, je tactiek is uniek, dus waarom zou je kleding dat niet zijn? CREATEE combineert de luxe van een premium fit met het lef van uniek design.</p>
+            <Logo variant={g.t("site-footer", "logo") === "green" ? "green" : "white"} className="h-7 md:h-8" />
+            <p className="max-w-sm text-sm leading-relaxed opacity-80">{g.t("site-footer", "about")}</p>
           </div>
           <div className="space-y-2 text-sm">
-            <p className="mb-4 text-xs font-bold uppercase">Ontdek</p>
+            <p data-role="heading" className="mb-4 text-xs font-bold uppercase">{g.t("site-footer", "h_discover")}</p>
             <Link to="/" className="block opacity-80 hover:opacity-100">Home</Link>
             <Link to="/collections/$slug" params={{ slug: "golf" }} className="block opacity-80 hover:opacity-100">Golf</Link>
             <Link to="/collections/$slug" params={{ slug: "padel" }} className="block opacity-80 hover:opacity-100">Padel</Link>
@@ -80,17 +84,17 @@ export function ShopLayout({ children, page }: { children: ReactNode; page?: "ho
             <Link to="/pages/ons-verhaal" className="block opacity-80 hover:opacity-100">Over ons</Link>
           </div>
           <div className="space-y-2 text-sm">
-            <p className="mb-4 text-xs font-bold uppercase">Informatie</p>
-            <span className="block opacity-80">Binnen 1-3 werkdagen verzonden</span>
-            <span className="block opacity-80">Gratis verzending vanaf €75</span>
-            <a href="https://nl.trustpilot.com/review/createe.nl" target="_blank" rel="noreferrer" className="block opacity-80 hover:opacity-100">Reviews op Trustpilot</a>
+            <p data-role="heading" className="mb-4 text-xs font-bold uppercase">{g.t("site-footer", "h_info")}</p>
+            {g.t("site-footer", "info1") && <span className="block opacity-80">{g.t("site-footer", "info1")}</span>}
+            {g.t("site-footer", "info2") && <span className="block opacity-80">{g.t("site-footer", "info2")}</span>}
+            {g.t("site-footer", "info3_label") && <a href={g.t("site-footer", "info3_url")} target="_blank" rel="noreferrer" className="block opacity-80 hover:opacity-100">{g.t("site-footer", "info3_label")}</a>}
           </div>
           <div className="space-y-3 text-sm">
-            <p className="text-xs font-bold uppercase">The Clubhouse</p>
-            <p className="leading-relaxed opacity-80">Word lid van The Clubhouse en ontvang direct <strong>gratis bezorging</strong> op je volgende bestelling.</p>
+            <p data-role="heading" className="text-xs font-bold uppercase">{g.t("site-footer", "club_title")}</p>
+            <div className="leading-relaxed opacity-80 [&_p]:m-0" dangerouslySetInnerHTML={{ __html: sanitizeDescription(g.t("site-footer", "club_text")) }} />
           </div>
         </div>
-        <div className="border-t border-primary-foreground/20 py-4 text-center text-xs opacity-70">© {new Date().getFullYear()} CREATEE</div>
+        <div className="border-t border-primary-foreground/20 py-4 text-center text-xs opacity-70">© {new Date().getFullYear()} {g.t("site-footer", "copyright")}</div>
       </footer>
       <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
         <SheetContent side="left" className="storefront w-[min(88vw,360px)] bg-background px-6">
