@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { ShopLayout } from "@/components/shop/ShopLayout";
 import { ProductCard } from "@/components/shop/ProductCard";
+import { RatingsBar } from "@/components/shop/RatingsBar";
 import { Button } from "@/components/ui/button";
 import { listProductsQuery } from "@/lib/shop";
 import { homepageQuery, type HeroSide } from "@/lib/site-settings";
