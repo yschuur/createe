@@ -59,6 +59,16 @@ export const collectionsQuery = () =>
     },
   });
 
+export const SPORTS = ["golf", "padel"] as const;
+export type Sport = (typeof SPORTS)[number];
+export const isSport = (s: unknown): s is Sport => s === "golf" || s === "padel";
+
+/** Sport collections list every product marked with that sport; other collections can be narrowed to one sport. */
+export function filterBySport<T extends { sports: string[] }>(products: T[], slug: string, sport?: Sport): T[] {
+  const s = isSport(slug) ? slug : sport;
+  return s ? products.filter((p) => p.sports.includes(s)) : products;
+}
+
 export const collectionQuery = (slug: string) =>
   queryOptions({
     queryKey: ["collections", slug],
@@ -66,6 +76,11 @@ export const collectionQuery = (slug: string) =>
       const { data: c, error } = await supabase.from("collections").select("*").eq("slug", slug).maybeSingle();
       if (error) throw error;
       if (!c) return null;
+      if (isSport(slug)) {
+        const { data: sp, error: e3 } = await supabase.from("products").select(SELECT).contains("sports", [slug]).eq("status", "active").eq("published", true).order("sort_order");
+        if (e3) throw e3;
+        return { collection: c, products: (sp as ProductWithRelations[]).map(sortRelations) };
+      }
       const { data: links } = await supabase.from("collection_products").select("product_id, sort_order").eq("collection_id", c.id);
       const ids = (links ?? []).map((l) => l.product_id);
       if (!ids.length) return { collection: c, products: [] as ProductWithRelations[] };
