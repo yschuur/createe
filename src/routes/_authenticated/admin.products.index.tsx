@@ -41,7 +41,7 @@ function ProductsAdmin() {
   const rows = data.filter((p) => (status === "all" || p.status === status) && (p.name + p.slug).toLowerCase().includes(q.toLowerCase()));
 
   return (
-    <AdminLayout title="Producten" actions={<Button onClick={create}>Product toevoegen</Button>}>
+    <AdminLayout title="Producten" actions={<div className="flex gap-2"><Link to="/admin/products/bulk"><Button variant="outline">Bulk aanpassen</Button></Link><Button onClick={create}>Product toevoegen</Button></div>}>
       <div className="mb-4 flex flex-wrap gap-3">
         <Input placeholder="Zoeken…" value={q} onChange={(e) => setQ(e.target.value)} className="max-w-xs bg-card" />
         <select value={status} onChange={(e) => setStatus(e.target.value)} className="rounded-sm border border-input bg-card px-3 text-sm">
