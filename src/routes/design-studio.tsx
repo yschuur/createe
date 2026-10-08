@@ -363,7 +363,7 @@ function DesignStudio() {
                         required
                         maxLength={2600}
                         rows={6}
-                        placeholder="Beschrijf jouw idee. Welke stijl past bij jouw groep?"
+                        placeholder="Beschrijf jouw idee. Welke stijl ben je naar op zoek? Voor welke gelegenheid is het? etc."
                         className="atelier-input"
                       />
                     </div>
