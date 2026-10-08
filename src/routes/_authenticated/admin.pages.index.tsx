@@ -4,13 +4,13 @@ import { AdminLayout } from "@/components/admin/AdminLayout";
 import { PAGE_DEFS } from "@/lib/page-settings";
 
 export const Route = createFileRoute("/_authenticated/admin/pages/")({
-  head: () => ({ meta: [{ title: "Pagina's — CREATEE beheer" }, { name: "description", content: "Pas teksten, foto's en stijl van elke pagina aan." }, { property: "og:title", content: "Pagina's — CREATEE beheer" }, { property: "og:description", content: "Pas teksten, foto's en stijl van elke pagina aan." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Pagina's | CREATEE beheer" }, { name: "description", content: "Pas teksten, foto's en stijl van elke pagina aan." }, { property: "og:title", content: "Pagina's | CREATEE beheer" }, { property: "og:description", content: "Pas teksten, foto's en stijl van elke pagina aan." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: PagesIndex,
 });
 
 const extras = [
-  { to: "/admin/homepage", label: "Homepage — inhoud", description: "Header-video's, knoppen, uitgelichte producten en aankondigingsbalk." },
-  { to: "/admin/studio", label: "Design Studio — inhoud", description: "Prijzen, scorecard-reviews en kleurfoto's van de Studio." },
+  { to: "/admin/homepage", label: "Homepage - inhoud", description: "Header-video's, knoppen, uitgelichte producten en aankondigingsbalk." },
+  { to: "/admin/studio", label: "Design Studio - inhoud", description: "Prijzen, scorecard-reviews en kleurfoto's van de Studio." },
   { to: "/admin/policies", label: "Juridische pagina's", description: "Privacy, algemene voorwaarden, retouren en verzending." },
 ] as const;
 

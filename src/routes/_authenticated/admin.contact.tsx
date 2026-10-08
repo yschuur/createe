@@ -13,7 +13,7 @@ import { contactFaqQuery, faqSchema, type FaqConfig } from "@/lib/contact";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/admin/contact")({
-  head: () => ({ meta: [{ title: "Contact & FAQ — CREATEE beheer" }, { name: "description", content: "Beheer veelgestelde vragen en lees ontvangen contactberichten." }, { property: "og:title", content: "Contact & FAQ — CREATEE beheer" }, { property: "og:description", content: "Categorieën, vragen, antwoorden en contactberichten beheren." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Contact & FAQ | CREATEE beheer" }, { name: "description", content: "Beheer veelgestelde vragen en lees ontvangen contactberichten." }, { property: "og:title", content: "Contact & FAQ | CREATEE beheer" }, { property: "og:description", content: "Categorieën, vragen, antwoorden en contactberichten beheren." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: ContactAdmin,
 });
 

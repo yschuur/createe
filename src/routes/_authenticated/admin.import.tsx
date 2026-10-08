@@ -9,7 +9,7 @@ import { parseShopifyCsv, runImport, type ImportSummary, type ParseResult } from
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/admin/import")({
-  head: () => ({ meta: [{ title: "Importeren — CREATEE beheer" }, { name: "description", content: "Importeren — CREATEE beheer. Beheer de CREATEE webshop." }, { property: "og:title", content: "Importeren — CREATEE beheer" }, { property: "og:description", content: "Importeren — CREATEE beheer. Beheer de CREATEE webshop." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Importeren | CREATEE beheer" }, { name: "description", content: "Importeren | CREATEE beheer. Beheer de CREATEE webshop." }, { property: "og:title", content: "Importeren | CREATEE beheer" }, { property: "og:description", content: "Importeren | CREATEE beheer. Beheer de CREATEE webshop." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: ImportPage,
 });
 

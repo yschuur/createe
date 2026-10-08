@@ -40,7 +40,7 @@ export const updateOrderStatus = createServerFn({ method: "POST" })
       const { sendOrderEmail } = await import("@/lib/order-emails.server");
       mailed = await sendOrderEmail(context.supabase, data.orderId, data.status, { nonce: String(Date.now()) });
     }
-    await logEvent(context, data.orderId, `Status gewijzigd naar ${STATUS_NL[data.status]}${mailed ? " — mail verstuurd" : ""}`);
+    await logEvent(context, data.orderId, `Status gewijzigd naar ${STATUS_NL[data.status]}${mailed ? " - mail verstuurd" : ""}`);
     return { ok: true, mailed };
   });
 

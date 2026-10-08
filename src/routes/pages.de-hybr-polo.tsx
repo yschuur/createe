@@ -6,9 +6,9 @@ import { pageSettingsQuery, usePageSettings } from "@/lib/page-settings";
 
 export const Route = createFileRoute("/pages/de-hybr-polo")({
   head: () => ({ meta: [
-    { title: "De HYBR™ polo — CREATEE" },
+    { title: "De HYBR™ polo | CREATEE" },
     { name: "description", content: "De HYBR™ polo: 360° stretch, premium finish, smart-collar en kreukvrij, ademend draagcomfort." },
-    { property: "og:title", content: "De HYBR™ polo — CREATEE" },
+    { property: "og:title", content: "De HYBR™ polo | CREATEE" },
     { property: "og:description", content: "Ontdek de ultieme veelzijdigheid van de CREATEE HYBR™ polo." },
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
   ] }),

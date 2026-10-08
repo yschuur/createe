@@ -11,7 +11,7 @@ export const Route = createFileRoute("/checkout/return")({
   validateSearch: (search: Record<string, unknown>): { session_id?: string | undefined } => ({
     session_id: typeof search['session_id'] === "string" ? search['session_id'] : undefined,
   }),
-  head: () => ({ meta: [{ title: "Bedankt voor je bestelling — CREATEE" }, { name: "description", content: "Bedankt voor je bestelling bij CREATEE." }, { property: "og:title", content: "Bedankt voor je bestelling — CREATEE" }, { property: "og:description", content: "Bedankt voor je bestelling bij CREATEE." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Bedankt voor je bestelling | CREATEE" }, { name: "description", content: "Bedankt voor je bestelling bij CREATEE." }, { property: "og:title", content: "Bedankt voor je bestelling | CREATEE" }, { property: "og:description", content: "Bedankt voor je bestelling bij CREATEE." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: CheckoutReturnRoute,
 });
 

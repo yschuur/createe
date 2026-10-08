@@ -12,7 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { replyToSubmission } from "@/lib/submissions.functions";
 
 export const Route = createFileRoute("/_authenticated/admin/submissions")({
-  head: () => ({ meta: [{ title: "Inzendingen — Beheer" }] }),
+  head: () => ({ meta: [{ title: "Inzendingen - Beheer" }] }),
   component: Submissions,
 });
 
@@ -127,7 +127,7 @@ function Detail({ item: i, onRemove }: { item: Item; onRemove: () => void }) {
     {i.replies.length > 0 && <div className="space-y-2">
       <div className="text-muted-foreground">Verstuurde reacties</div>
       {i.replies.map((r, n) => <div key={n} className="rounded border-l-4 border-primary bg-muted/50 p-3">
-        <div className="mb-1 text-xs text-muted-foreground">{new Date(r.at).toLocaleString("nl-NL")} — {r.subject}</div>
+        <div className="mb-1 text-xs text-muted-foreground">{new Date(r.at).toLocaleString("nl-NL")} - {r.subject}</div>
         <p className="whitespace-pre-wrap">{r.message}</p>
       </div>)}
     </div>}

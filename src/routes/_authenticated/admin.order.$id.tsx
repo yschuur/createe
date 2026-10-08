@@ -15,7 +15,7 @@ import { STATUS_LABELS, STATUS_TONE } from "@/lib/order-status";
 import { addOrderEvent, ORDER_STATUSES, resendOrderEmail, saveOrder, sendCustomOrderEmail, updateOrderStatus } from "@/lib/orders.functions";
 
 export const Route = createFileRoute("/_authenticated/admin/order/$id")({
-  head: () => ({ meta: [{ title: "Bestelling — Beheer" }] }),
+  head: () => ({ meta: [{ title: "Bestelling - Beheer" }] }),
   component: OrderDetail,
 });
 
@@ -112,7 +112,7 @@ function OrderDetail() {
             <Row label="Subtotaal" value={formatPrice(subtotal)} />
             <div className="flex items-center justify-between"><span>Verzendkosten</span><Input className="w-28 text-right" type="number" step="0.01" min={0} value={form.shipping} onChange={(e) => setForm({ ...form, shipping: Number(e.target.value) })} /></div>
             <Row label="Totaal" value={formatPrice(subtotal + form.shipping)} bold />
-            {Math.abs(subtotal + form.shipping - Number(order.total)) > 0.004 && <p className="text-xs text-muted-foreground">Opgeslagen totaal: {formatPrice(Number(order.total))} — wordt bijgewerkt bij opslaan. Let op: dit wijzigt geen betaling bij Stripe.</p>}
+            {Math.abs(subtotal + form.shipping - Number(order.total)) > 0.004 && <p className="text-xs text-muted-foreground">Opgeslagen totaal: {formatPrice(Number(order.total))} - wordt bijgewerkt bij opslaan. Let op: dit wijzigt geen betaling bij Stripe.</p>}
           </div>
         </Card>
 

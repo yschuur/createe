@@ -9,7 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { BLANK_MODELS } from "@/lib/blank-stock";
 
 export const Route = createFileRoute("/_authenticated/admin/products/bulk")({
-  head: () => ({ meta: [{ title: "Bulk aanpassen — CREATEE beheer" }, { name: "description", content: "Pas meerdere producten tegelijk aan in de CREATEE webshop." }, { property: "og:title", content: "Bulk aanpassen — CREATEE beheer" }, { property: "og:description", content: "Pas meerdere producten tegelijk aan in de CREATEE webshop." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Bulk aanpassen | CREATEE beheer" }, { name: "description", content: "Pas meerdere producten tegelijk aan in de CREATEE webshop." }, { property: "og:title", content: "Bulk aanpassen | CREATEE beheer" }, { property: "og:description", content: "Pas meerdere producten tegelijk aan in de CREATEE webshop." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: BulkEdit,
 });
 
@@ -164,10 +164,10 @@ function ColumnFill({ f, sports, onApply }: { f: FieldDef; sports: { id: string;
   const [v, setV] = useState<string>("");
   const s = "h-7 rounded-sm border border-input bg-background px-1 text-xs";
   let input;
-  if (f.kind === "bool") input = <select className={s} value={v} onChange={(e) => setV(e.target.value)}><option value="">—</option><option value="1">Aan</option><option value="0">Uit</option></select>;
-  else if (f.kind === "status") input = <select className={s} value={v} onChange={(e) => setV(e.target.value)}><option value="">—</option><option value="active">Actief</option><option value="draft">Concept</option><option value="unlisted">Verborgen</option><option value="archived">Gearchiveerd</option></select>;
-  else if (f.kind === "sport") input = <select className={s} value={v} onChange={(e) => setV(e.target.value)}><option value="">—</option><option value="__none">Geen</option>{sports.map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}</select>;
-  else if (f.kind === "blank") input = <select className={s} value={v} onChange={(e) => setV(e.target.value)}><option value="">—</option><option value="__none">Geen</option>{BLANK_MODELS.map((m) => <option key={m.key} value={m.key}>{m.label}</option>)}</select>;
+  if (f.kind === "bool") input = <select className={s} value={v} onChange={(e) => setV(e.target.value)}><option value="">-</option><option value="1">Aan</option><option value="0">Uit</option></select>;
+  else if (f.kind === "status") input = <select className={s} value={v} onChange={(e) => setV(e.target.value)}><option value="">-</option><option value="active">Actief</option><option value="draft">Concept</option><option value="unlisted">Verborgen</option><option value="archived">Gearchiveerd</option></select>;
+  else if (f.kind === "sport") input = <select className={s} value={v} onChange={(e) => setV(e.target.value)}><option value="">-</option><option value="__none">Geen</option>{sports.map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}</select>;
+  else if (f.kind === "blank") input = <select className={s} value={v} onChange={(e) => setV(e.target.value)}><option value="">-</option><option value="__none">Geen</option>{BLANK_MODELS.map((m) => <option key={m.key} value={m.key}>{m.label}</option>)}</select>;
   else input = <input className={s + " w-24"} type={f.kind === "price" || f.kind === "number" ? "number" : "text"} value={v} onChange={(e) => setV(e.target.value)} />;
   function apply() {
     if (v === "" && f.kind !== "text") return;

@@ -12,7 +12,7 @@ import { isPlainObject, pageDefBySlug, pageSettingsQuery, parsePageConfig, type 
 export const Route = createFileRoute("/_authenticated/admin/pages/$page")({
   head: ({ params }) => {
     const def = pageDefBySlug(params.page);
-    const title = `${def?.label ?? "Pagina bewerken"} — CREATEE beheer`;
+    const title = `${def?.label ?? "Pagina bewerken"} | CREATEE beheer`;
     const description = def?.description ?? "Pas de onderdelen van een CREATEE-pagina aan.";
     return { meta: [{ title }, { name: "description", content: description }, { property: "og:title", content: title }, { property: "og:description", content: description }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] };
   },

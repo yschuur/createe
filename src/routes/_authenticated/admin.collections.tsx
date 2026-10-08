@@ -12,7 +12,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/admin/collections")({
-  head: () => ({ meta: [{ title: "Collecties — CREATEE beheer" }, { name: "description", content: "Collecties — CREATEE beheer. Beheer de CREATEE webshop." }, { property: "og:title", content: "Collecties — CREATEE beheer" }, { property: "og:description", content: "Collecties — CREATEE beheer. Beheer de CREATEE webshop." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Collecties | CREATEE beheer" }, { name: "description", content: "Collecties | CREATEE beheer. Beheer de CREATEE webshop." }, { property: "og:title", content: "Collecties | CREATEE beheer" }, { property: "og:description", content: "Collecties | CREATEE beheer. Beheer de CREATEE webshop." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: CollectionsAdmin,
 });
 

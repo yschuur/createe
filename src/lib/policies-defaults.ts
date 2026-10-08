@@ -1,4 +1,4 @@
-// Copied from createe.nl/policies — defaults until edited in admin.
+// Copied from createe.nl/policies - defaults until edited in admin.
 export const defaultPolicyContent = {
  "privacy-policy": {
   "label": "Privacy",

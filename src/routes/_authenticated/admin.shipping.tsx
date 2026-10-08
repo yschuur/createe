@@ -10,7 +10,7 @@ import { shippingQuery, shippingSchema, type ShippingSettings } from "@/lib/ship
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/admin/shipping")({
-  head: () => ({ meta: [{ title: "Verzending — Beheer" }] }),
+  head: () => ({ meta: [{ title: "Verzending - Beheer" }] }),
   component: AdminShipping,
 });
 

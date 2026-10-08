@@ -340,7 +340,7 @@
  .about-technology-grid .about-editorial-photo { order: 2; }
 }
 
-/* Design Studio atelier restyle — luxe, creative, spontaneous. */
+/* Design Studio atelier restyle - luxe, creative, spontaneous. */
 .studio-atelier { --atelier-cream: oklch(0.975 0.008 85); --atelier-gold: oklch(0.78 0.11 80); background: var(--atelier-cream); overflow-x: clip; }
 .studio-atelier .font-display, .atelier-title, .atelier-section-title, .atelier-num { font-family: "Jost", system-ui, sans-serif; }
 .atelier-hero { position: relative; background: radial-gradient(120% 80% at 85% 0%, oklch(0.5 0.09 151) 0%, var(--primary) 45%, oklch(0.3 0.06 151) 100%); color: var(--primary-foreground); }

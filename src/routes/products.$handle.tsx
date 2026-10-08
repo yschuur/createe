@@ -27,7 +27,7 @@ export const Route = createFileRoute("/products/$handle")({
     };
   },
   head: ({ loaderData }) => {
-    const title = loaderData?.seoTitle || `${loaderData?.name ?? "Product"} — CREATEE`;
+    const title = loaderData?.seoTitle || `${loaderData?.name ?? "Product"} | CREATEE`;
     const description = loaderData?.seoDescription || `${loaderData?.name ?? "Product"} van CREATEE.`;
     const meta = [
       { title }, { name: "description", content: description },
@@ -194,7 +194,7 @@ function ProductPage() {
               <div className="flex items-center justify-between gap-3 px-4 py-4">
                 <p className="font-label text-sm font-bold uppercase tracking-wider">{page.featureTitle}</p>
                 {page.featureLinkUrl && (
-                  <Button asChild variant="outline"><a href={page.featureLinkUrl} className="font-label flex items-center gap-1 border border-primary-foreground/70 px-4 py-2 text-[10px] font-semibold uppercase tracking-wider">
+                  <Button asChild variant="outline"><a href={page.featureLinkUrl} style={{ ...(page.featureButtonBg ? { background: page.featureButtonBg, borderColor: page.featureButtonBg } : {}), ...(page.featureButtonColor ? { color: page.featureButtonColor } : {}) }} className="font-label flex items-center gap-1 border border-primary-foreground/70 px-4 py-2 text-[10px] font-semibold uppercase tracking-wider">
                     {page.featureLinkLabel} <ChevronRight className="h-3 w-3" />
                   </a></Button>
                 )}

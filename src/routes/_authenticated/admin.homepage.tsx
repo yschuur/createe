@@ -13,7 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { homepageQuery, type HomepageSettings, type HeroSide } from "@/lib/site-settings";
 
 export const Route = createFileRoute("/_authenticated/admin/homepage")({
-  head: () => ({ meta: [{ title: "Homepage — CREATEE beheer" }, { name: "description", content: "Pas de CREATEE homepage aan." }, { property: "og:title", content: "Homepage — CREATEE beheer" }, { property: "og:description", content: "Pas de CREATEE homepage aan." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Homepage | CREATEE beheer" }, { name: "description", content: "Pas de CREATEE homepage aan." }, { property: "og:title", content: "Homepage | CREATEE beheer" }, { property: "og:description", content: "Pas de CREATEE homepage aan." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: HomepageAdmin,
 });
 

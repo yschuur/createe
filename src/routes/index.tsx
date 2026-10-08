@@ -18,10 +18,10 @@ import padelPoster from "@/assets/hero-padel-poster.jpg.asset.json";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "CREATEE — Golf & padel kleding met een knipoog" },
-      { name: "description", content: "Polo's en T-shirts van organisch katoen voor golf en padel. Fairway to Heaven, Harry Putter, Bogeymian Rhapsody en meer." },
-      { property: "og:title", content: "CREATEE — Golf & padel kleding met een knipoog" },
-      { property: "og:description", content: "Polo's en T-shirts van organisch katoen voor golf en padel." },
+      { title: "CREATEE | Unieke Kleding & Exclusieve Designs" },
+      { name: "description", content: "Weg met de standaard kleding. Shop premium kleding met unieke designs of gebruik onze design studio voor jouw eigen masterpiece." },
+      { property: "og:title", content: "CREATEE | Unieke Kleding & Exclusieve Designs" },
+      { property: "og:description", content: "Weg met de standaard kleding. Shop premium kleding met unieke designs of gebruik onze design studio voor jouw eigen masterpiece." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -83,7 +83,7 @@ function Home() {
   const btn = "bg-shop-surface text-shop-ink";
   return <ShopLayout page="home">
     <section data-section="home-hero" className="home-hero relative grid grid-cols-1 grid-rows-2 overflow-hidden bg-primary md:grid-cols-2 md:grid-rows-1">
-      <h1 className="sr-only">CREATEE — Golf & padel kleding</h1>
+      <h1 className="sr-only">CREATEE | Golf & padel kleding</h1>
       <HeroPanel side={home.golf} video={golfVideo.url} poster={golfPoster.url} image={golfImg.url} alt="CREATEE golfkleding op de golfbaan" position="object-center" />
       <HeroPanel side={home.padel} video={padelVideo.url} poster={padelPoster.url} image={padelImg.url} alt="CREATEE padelkleding op de padelbaan" position="object-center" />
       <div className="pointer-events-none absolute inset-x-0 top-1/2 flex -translate-y-1/2 justify-center gap-2 md:top-auto md:bottom-16 md:translate-y-0">

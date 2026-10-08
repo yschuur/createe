@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export const Route = createFileRoute("/checkout/")({
-  head: () => ({ meta: [{ title: "Afrekenen — CREATEE" }, { name: "description", content: "Veilig afrekenen bij CREATEE." }, { property: "og:title", content: "Afrekenen — CREATEE" }, { property: "og:description", content: "Veilig afrekenen bij CREATEE." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Afrekenen | CREATEE" }, { name: "description", content: "Veilig afrekenen bij CREATEE." }, { property: "og:title", content: "Afrekenen | CREATEE" }, { property: "og:description", content: "Veilig afrekenen bij CREATEE." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: CheckoutRoute,
 });
 
@@ -69,7 +69,7 @@ function CheckoutContent() {
       else if ("clientSecret" in res) {
         setClientSecret(res.clientSecret);
         setFreeShipping(res.freeShipping);
-        setCodeMsg(res.discountError ?? (discountCode ? "Actiecode toegepast — je ziet de korting op de betaalpagina." : ""));
+        setCodeMsg(res.discountError ?? (discountCode ? "Actiecode toegepast - je ziet de korting op de betaalpagina." : ""));
       }
     }
   }

@@ -45,7 +45,7 @@ export const OrderEmail = (p: OrderEmailProps) => (
             <Text style={label}>Jouw items</Text>
             {p.lines.map((l, i) => (
               <Row key={i} style={{ marginBottom: 8 }}>
-                <Column><Text style={item}>{l.quantity}× {l.name}{l.label ? ` — ${l.label}` : ''}</Text></Column>
+                <Column><Text style={item}>{l.quantity}× {l.name}{l.label ? ` - ${l.label}` : ''}</Text></Column>
                 <Column align="right"><Text style={item}>{eur(l.total)}</Text></Column>
               </Row>
             ))}

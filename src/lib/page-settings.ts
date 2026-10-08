@@ -81,11 +81,11 @@ export const PAGE_DEFS: PageDef[] = [
         content: [
           { key: "intro", label: "Tekst boven formulier", type: "rich", default: "Wij streven ernaar om binnen 2 werkdagen te reageren." },
           { key: "description", label: "Formuliertekst", type: "rich", default: "Of je nu meer wilt weten over onze huidige designs of interesse hebt in een custom design: dat horen wij heel graag, we denken graag met je mee. Heb je vragen over de status van je order, vergeet dan niet je ordernummer door te geven." },
-          txt("name_label", "Naam — label", "Naam"), txt("name_placeholder", "Naam — voorbeeld", "Je naam"),
-          txt("email_label", "E-mail — label", "E-mailadres"), txt("email_placeholder", "E-mail — voorbeeld", "naam@voorbeeld.nl"),
-          txt("phone_label", "Telefoon — label", "Telefoonnummer"), txt("phone_placeholder", "Telefoon — voorbeeld", "Bijv. 06 12345678"),
-          txt("order_label", "Order — label", "Ordernummer"), txt("order_placeholder", "Order — voorbeeld", "#12345"),
-          txt("message_label", "Bericht — label", "Jouw bericht"), txt("message_placeholder", "Bericht — voorbeeld", "Waarmee kunnen we je helpen?"),
+          txt("name_label", "Naam - label", "Naam"), txt("name_placeholder", "Naam - voorbeeld", "Je naam"),
+          txt("email_label", "E-mail - label", "E-mailadres"), txt("email_placeholder", "E-mail - voorbeeld", "naam@voorbeeld.nl"),
+          txt("phone_label", "Telefoon - label", "Telefoonnummer"), txt("phone_placeholder", "Telefoon - voorbeeld", "Bijv. 06 12345678"),
+          txt("order_label", "Order - label", "Ordernummer"), txt("order_placeholder", "Order - voorbeeld", "#12345"),
+          txt("message_label", "Bericht - label", "Jouw bericht"), txt("message_placeholder", "Bericht - voorbeeld", "Waarmee kunnen we je helpen?"),
           txt("submit_label", "Verzendknop", "Verstuur bericht"), txt("privacy", "Privacytekst", "Respect voor jouw privacy"),
           { key: "success", label: "Bevestiging", type: "rich", default: "Bedankt! Je bericht is ontvangen." },
         ], buttonTargets: [{ id: "submit", label: "Verstuur bericht", selector: '[data-page-button=submit]' }] },
@@ -143,12 +143,12 @@ export const PAGE_DEFS: PageDef[] = [
           ...valueFields(1, "Premium kwaliteit", "Onze toewijding aan premium kwaliteit begint bij de stof, de pasvorm en het draagcomfort. We combineren technische materialen met een verfijnde afwerking om kleding te maken die goed voelt tijdens het sporten en daarna nog steeds scherp uitziet. Voor ons is kwaliteit de voorwaarde voor creativiteit. Het een kan niet zonder het ander."),
           ...valueFields(2, "Grenzeloze creativiteit", "Vanuit die premium basis laten we de creativiteit pas echt de vrije loop. We geloven niet in de standaard grijze massa, dus ontwerpen we uitsluitend exclusieve designs die je nergens anders op de fairway tegenkomt. Bovendien bieden we een podium aan sporters die zelf hun visie willen uiten via onze Design Studio."),
           ...valueFields(3, "Persoonlijke aanpak", "Die creativiteit krijgt pas echt betekenis door de persoonlijke klik die we met je hebben. We zijn namelijk geen anonieme fabriek, maar golfers die de sport begrijpen en er plezier in hebben. Om jouw ideeën echt tot leven te wekken, bieden we in onze Design Studio altijd een gratis online meeting aan. Op die manier kennen we echt samen wat je nodig hebt en maken we samen iets unieks.")],
-        media: [img("v1_image", "Kaart 1 — foto", fabric.url, "Detail van de HYBR stof"), img("v2_image", "Kaart 2 — foto", "", "Een persoonlijk CREATEE ontwerp"), img("v3_image", "Kaart 3 — foto", "", "CREATEE kleding op de golfbaan")] },
+        media: [img("v1_image", "Kaart 1 - foto", fabric.url, "Detail van de HYBR stof"), img("v2_image", "Kaart 2 - foto", "", "Een persoonlijk CREATEE ontwerp"), img("v3_image", "Kaart 3 - foto", "", "CREATEE kleding op de golfbaan")] },
       { id: "story-cta", label: "Afsluiter", roles: ["heading", "body", "button"], background: true, spacing: true, buttons: true,
         content: [txt("title", "Titel", "Klaar om op te vallen?"),
           area("text", "Tekst", "Ruil jouw voorspelbare kleding in voor een exclusief design of creëer samen met ons een uniek meesterwerk. Wij staan voor je klaar."),
-          txt("btn1_label", "Knop 1 — tekst", "Designs"), url("btn1_url", "Knop 1 — link", "/collections/golf"),
-          txt("btn2_label", "Knop 2 — tekst", "Studio"), url("btn2_url", "Knop 2 — link", "/design-studio")] },
+          txt("btn1_label", "Knop 1 - tekst", "Designs"), url("btn1_url", "Knop 1 - link", "/collections/golf"),
+          txt("btn2_label", "Knop 2 - tekst", "Studio"), url("btn2_url", "Knop 2 - link", "/design-studio")] },
     ],
   },
   {
@@ -156,19 +156,19 @@ export const PAGE_DEFS: PageDef[] = [
     description: "Opening en HYBR™-technologie.",
     sections: [
       { id: "hybr-1", label: "Eerste blok", roles: ["kicker", "heading", "subheading", "body", "button"], background: true, backgroundImage: true, spacing: true, buttons: true,
-        content: [txt("kicker", "Kicker", "HYBR™"), txt("headline", "Hoofdtitel", "De HYBR™"), txt("headline_em", "Hoofdtitel — vervolg", "polo."),
+        content: [txt("kicker", "Kicker", "HYBR™"), txt("headline", "Hoofdtitel", "De HYBR™"), txt("headline_em", "Hoofdtitel - vervolg", "polo."),
           txt("subtitle", "Subtitel", "Ultieme veelzijdigheid."),
           area("lead", "Introtekst", "Ontdek de ultieme veelzijdigheid. De HYBR™ Polo is ontwikkeld voor de golfer die prestatie eist zonder in te leveren op een volmaakte look. Onze unieke hybride stof biedt volledige bewegingsvrijheid, maar keert daarna direct terug naar de perfecte pasvorm. Ervaar het comfort van een sportpolo met de uitstraling van premium kwaliteit."),
-          txt("btn1_label", "Knop 1 — tekst", "Ontdek HYBR"), url("btn1_url", "Knop 1 — link", "/collections/polos"),
-          txt("btn2_label", "Knop 2 — tekst", "Personaliseer nu"), url("btn2_url", "Knop 2 — link", "/design-studio"),
+          txt("btn1_label", "Knop 1 - tekst", "Ontdek HYBR"), url("btn1_url", "Knop 1 - link", "/collections/polos"),
+          txt("btn2_label", "Knop 2 - tekst", "Personaliseer nu"), url("btn2_url", "Knop 2 - link", "/design-studio"),
           area("signature", "Slotzin", "Het comfort van een sportpolo met de uitstraling van premium kwaliteit.")],
         media: [img("main", "Hoofdafbeelding", hybrGolf.url, "Golfer in de groene CREATEE HYBR polo"), img("detail", "Detailafbeelding", hybrDetail.url, "Detail van de kraag en het CREATEE borduursel")] },
       { id: "hybr-2", label: "Tweede blok (technologie)", roles: ["kicker", "heading", "label", "body"], background: true, spacing: true,
         content: [txt("kicker", "Kicker", "De details maken het verschil"), txt("title_1", "Titel regel 1", "De kracht van"), txt("title_2", "Titel regel 2", "HYBR™ technologie"),
-          txt("f1_title", "Kenmerk 1 — titel", "360° stretch"), area("f1_text", "Kenmerk 1 — tekst", "Maximale flexibiliteit voor een krachtige swing, waarna de stof direct weer herstelt naar de perfecte fit. Volledige vrijheid, zonder vormverlies."),
-          txt("f2_title", "Kenmerk 2 — titel", "Premium finish"), area("f2_text", "Kenmerk 2 — tekst", "Vergeet de glimmende, plastic look van standaard sportpolo’s. Ervaar een rijke, matte textuur met luxe micro-details voor een verfijnde uitstraling."),
-          txt("f3_title", "Kenmerk 3 — titel", "Smart-collar"), area("f3_text", "Kenmerk 3 — tekst", "Een kraag die nooit inzakt. Of je nu afslaat of proost op de overwinning, je ziet er de hele dag haarscherp uit."),
-          txt("f4_title", "Kenmerk 4 — titel", "Kreukvrij & ademend"), area("f4_text", "Kenmerk 4 — tekst", "Optimale ventilatie en kreukvrij. Zelfs na 18 holes zie je er fris uit.")],
+          txt("f1_title", "Kenmerk 1 - titel", "360° stretch"), area("f1_text", "Kenmerk 1 - tekst", "Maximale flexibiliteit voor een krachtige swing, waarna de stof direct weer herstelt naar de perfecte fit. Volledige vrijheid, zonder vormverlies."),
+          txt("f2_title", "Kenmerk 2 - titel", "Premium finish"), area("f2_text", "Kenmerk 2 - tekst", "Vergeet de glimmende, plastic look van standaard sportpolo’s. Ervaar een rijke, matte textuur met luxe micro-details voor een verfijnde uitstraling."),
+          txt("f3_title", "Kenmerk 3 - titel", "Smart-collar"), area("f3_text", "Kenmerk 3 - tekst", "Een kraag die nooit inzakt. Of je nu afslaat of proost op de overwinning, je ziet er de hele dag haarscherp uit."),
+          txt("f4_title", "Kenmerk 4 - titel", "Kreukvrij & ademend"), area("f4_text", "Kenmerk 4 - tekst", "Optimale ventilatie en kreukvrij. Zelfs na 18 holes zie je er fris uit.")],
         media: [img("image", "Afbeelding", hybrDetail.url, "Detail van de kraag en het CREATEE borduursel")] },
     ],
   },
@@ -197,7 +197,7 @@ export const PAGE_DEFS: PageDef[] = [
         { id: "filled", label: "Gevulde knoppen", selector: '[data-slot=button][data-variant=default]' },
         { id: "outline", label: "Omlijnde knoppen", selector: '[data-slot=button][data-variant=outline]' },
         { id: "ghost", label: "Tekst- en icoonknoppen", selector: '[data-slot=button][data-variant=ghost]' },
-        { id: "cart", label: "Winkelmand — afrekenen", selector: '[data-page-button=checkout]' },
+        { id: "cart", label: "Winkelmand - afrekenen", selector: '[data-page-button=checkout]' },
       ] },
       { id: "site-announcement", label: "Aankondigingsbalk", roles: ["body", "link"], background: true, contentLink: { to: "/admin/homepage", label: "Teksten en links" } },
       { id: "site-header", label: "Menu-balk", roles: ["link"], background: true, contentLink: { to: "/admin/menu", label: "Menu-onderdelen" },
@@ -216,15 +216,15 @@ export const PAGE_DEFS: PageDef[] = [
         content: [{ key: "logo", label: "Logo", type: "select", default: "white", options: [{ value: "white", label: "Wit" }, { value: "green", label: "Groen" }] },
           area("about", "Tekst onder logo", "Tradities zijn er om te eren, niet om te dragen. Wij geloven dat sportkleding meer mag zijn dan standaard. Je techniek is uniek, je tactiek is uniek, dus waarom zou je kleding dat niet zijn? CREATEE combineert de luxe van een premium fit met het lef van uniek design."),
           txt("h_discover", "Kop kolom 1", "Ontdek"),
-          ...Array.from({ length: 8 }, (_, i) => [txt(`d${i + 1}_label`, `Ontdek link ${i + 1} — tekst`, ""), url(`d${i + 1}_url`, `Ontdek link ${i + 1} — adres`, "")]).flat(),
+          ...Array.from({ length: 8 }, (_, i) => [txt(`d${i + 1}_label`, `Ontdek link ${i + 1} - tekst`, ""), url(`d${i + 1}_url`, `Ontdek link ${i + 1} - adres`, "")]).flat(),
           txt("h_info", "Kop kolom 2", "Informatie"),
-          ...Array.from({ length: 8 }, (_, i) => [txt(`i${i + 1}_label`, `Informatie link ${i + 1} — tekst`, ""), url(`i${i + 1}_url`, `Informatie link ${i + 1} — adres`, "")]).flat(),
-          txt("club_title", "Nieuwsbrief — kop", "The Clubhouse"),
-           { key: "club_text", label: "Nieuwsbrief — tekst", type: "rich", default: "<p>Word lid van The Clubhouse.</p>" },
-          { key: "club_show", label: "Nieuwsbrief — invulveld tonen", type: "select", default: "yes", options: [{ value: "yes", label: "Ja" }, { value: "no", label: "Nee" }] },
-          txt("club_placeholder", "Nieuwsbrief — tekst in invulveld", "Je e-mailadres"),
-          txt("club_button", "Nieuwsbrief — knoptekst", "Aanmelden"),
-          { key: "club_success", label: "Nieuwsbrief — bedanktekst (de actiecode verschijnt eronder)", type: "rich", default: "<p>Welkom bij The Clubhouse! Gebruik deze code in je winkelmand:</p>" },
+          ...Array.from({ length: 8 }, (_, i) => [txt(`i${i + 1}_label`, `Informatie link ${i + 1} - tekst`, ""), url(`i${i + 1}_url`, `Informatie link ${i + 1} - adres`, "")]).flat(),
+          txt("club_title", "Nieuwsbrief - kop", "The Clubhouse"),
+           { key: "club_text", label: "Nieuwsbrief - tekst", type: "rich", default: "<p>Word lid van The Clubhouse.</p>" },
+          { key: "club_show", label: "Nieuwsbrief - invulveld tonen", type: "select", default: "yes", options: [{ value: "yes", label: "Ja" }, { value: "no", label: "Nee" }] },
+          txt("club_placeholder", "Nieuwsbrief - tekst in invulveld", "Je e-mailadres"),
+          txt("club_button", "Nieuwsbrief - knoptekst", "Aanmelden"),
+          { key: "club_success", label: "Nieuwsbrief - bedanktekst (de actiecode verschijnt eronder)", type: "rich", default: "<p>Welkom bij The Clubhouse! Gebruik deze code in je winkelmand:</p>" },
           txt("copyright", "Copyright-naam", "CREATEE")] },
     ],
   },
@@ -256,15 +256,15 @@ for (const page of PAGE_DEFS.filter((p) => p.key === "story" || p.key === "hybr"
 }
 const technology = PAGE_DEFS.find((p) => p.key === "hybr")?.sections.find((s) => s.id === "hybr-2");
 if (technology?.content) {
-  for (let n = 1; n <= 4; n++) technology.content.push({ key: `f${n}_number`, label: `Kenmerk ${n} — nummer`, type: "rich", default: `0${n}` });
+  for (let n = 1; n <= 4; n++) technology.content.push({ key: `f${n}_number`, label: `Kenmerk ${n} - nummer`, type: "rich", default: `0${n}` });
 }
 
 function valueFields(n: number, title: string, text: string): ContentFieldDef[] {
-  return [txt(`v${n}_number`, `Kaart ${n} — nummer`, `0${n}`), txt(`v${n}_title`, `Kaart ${n} — titel`, title), area(`v${n}_text`, `Kaart ${n} — tekst`, text),
-    { key: `v${n}_bg`, label: `Kaart ${n} — achtergrond`, type: "color", default: "" }, { key: `v${n}_color`, label: `Kaart ${n} — tekstkleur`, type: "color", default: "" }];
+  return [txt(`v${n}_number`, `Kaart ${n} - nummer`, `0${n}`), txt(`v${n}_title`, `Kaart ${n} - titel`, title), area(`v${n}_text`, `Kaart ${n} - tekst`, text),
+    { key: `v${n}_bg`, label: `Kaart ${n} - achtergrond`, type: "color", default: "" }, { key: `v${n}_color`, label: `Kaart ${n} - tekstkleur`, type: "color", default: "" }];
 }
 function usp(n: number, text: string): ContentFieldDef[] {
-  return [txt(`u${n}_text`, `USP ${n} — tekst`, text), url(`u${n}_link`, `USP ${n} — link (optioneel)`, ""), { key: `u${n}_show`, label: `USP ${n} tonen`, type: "select", default: "yes", options: yesNo }];
+  return [txt(`u${n}_text`, `USP ${n} - tekst`, text), url(`u${n}_link`, `USP ${n} - link (optioneel)`, ""), { key: `u${n}_show`, label: `USP ${n} tonen`, type: "select", default: "yes", options: yesNo }];
 }
 
 // A stale page key or temporarily incomplete registry must never blank the shop.

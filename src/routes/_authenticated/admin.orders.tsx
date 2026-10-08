@@ -10,7 +10,7 @@ import { formatPrice } from "@/lib/shop";
 import { STATUS_LABELS, STATUS_TONE } from "@/lib/order-status";
 
 export const Route = createFileRoute("/_authenticated/admin/orders")({
-  head: () => ({ meta: [{ title: "Bestellingen — Beheer" }] }),
+  head: () => ({ meta: [{ title: "Bestellingen - Beheer" }] }),
   component: AdminOrders,
 });
 
@@ -67,7 +67,7 @@ function AdminOrders() {
           <tbody>{list.map((o) => <tr key={o.id} className="border-b last:border-0 hover:bg-muted/50">
             <td className="p-3 font-semibold"><Link to="/admin/order/$id" params={{ id: o.id }} className="underline-offset-2 hover:underline">{o.order_number}</Link>{o.environment === "sandbox" && <span className="ml-1 text-xs font-normal text-muted-foreground">(test)</span>}</td>
             <td className="p-3">{new Date(o.created_at).toLocaleString("nl-NL", { dateStyle: "short", timeStyle: "short" })}</td>
-            <td className="p-3"><div>{o.name ?? "—"}</div><div className="text-xs text-muted-foreground">{o.email}</div></td>
+            <td className="p-3"><div>{o.name ?? "-"}</div><div className="text-xs text-muted-foreground">{o.email}</div></td>
             <td className="p-3"><span className={`rounded-sm px-2 py-1 text-xs ${STATUS_TONE[o.status] ?? "bg-muted"}`}>{STATUS_LABELS[o.status] ?? o.status}</span></td>
             <td className="p-3 text-right font-medium">{formatPrice(Number(o.total))}</td>
           </tr>)}</tbody>

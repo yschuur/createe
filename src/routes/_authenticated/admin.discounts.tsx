@@ -10,7 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { formatPrice } from "@/lib/shop";
 
 export const Route = createFileRoute("/_authenticated/admin/discounts")({
-  head: () => ({ meta: [{ title: "Acties — CREATEE beheer" }, { name: "description", content: "Acties — CREATEE beheer. Beheer de CREATEE webshop." }, { property: "og:title", content: "Acties — CREATEE beheer" }, { property: "og:description", content: "Acties — CREATEE beheer. Beheer de CREATEE webshop." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Acties | CREATEE beheer" }, { name: "description", content: "Acties | CREATEE beheer. Beheer de CREATEE webshop." }, { property: "og:title", content: "Acties | CREATEE beheer" }, { property: "og:description", content: "Acties | CREATEE beheer. Beheer de CREATEE webshop." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: DiscountsAdmin,
 });
 
