@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ShopLayout } from "@/components/shop/ShopLayout";
 import { Button } from "@/components/ui/button";
+import { PageText } from "@/components/shop/PageText";
 import { AboutCollage } from "@/components/shop/AboutCollage";
 import { pageSettingsQuery, usePageSettings } from "@/lib/page-settings";
-import { sanitizeDescription } from "@/lib/shop";
 
 export const Route = createFileRoute("/pages/ons-verhaal")({
   head: () => ({ meta: [
@@ -29,32 +29,32 @@ function Story() {
         <div className="about-opening-grid">
           <AboutCollage image={intro.main.url} alt={intro.main.alt} detail={intro.detail.url} detailAlt={intro.detail.alt} imageStyle={intro.main.style} detailStyle={intro.detail.style} />
           <div className="about-opening-copy">
-            <p className="about-kicker text-primary">{t("story-intro", "kicker")}</p>
-            <h1 className="about-headline">{t("story-intro", "headline")}<br /><em>{t("story-intro", "headline_em")}</em></h1>
-            <h2 className="about-secondary-title text-primary">{t("story-intro", "subtitle")}</h2>
-            <p className="about-lead">{t("story-intro", "lead")}</p>
-            {t("story-intro", "note") && <p className="about-note">{t("story-intro", "note")}</p>}
-            {t("story-intro", "signature") && <p className="about-signature">{t("story-intro", "signature")}</p>}
+            <PageText as="div" className="about-kicker text-primary" value={t("story-intro", "kicker")} />
+            <h1 className="about-headline"><PageText as="span" inline value={t("story-intro", "headline")} /><em><PageText as="span" inline value={t("story-intro", "headline_em")} /></em></h1>
+            <PageText as="h2" className="about-secondary-title text-primary" value={t("story-intro", "subtitle")} inline />
+            <PageText as="div" className="about-lead" value={t("story-intro", "lead")} />
+            {t("story-intro", "note") && <PageText as="div" className="about-note" value={t("story-intro", "note")} />}
+            {t("story-intro", "signature") && <PageText as="div" className="about-signature" value={t("story-intro", "signature")} />}
           </div>
         </div>
       </section>
       <section data-section="story-mission" className="about-band bg-primary text-primary-foreground">
         <div className="about-mission-grid">
-          <div><h2 className="about-section-title">{t("story-mission", "title")}</h2><p className="about-lead">{t("story-mission", "lead")}</p>{t("story-mission", "quote") && <blockquote className="about-mission-quote">{t("story-mission", "quote")}</blockquote>}</div>
+          <div><PageText as="h2" className="about-section-title" value={t("story-mission", "title")} inline /><PageText as="div" className="about-lead" value={t("story-mission", "lead")} />{t("story-mission", "quote") && <PageText as="blockquote" className="about-mission-quote" value={t("story-mission", "quote")} />}</div>
           {mission.url && <img src={mission.url} alt={mission.alt} style={mission.style} loading="lazy" className="about-mission-image" />}
         </div>
       </section>
       <section data-section="story-begin" className="about-band bg-shop-surface">
         <div className="about-history-grid">
           {begin.url && <img src={begin.url} alt={begin.alt} style={begin.style} loading="lazy" className="about-history-image" />}
-          <div className="about-history-copy"><p className="about-kicker text-primary">{t("story-begin", "kicker")}</p><h2 className="about-section-title">{t("story-begin", "title")}</h2><div className="about-prose"><p className="about-lead">{t("story-begin", "lead")}</p><div className="contents" dangerouslySetInnerHTML={{ __html: sanitizeDescription(t("story-begin", "body")) }} /></div></div>
+          <div className="about-history-copy"><PageText as="div" className="about-kicker text-primary" value={t("story-begin", "kicker")} /><PageText as="h2" className="about-section-title" value={t("story-begin", "title")} inline /><div className="about-prose"><PageText as="div" className="about-lead" value={t("story-begin", "lead")} /><PageText className="contents" value={t("story-begin", "body")} /></div></div>
         </div>
       </section>
       <section data-section="story-values" className="about-band bg-muted">
-        <h2 className="about-section-title about-values-title">{t("story-values", "title")}</h2>
-        <div className="about-values-grid">{values.map((v) => <article key={v.n} className={`about-value ${v.n === 2 ? "bg-primary text-primary-foreground" : "bg-shop-surface text-shop-ink"}`} style={v.bg || v.fg ? { ...(v.bg ? { backgroundColor: v.bg } : {}), ...(v.fg ? { color: v.fg } : {}) } : undefined}><div className="about-value-photo">{v.image.url && <img src={v.image.url} alt={v.image.alt} style={v.image.style} loading="lazy" />}<span className="about-value-number" aria-hidden="true">{v.number}</span></div><div className="about-value-copy"><h3>{v.title}</h3><p>{v.text}</p></div></article>)}</div>
+        <PageText as="h2" className="about-section-title about-values-title" value={t("story-values", "title")} inline />
+        <div className="about-values-grid">{values.map((v) => <article key={v.n} className={`about-value ${v.n === 2 ? "bg-primary text-primary-foreground" : "bg-shop-surface text-shop-ink"}`} style={v.bg || v.fg ? { ...(v.bg ? { backgroundColor: v.bg } : {}), ...(v.fg ? { color: v.fg } : {}) } : undefined}><div className="about-value-photo">{v.image.url && <img src={v.image.url} alt={v.image.alt} style={v.image.style} loading="lazy" />}<PageText as="span" inline className="about-value-number" value={v.number} /></div><div className="about-value-copy"><PageText as="h3" value={v.title} inline /><PageText as="div" value={v.text} /></div></article>)}</div>
       </section>
-      <section data-section="story-cta" className="about-band bg-shop-surface about-cta"><div><h2 className="about-section-title text-primary">{t("story-cta", "title")}</h2><p className="about-lead">{t("story-cta", "text")}</p></div><div className="flex flex-wrap gap-3">{t("story-cta", "btn1_label") && <Button asChild variant="outline"><a href={t("story-cta", "btn1_url")}>{t("story-cta", "btn1_label")}</a></Button>}{t("story-cta", "btn2_label") && <Button asChild><a href={t("story-cta", "btn2_url")}>{t("story-cta", "btn2_label")}</a></Button>}</div></section>
+      <section data-section="story-cta" className="about-band bg-shop-surface about-cta"><div><PageText as="h2" className="about-section-title text-primary" value={t("story-cta", "title")} inline /><PageText as="div" className="about-lead" value={t("story-cta", "text")} /></div><div className="flex flex-wrap gap-3">{t("story-cta", "btn1_label") && <Button asChild variant="outline"><a data-page-button="btn1" href={t("story-cta", "btn1_url")}>{t("story-cta", "btn1_label")}</a></Button>}{t("story-cta", "btn2_label") && <Button asChild><a data-page-button="btn2" href={t("story-cta", "btn2_url")}>{t("story-cta", "btn2_label")}</a></Button>}</div></section>
     </div>
   </ShopLayout>;
 }
