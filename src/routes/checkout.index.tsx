@@ -1,6 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ClientOnly } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { shippingQuery, shippingCost } from "@/lib/shipping";
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
 import { useCart } from "@/lib/cart";
 import { formatPrice, imgUrl } from "@/lib/shop";
@@ -42,6 +44,7 @@ function CheckoutContent() {
   const [error, setError] = useState("");
   const [creating, setCreating] = useState(false);
   const startedRef = useRef(false);
+  const { data: ship } = useQuery(shippingQuery());
 
   useEffect(() => {
     if (startedRef.current) return;
@@ -111,6 +114,10 @@ function CheckoutContent() {
           <span>Subtotaal</span>
           <span>{formatPrice(cart.subtotal)}</span>
         </div>
+        {ship && <div className="flex justify-between border-t border-border px-5 py-3 text-sm text-muted-foreground">
+          <span>Verzending</span>
+          <span>{shippingCost(cart.subtotal, ship) === 0 ? "Gratis" : formatPrice(shippingCost(cart.subtotal, ship))}</span>
+        </div>}
       </div>
       <div className="rounded-sm border border-border bg-card p-4 sm:p-6">
         {creating || !clientSecret ? (
