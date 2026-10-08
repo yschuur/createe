@@ -256,7 +256,10 @@ function usp(n: number, text: string): ContentFieldDef[] {
   return [txt(`u${n}_text`, `USP ${n} — tekst`, text), url(`u${n}_link`, `USP ${n} — link (optioneel)`, ""), { key: `u${n}_show`, label: `USP ${n} tonen`, type: "select", default: "yes", options: yesNo }];
 }
 
-export const pageDef = (key: PageKey) => PAGE_DEFS.find((p) => p.key === key)!;
+// A stale page key or temporarily incomplete registry must never blank the shop.
+export const pageDef = (key: PageKey): PageDef => PAGE_DEFS.find((p) => p.key === key) ?? {
+  key, slug: key, label: key, storageKey: "", viewUrl: "/", description: "", sections: [],
+};
 export const pageDefBySlug = (slug: string) => PAGE_DEFS.find((p) => p.slug === slug);
 
 /* ------------------------------------------------------------------ */
@@ -342,7 +345,9 @@ export function pageDefaults(key: PageKey): PageConfig {
 export const pageSettingsQuery = (key: PageKey) => queryOptions({
   queryKey: ["site-settings", "page", key],
   queryFn: async (): Promise<PageConfig> => {
-    const { data } = await supabase.from("site_settings").select("value").eq("key", pageDef(key).storageKey).maybeSingle();
+    const definition = pageDef(key);
+    if (!definition.storageKey) return { sections: {} };
+    const { data } = await supabase.from("site_settings").select("value").eq("key", definition.storageKey).maybeSingle();
     return parsePageConfig(data?.value);
   },
   staleTime: 60_000,
