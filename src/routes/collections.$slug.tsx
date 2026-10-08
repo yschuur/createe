@@ -1,4 +1,4 @@
-import { sanitizeDescription, collectionQuery, filterSportShop, isPurchasable, priceRange, type ProductWithRelations } from "@/lib/shop";
+import { sanitizeDescription, collectionQuery, filterSportShop, filterProducts, sortProducts } from "@/lib/shop";
 import { createFileRoute, Link, notFound, redirect, useNavigate } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { z } from "zod";
@@ -44,18 +44,6 @@ const SORTS = [
   { id: "date-desc", label: "Datum: nieuwste eerst" },
   { id: "date-asc", label: "Datum: oudste eerst" },
 ];
-
-function sortProducts(products: ProductWithRelations[], sort: string | undefined) {
-  const list = [...products];
-  switch (sort) {
-    case "alpha": return list.sort((a, b) => a.name.localeCompare(b.name, "nl"));
-    case "price-asc": return list.sort((a, b) => priceRange(a).min - priceRange(b).min);
-    case "price-desc": return list.sort((a, b) => priceRange(b).min - priceRange(a).min);
-    case "date-desc": return list.sort((a, b) => +new Date(b.created_at) - +new Date(a.created_at));
-    case "date-asc": return list.sort((a, b) => +new Date(a.created_at) - +new Date(b.created_at));
-    default: return list;
-  }
-}
 
 function SportShopPage() {
   const { slug } = Route.useParams();
