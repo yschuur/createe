@@ -38,7 +38,7 @@ export function RichTextEditor({ value, onChange, placeholder, minHeight = 120 }
     if (editor && value !== editor.getHTML() && !(value === "" && editor.isEmpty)) editor.commands.setContent(value || "", { emitUpdate: false });
   }, [value, editor]);
 
-  const st = useEditorState({
+  const state = useEditorState({
     editor,
     selector: ({ editor: e }) => e ? {
       bold: e.isActive("bold"), italic: e.isActive("italic"), underline: e.isActive("underline"), strike: e.isActive("strike"),
@@ -49,7 +49,8 @@ export function RichTextEditor({ value, onChange, placeholder, minHeight = 120 }
       align: (["center", "right", "justify"].find((a) => e.isActive({ textAlign: a })) ?? "left"),
     } : null,
   });
-  if (!editor || !st) return <div className="rounded-sm border border-input bg-background" style={{ minHeight: minHeight + 40 }} />;
+  if (!editor) return <div className="rounded-sm border border-input bg-background" style={{ minHeight: minHeight + 40 }} />;
+  const st = state ?? { bold: false, italic: false, underline: false, strike: false, bullet: false, ordered: false, quote: false, link: false, font: "", size: "", color: "", block: "p", align: "left" };
   const c = () => editor.chain().focus();
   const btn = (active: boolean, label: string, onClick: () => void, Icon: typeof Bold) =>
     <button type="button" title={label} aria-label={label} aria-pressed={active} onMouseDown={(e) => e.preventDefault()} onClick={onClick}
