@@ -120,6 +120,13 @@
       "when": 1791464135065,
       "tag": "0016_allow_free_shipping_discount_type",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1791467669275,
+      "tag": "0017_tighten_public_policies",
+      "breakpoints": true
     }
   ]
 }
