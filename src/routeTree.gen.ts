@@ -38,6 +38,7 @@ import { Route as AuthenticatedAdminSportsRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAdminStudioRouteImport } from './routes/_authenticated/admin.studio'
 import { Route as AuthenticatedAdminStylesRouteImport } from './routes/_authenticated/admin.styles'
 import { Route as AuthenticatedAdminSubmissionsRouteImport } from './routes/_authenticated/admin.submissions'
+import { Route as AuthenticatedAdminOrderIdRouteImport } from './routes/_authenticated/admin.order.$id'
 import { Route as AuthenticatedAdminPagesIndexRouteImport } from './routes/_authenticated/admin.pages.index'
 import { Route as AuthenticatedAdminPagesPageRouteImport } from './routes/_authenticated/admin.pages.$page'
 import { Route as AuthenticatedAdminProductsIndexRouteImport } from './routes/_authenticated/admin.products.index'
@@ -202,6 +203,12 @@ const AuthenticatedAdminSubmissionsRoute =
     path: '/admin/submissions',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminOrderIdRoute =
+  AuthenticatedAdminOrderIdRouteImport.update({
+    id: '/admin/order/$id',
+    path: '/admin/order/$id',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminPagesIndexRoute =
   AuthenticatedAdminPagesIndexRouteImport.update({
     id: '/admin/pages/',
@@ -268,6 +275,7 @@ export interface FileRoutesByFullPath {
   '/admin/styles': typeof AuthenticatedAdminStylesRoute
   '/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/admin/order/$id': typeof AuthenticatedAdminOrderIdRoute
   '/admin/pages/$page': typeof AuthenticatedAdminPagesPageRoute
   '/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -304,6 +312,7 @@ export interface FileRoutesByTo {
   '/admin/styles': typeof AuthenticatedAdminStylesRoute
   '/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
+  '/admin/order/$id': typeof AuthenticatedAdminOrderIdRoute
   '/admin/pages/$page': typeof AuthenticatedAdminPagesPageRoute
   '/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -342,6 +351,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/styles': typeof AuthenticatedAdminStylesRoute
   '/_authenticated/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/admin/order/$id': typeof AuthenticatedAdminOrderIdRoute
   '/_authenticated/admin/pages/$page': typeof AuthenticatedAdminPagesPageRoute
   '/_authenticated/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -380,6 +390,7 @@ export interface FileRouteTypes {
     | '/admin/styles'
     | '/admin/submissions'
     | '/admin/'
+    | '/admin/order/$id'
     | '/admin/pages/$page'
     | '/admin/products/$id'
     | '/api/public/payments/webhook'
@@ -416,6 +427,7 @@ export interface FileRouteTypes {
     | '/admin/styles'
     | '/admin/submissions'
     | '/admin'
+    | '/admin/order/$id'
     | '/admin/pages/$page'
     | '/admin/products/$id'
     | '/api/public/payments/webhook'
@@ -453,6 +465,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/styles'
     | '/_authenticated/admin/submissions'
     | '/_authenticated/admin/'
+    | '/_authenticated/admin/order/$id'
     | '/_authenticated/admin/pages/$page'
     | '/_authenticated/admin/products/$id'
     | '/api/public/payments/webhook'
@@ -684,6 +697,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminSubmissionsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/order/$id': {
+      id: '/_authenticated/admin/order/$id'
+      path: '/admin/order/$id'
+      fullPath: '/admin/order/$id'
+      preLoaderRoute: typeof AuthenticatedAdminOrderIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/pages/': {
       id: '/_authenticated/admin/pages/'
       path: '/admin/pages'
@@ -746,6 +766,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminStylesRoute: typeof AuthenticatedAdminStylesRoute
   AuthenticatedAdminSubmissionsRoute: typeof AuthenticatedAdminSubmissionsRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedAdminOrderIdRoute: typeof AuthenticatedAdminOrderIdRoute
   AuthenticatedAdminPagesPageRoute: typeof AuthenticatedAdminPagesPageRoute
   AuthenticatedAdminProductsIdRoute: typeof AuthenticatedAdminProductsIdRoute
   AuthenticatedAdminPagesIndexRoute: typeof AuthenticatedAdminPagesIndexRoute
@@ -769,6 +790,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminStylesRoute: AuthenticatedAdminStylesRoute,
   AuthenticatedAdminSubmissionsRoute: AuthenticatedAdminSubmissionsRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+  AuthenticatedAdminOrderIdRoute: AuthenticatedAdminOrderIdRoute,
   AuthenticatedAdminPagesPageRoute: AuthenticatedAdminPagesPageRoute,
   AuthenticatedAdminProductsIdRoute: AuthenticatedAdminProductsIdRoute,
   AuthenticatedAdminPagesIndexRoute: AuthenticatedAdminPagesIndexRoute,
