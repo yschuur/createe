@@ -48,6 +48,30 @@ function Home() {
   const { data: products } = useSuspenseQuery(listProductsQuery());
   const { data: home } = useSuspenseQuery(homepageQuery());
   const row = useRef<HTMLDivElement>(null);
+  const drag = useRef({ down: false, moved: false, startX: 0, scrollLeft: 0 });
+  const onPointerDown = (e: React.PointerEvent) => {
+    if (e.pointerType !== "mouse" || !row.current) return;
+    drag.current = { down: true, moved: false, startX: e.clientX, scrollLeft: row.current.scrollLeft };
+  };
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (!drag.current.down || !row.current) return;
+    const dx = e.clientX - drag.current.startX;
+    if (Math.abs(dx) > 4) {
+      drag.current.moved = true;
+      row.current.classList.add("dragging");
+    }
+    if (drag.current.moved) row.current.scrollLeft = drag.current.scrollLeft - dx;
+  };
+  const onPointerUp = () => {
+    drag.current.down = false;
+    row.current?.classList.remove("dragging");
+  };
+  const onClickCapture = (e: React.MouseEvent) => {
+    if (!drag.current.moved) return;
+    drag.current.moved = false;
+    e.preventDefault();
+    e.stopPropagation();
+  };
   const cms = usePageSettings("home");
   const count = Math.round(cms.n("home-products", "count") ?? 12);
   const preferred = home.featured_slugs;
