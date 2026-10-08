@@ -11,7 +11,7 @@
 - [x] Shop front (home, collections, product pages, cart) with CREATEE logos and real catalog
 - [x] Admin: products, variants/stock, collections, discounts, Design Studio requests, Shopify CSV import
 - [x] Verzendkosten €4,95 onder €75, instelbaar in beheer
-- [ ] Orderbevestiging/productie/verzonden-mails (klant + contact@createe.nl), instelbaar — wacht op e-maildomein
+- [x] Ordermails (bevestiging, productie, verzonden+tracking) + melding naar contact@createe.nl, instelbaar; versturen start na DNS-verificatie notify.createe.nl
 - [ ] Checkout (optie 1): afrekenpagina + testbetaling werkend; orderverwerking na betaling (webhook → betaald + voorraad) nog verifiëren/oplossen in preview
 - [ ] Move product images off Shopify into own storage (blocked: workspace disallows public file storage)
 - [ ] Redirects + domain switch of createe.nl (only after launch checklist)

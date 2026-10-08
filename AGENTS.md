@@ -31,3 +31,4 @@
 - The router serializes and hydrates its request-scoped QueryClient — saved page content must match on server render and the first browser render.
 - Storefront button styles use the page CMS with global defaults, per-button-ID overrides keyed per section, registered section/action targets and per-button overrides, including hover/focus colors — one validated CSS builder covers native buttons and portaled shop dialogs while admin stays unchanged.
 - Sports are rows in `sports`; each product has one sport_id and collections list sport_ids; /collections/<sport> is the sport shop with collections/tags as filters — products never leak across sports and new sports need no code.
+- Order emails: one order-email template; copy in site_settings "order_emails" via src/lib/order-emails.ts, sent from the Stripe webhook and admin status server fn — owner edits text without code.
