@@ -339,7 +339,7 @@ function responsive(sel: string, prop: string, r: ResponsiveNumber | undefined, 
   if (d !== undefined && m !== undefined && d !== m) out.push(`${MD}{${sel}{${prop}:${d}${unit} !important}}`);
 }
 function hexToRgba(c: string, opacity: number) {
-  const hex = c.startsWith("#") ? c : COLOR_TOKENS.dark.swatch;
+  const hex = c.startsWith("#") ? c : "#1a1a1a";
   const h = hex.length === 4 ? hex.slice(1).split("").map((x) => x + x).join("") : hex.slice(1, 7);
   const [r, g, b] = [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16));
   return `rgba(${r},${g},${b},${(opacity / 100).toFixed(2)})`;
@@ -413,22 +413,22 @@ export function buildPageCss(key: PageKey, overrides: PageConfig | undefined): s
     // Section-specific whitelisted extras
     const ex = c.extra ?? {};
     if (s.id === "home-hero") {
-      if (ex.height) { out.push(`${root}{min-height:0 !important;max-height:none !important}`); responsive(root, "height", ex.height, 30, 100, "vh", out); }
-      const o = clampN(ex.overlay?.desktop ?? ex.overlay?.mobile, 0, 100);
+      if (ex["height"]) { out.push(`${root}{min-height:0 !important;max-height:none !important}`); responsive(root, "height", ex["height"], 30, 100, "vh", out); }
+      const o = clampN(ex["overlay"]?.desktop ?? ex["overlay"]?.mobile, 0, 100);
       if (o !== undefined) out.push(`${root} [data-role=overlay]{opacity:${o / 100} !important;background:linear-gradient(to top,var(--primary),transparent) !important}`);
     }
     if (s.id === "collection-grid") {
       const g = `${root} [data-role=grid]`;
-      const cm = clampN(ex.colsMobile?.desktop ?? ex.colsMobile?.mobile, 1, 3); if (cm) out.push(`${g}{grid-template-columns:repeat(${Math.round(cm)},minmax(0,1fr)) !important}`);
-      const cd = clampN(ex.colsDesktop?.desktop ?? ex.colsDesktop?.mobile, 2, 6); if (cd) out.push(`${MD}{${g}{grid-template-columns:repeat(${Math.round(cd)},minmax(0,1fr)) !important}}`);
-      const gp = clampN(ex.gap?.desktop ?? ex.gap?.mobile, 0, 80); if (gp !== undefined) out.push(`${g}{gap:${gp}px !important}`);
+      const cm = clampN(ex["colsMobile"]?.desktop ?? ex["colsMobile"]?.mobile, 1, 3); if (cm) out.push(`${g}{grid-template-columns:repeat(${Math.round(cm)},minmax(0,1fr)) !important}`);
+      const cd = clampN(ex["colsDesktop"]?.desktop ?? ex["colsDesktop"]?.mobile, 2, 6); if (cd) out.push(`${MD}{${g}{grid-template-columns:repeat(${Math.round(cd)},minmax(0,1fr)) !important}}`);
+      const gp = clampN(ex["gap"]?.desktop ?? ex["gap"]?.mobile, 0, 80); if (gp !== undefined) out.push(`${g}{gap:${gp}px !important}`);
     }
     if (s.id === "site-header") {
-      if (c.content?.sticky === "no") out.push(`${root}{position:relative !important}`);
-      const h = clampN(ex.height?.desktop ?? ex.height?.mobile, 48, 140); if (h) out.push(`${root} > div{height:${h}px !important}`);
+      if (c.content?.["sticky"] === "no") out.push(`${root}{position:relative !important}`);
+      const h = clampN(ex["height"]?.desktop ?? ex["height"]?.mobile, 48, 140); if (h) out.push(`${root} > div{height:${h}px !important}`);
     }
     if (s.id === "product-main") {
-      const a = c.content?.aspect;
+      const a = c.content?.["aspect"];
       if (a && ["3/4", "4/5", "2/3", "1/1"].includes(a)) out.push(`${root} [data-role=pdp-image]{aspect-ratio:${a.replace("/", " / ")} !important}`);
     }
   }

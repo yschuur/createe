@@ -51,7 +51,7 @@ export function ColorField({ value, onChange, allowEmpty = true }: { value: stri
   </div>;
 }
 
-export function ResponsiveNumberField({ label, value, onChange, min, max, step = 1, unit }: { label: string; value: ResponsiveNumber | undefined; onChange: (v: ResponsiveNumber | undefined) => void; min: number; max: number; step?: number; unit: string }) {
+export function ResponsiveNumberField({ label, value, onChange, min, max, step = 1, unit }: { label: string; value: ResponsiveNumber | undefined; onChange: (v: ResponsiveNumber | undefined) => void; min: number; max: number; step?: number | undefined; unit: string }) {
   const set = (k: "mobile" | "desktop", v: number | undefined) => { const n = { ...value, [k]: v }; onChange(n.mobile === undefined && n.desktop === undefined ? undefined : n); };
   return <Field label={label} changed={!!value} onReset={() => onChange(undefined)}>
     <div className="grid grid-cols-2 gap-2">
