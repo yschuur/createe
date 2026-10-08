@@ -12,7 +12,7 @@ import { EMAIL_KEYS, EMAIL_LABELS, orderEmailsQuery, orderEmailsSchema, type Ema
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/admin/emails")({
-  head: () => ({ meta: [{ title: "E-mails — Beheer" }] }),
+  head: () => ({ meta: [{ title: "E-mails - Beheer" }] }),
   component: AdminEmails,
 });
 

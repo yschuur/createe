@@ -20,9 +20,9 @@ export const Route = createFileRoute("/pages/contact")({
     const strip = (s: string) => s.replace(/<[^>]*>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
     const items: { question: string; answer: string }[] = faq ? faq.categories.flatMap((c) => c.items).filter((i) => strip(i.question) && strip(i.answer)) : [];
     return { meta: [
-      { title: "Contact & veelgestelde vragen — CREATEE" },
+      { title: "Contact & veelgestelde vragen | CREATEE" },
       { name: "description", content: "Neem contact op met CREATEE en vind antwoorden over bestellingen, verzending, retouren en de Design Studio." },
-      { property: "og:title", content: "Contact & veelgestelde vragen — CREATEE" },
+      { property: "og:title", content: "Contact & veelgestelde vragen | CREATEE" },
       { property: "og:description", content: "Een vraag over je bestelling of een persoonlijk design? Neem contact op met CREATEE." },
       { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
     ], scripts: items.length ? [{ type: "application/ld+json", children: JSON.stringify({

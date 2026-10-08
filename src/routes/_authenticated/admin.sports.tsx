@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/admin/sports")({
-  head: () => ({ meta: [{ title: "Sporten — CREATEE beheer" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Sporten | CREATEE beheer" }, { name: "robots", content: "noindex" }] }),
   component: SportsAdmin,
 });
 

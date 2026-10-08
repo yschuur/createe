@@ -8,7 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { formatPrice, imgUrl } from "@/lib/shop";
 
 export const Route = createFileRoute("/_authenticated/admin/products/")({
-  head: () => ({ meta: [{ title: "Producten — CREATEE beheer" }, { name: "description", content: "Producten — CREATEE beheer. Beheer de CREATEE webshop." }, { property: "og:title", content: "Producten — CREATEE beheer" }, { property: "og:description", content: "Producten — CREATEE beheer. Beheer de CREATEE webshop." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Producten | CREATEE beheer" }, { name: "description", content: "Producten | CREATEE beheer. Beheer de CREATEE webshop." }, { property: "og:title", content: "Producten | CREATEE beheer" }, { property: "og:description", content: "Producten | CREATEE beheer. Beheer de CREATEE webshop." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: ProductsAdmin,
 });
 
@@ -63,8 +63,8 @@ function ProductsAdmin() {
                   <td className="p-3"><Link to="/admin/products/$id" params={{ id: p.id }} className="font-medium">{p.name}</Link><p className="font-mono text-xs text-muted-foreground">{p.slug}</p></td>
                   <td className="p-3"><span className={`rounded-full px-2 py-0.5 text-xs ${statusStyle[p.status]}`}>{p.status}</span>{!p.published && <span className="ml-1 text-xs text-muted-foreground">niet gepubliceerd</span>}</td>
                   <td className="p-3 text-xs">{p.is_service ? "Dienst" : p.product_type}</td>
-                  <td className="p-3">{p.is_service ? "—" : `${stock} in ${p.product_variants.length} var.`}</td>
-                  <td className="p-3">{isFinite(price) ? formatPrice(price) : "—"}</td>
+                  <td className="p-3">{p.is_service ? "-" : `${stock} in ${p.product_variants.length} var.`}</td>
+                  <td className="p-3">{isFinite(price) ? formatPrice(price) : "-"}</td>
                 </tr>
               );
             })}

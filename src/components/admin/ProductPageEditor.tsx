@@ -30,6 +30,14 @@ export function ProductPageEditor({ value, onChange }: { value: ProductPageConte
         {value.featureShow && (<>
           {F("Titel", "featureTitle")}
           <div className="grid grid-cols-2 gap-3">{F("Knoptekst", "featureLinkLabel")}{F("Knoplink", "featureLinkUrl")}</div>
+          <div className="grid grid-cols-2 gap-3">
+            {(["featureButtonBg", "featureButtonColor"] as const).map((k) => (
+              <div key={k}><Label>{k === "featureButtonBg" ? "Knop achtergrondkleur" : "Knop tekstkleur"}</Label>
+                <div className="flex gap-2"><input type="color" className="h-9 w-12 rounded-sm border border-input" value={value[k] || (k === "featureButtonBg" ? "#275c38" : "#ffffff")} onChange={(e) => set(k, e.target.value)} />
+                  <Input value={value[k]} placeholder="Standaard" onChange={(e) => set(k, e.target.value)} />
+                  {value[k] && <Button type="button" variant="outline" size="sm" onClick={() => set(k, "")}>Reset</Button>}</div></div>
+            ))}
+          </div>
           <div><Label>Kenmerken (één per regel)</Label><Textarea rows={4} value={value.featureBadges.join("\n")} onChange={(e) => set("featureBadges", e.target.value.split("\n"))} /></div>
         </>)}
       </div>

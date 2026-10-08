@@ -28,10 +28,10 @@ export function FooterNewsletterEditor() {
   }
   const usable = data.filter((d) => !discountProblem({ ...d, min_order_amount: null }, 0));
   return <div className="space-y-2 border-t border-border pt-4">
-    <Label htmlFor="footer-newsletter-code">Nieuwsbrief — actiecode na aanmelden</Label>
+    <Label htmlFor="footer-newsletter-code">Nieuwsbrief - actiecode na aanmelden</Label>
     <select id="footer-newsletter-code" disabled={busy || isLoading || !!error} value={data.find((d) => d.newsletter)?.id ?? ""} onChange={(e) => choose(e.target.value)} className="h-9 w-full rounded-sm border border-input bg-background px-2 text-sm">
       <option value="">Geen code tonen</option>
-      {data.filter((d) => d.newsletter || usable.some((u) => u.id === d.id)).map((d) => <option key={d.id} value={d.id} disabled={!usable.some((u) => u.id === d.id)}>{d.code}{!usable.some((u) => u.id === d.id) ? " — niet beschikbaar" : ""}</option>)}
+      {data.filter((d) => d.newsletter || usable.some((u) => u.id === d.id)).map((d) => <option key={d.id} value={d.id} disabled={!usable.some((u) => u.id === d.id)}>{d.code}{!usable.some((u) => u.id === d.id) ? " - niet beschikbaar" : ""}</option>)}
     </select>
     {error && <p className="text-sm text-destructive">Actiecodes konden niet worden geladen.</p>}
   </div>;

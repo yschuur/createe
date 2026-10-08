@@ -154,7 +154,7 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
         couponId,
       });
       if (!session.ok) {
-        // Stripe Tax may not be enabled on the account yet — fall back to a
+        // Stripe Tax may not be enabled on the account yet - fall back to a
         // session without automatic tax; VAT is already included in the prices.
         const retry = await createSession(stripe, {
           resolved, total, orderNumber, orderId: order.id,
@@ -202,7 +202,7 @@ async function createSession(
           currency: "eur",
           unit_amount: Math.round(i.price * 100),
           tax_behavior: "inclusive",
-          product_data: { name: `${i.productName} — ${i.label}` },
+          product_data: { name: `${i.productName} - ${i.label}` },
         },
       })),
       shipping_address_collection: { allowed_countries: ["NL", "BE"] },

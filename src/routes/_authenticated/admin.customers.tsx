@@ -9,7 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { formatPrice } from "@/lib/shop";
 
 export const Route = createFileRoute("/_authenticated/admin/customers")({
-  head: () => ({ meta: [{ title: "Klanten — CREATEE beheer" }, { name: "description", content: "Alle klanten, inzenders en nieuwsbriefleden van CREATEE." }, { property: "og:title", content: "Klanten — CREATEE beheer" }, { property: "og:description", content: "Alle klanten, inzenders en nieuwsbriefleden van CREATEE." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Klanten | CREATEE beheer" }, { name: "description", content: "Alle klanten, inzenders en nieuwsbriefleden van CREATEE." }, { property: "og:title", content: "Klanten | CREATEE beheer" }, { property: "og:description", content: "Alle klanten, inzenders en nieuwsbriefleden van CREATEE." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: Customers,
 });
 

@@ -10,7 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { menuQuery, type MenuItem } from "@/lib/menu";
 
 export const Route = createFileRoute("/_authenticated/admin/menu")({
-  head: () => ({ meta: [{ title: "Menu — CREATEE beheer" }, { name: "description", content: "Beheer het websitemenu van CREATEE." }, { property: "og:title", content: "Menu — CREATEE beheer" }, { property: "og:description", content: "Beheer het websitemenu van CREATEE." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Menu | CREATEE beheer" }, { name: "description", content: "Beheer het websitemenu van CREATEE." }, { property: "og:title", content: "Menu | CREATEE beheer" }, { property: "og:description", content: "Beheer het websitemenu van CREATEE." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: MenuAdmin,
 });
 

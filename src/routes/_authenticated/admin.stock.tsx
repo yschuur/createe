@@ -10,7 +10,7 @@ import { BLANK_MODELS, DEFAULT_SIZES, blankKey } from "@/lib/blank-stock";
 import { prettyValue } from "@/lib/shop";
 
 export const Route = createFileRoute("/_authenticated/admin/stock")({
-  head: () => ({ meta: [{ title: "Blanco voorraad — CREATEE beheer" }, { name: "description", content: "Beheer de gedeelde voorraad blanco kleding per model, kleur en maat." }, { property: "og:title", content: "Blanco voorraad — CREATEE beheer" }, { property: "og:description", content: "Beheer de gedeelde voorraad blanco kleding." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Blanco voorraad | CREATEE beheer" }, { name: "description", content: "Beheer de gedeelde voorraad blanco kleding per model, kleur en maat." }, { property: "og:title", content: "Blanco voorraad | CREATEE beheer" }, { property: "og:description", content: "Beheer de gedeelde voorraad blanco kleding." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: StockAdmin,
 });
 
@@ -41,7 +41,7 @@ function StockAdmin() {
     const { error } = await supabase.from("blank_stock").upsert(rows);
     setSaving(false);
     if (error) { toast.error(error.message); return; }
-    setEdits({}); toast.success("Voorraad opgeslagen — alle gekoppelde producten zijn bijgewerkt");
+    setEdits({}); toast.success("Voorraad opgeslagen - alle gekoppelde producten zijn bijgewerkt");
     qc.invalidateQueries();
   }
 

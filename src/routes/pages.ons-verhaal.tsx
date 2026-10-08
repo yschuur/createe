@@ -6,9 +6,9 @@ import { pageSettingsQuery, usePageSettings } from "@/lib/page-settings";
 
 export const Route = createFileRoute("/pages/ons-verhaal")({
   head: () => ({ meta: [
-    { title: "Ons verhaal — CREATEE" },
+    { title: "Ons verhaal | CREATEE" },
     { name: "description", content: "Exclusieve designs. Echte identiteit. Ontdek het verhaal, de missie en de kernwaarden van CREATEE." },
-    { property: "og:title", content: "Ons verhaal — CREATEE" },
+    { property: "og:title", content: "Ons verhaal | CREATEE" },
     { property: "og:description", content: "Premium kwaliteit, grenzeloze creativiteit en een persoonlijke aanpak." },
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
   ] }),

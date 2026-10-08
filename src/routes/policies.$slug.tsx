@@ -13,8 +13,8 @@ export const Route = createFileRoute("/policies/$slug")({
   },
   head: ({ params }) => {
     const p = isPolicySlug(params.slug) ? defaultPolicies[params.slug] : null;
-    if (!p) return { meta: [{ title: "Niet gevonden — CREATEE" }, { name: "robots", content: "noindex" }] };
-    const title = `${p.title} — CREATEE`;
+    if (!p) return { meta: [{ title: "Niet gevonden | CREATEE" }, { name: "robots", content: "noindex" }] };
+    const title = `${p.title} | CREATEE`;
     const desc = `${p.title} van CREATEE: alles wat je moet weten over ${p.label.toLowerCase()}.`;
     return { meta: [{ title }, { name: "description", content: desc }, { property: "og:title", content: title }, { property: "og:description", content: desc }, { property: "og:type", content: "article" }, { name: "twitter:card", content: "summary" }] };
   },

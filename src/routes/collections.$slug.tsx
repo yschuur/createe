@@ -26,7 +26,7 @@ export const Route = createFileRoute("/collections/$slug")({
     return { name: "sport" in data ? data.sport.name : "Shop" };
   },
   head: ({ loaderData }) => {
-    const title = `${loaderData?.name ?? "Shop"} — CREATEE`;
+    const title = `${loaderData?.name ?? "Shop"} | CREATEE`;
     const description = `Shop de CREATEE ${loaderData?.name ?? ""} collectie: unieke designs, technische stoffen.`.replace("  ", " ");
     return { meta: [
       { title }, { name: "description", content: description },

@@ -91,7 +91,7 @@ export async function verifyWebhook(req: Request, env: StripeEnv): Promise<{ typ
     throw new Error("Missing signature or body");
   }
 
-  // Parse signature header — collect all v1 values (multiple during secret rotation)
+  // Parse signature header - collect all v1 values (multiple during secret rotation)
   let timestamp: string | undefined;
   const v1Signatures: string[] = [];
   for (const part of signature.split(",")) {

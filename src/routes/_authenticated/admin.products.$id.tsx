@@ -20,7 +20,7 @@ import { getPage, type ProductPageContent } from "@/lib/product-page";
 import { imgUrl, type Product, type ProductImage, type Variant } from "@/lib/shop";
 
 export const Route = createFileRoute("/_authenticated/admin/products/$id")({
-  head: () => ({ meta: [{ title: "Product bewerken — CREATEE beheer" }, { name: "description", content: "Product bewerken — CREATEE beheer. Beheer de CREATEE webshop." }, { property: "og:title", content: "Product bewerken — CREATEE beheer" }, { property: "og:description", content: "Product bewerken — CREATEE beheer. Beheer de CREATEE webshop." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Product bewerken | CREATEE beheer" }, { name: "description", content: "Product bewerken | CREATEE beheer. Beheer de CREATEE webshop." }, { property: "og:title", content: "Product bewerken | CREATEE beheer" }, { property: "og:description", content: "Product bewerken | CREATEE beheer. Beheer de CREATEE webshop." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: EditProduct,
 });
 
@@ -135,7 +135,7 @@ function EditProduct() {
               <div><Label>Materiaal</Label><Input value={p.fabric ?? ""} onChange={(e) => set("fabric", e.target.value)} /></div>
               <div className="col-span-2"><Label>Blanco model (gedeelde voorraad)</Label>
                 <select value={p.blank_model ?? ""} onChange={(e) => set("blank_model", e.target.value || null)} className="h-9 w-full rounded-sm border border-input bg-background px-2 text-sm">
-                  <option value="">Geen — eigen voorraad per variant</option>
+                  <option value="">Geen - eigen voorraad per variant</option>
                   {BLANK_MODELS.map((m) => <option key={m.key} value={m.key}>{m.label}</option>)}
                 </select>
                 {p.blank_model && <p className="mt-1 text-xs text-muted-foreground">Voorraad komt uit Blanco voorraad; aantallen bij varianten worden daar automatisch van overgenomen.</p>}
@@ -203,8 +203,8 @@ function EditProduct() {
           <Box title="Zichtbaarheid">
             <div><Label>Status</Label>
               <select className="w-full rounded-sm border border-input bg-background p-2 text-sm" value={p.status} onChange={(e) => set("status", e.target.value)}>
-                <option value="active">Actief — zichtbaar in shop</option><option value="draft">Concept — alleen in beheer</option>
-                <option value="unlisted">Verborgen — alleen via directe link</option><option value="archived">Gearchiveerd</option>
+                <option value="active">Actief - zichtbaar in shop</option><option value="draft">Concept - alleen in beheer</option>
+                <option value="unlisted">Verborgen - alleen via directe link</option><option value="archived">Gearchiveerd</option>
               </select>
             </div>
             <Toggle label="Gepubliceerd" checked={p.published} onChange={(c) => set("published", c)} />

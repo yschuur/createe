@@ -50,7 +50,7 @@ export function ColorField({ value, onChange, allowEmpty = true }: { value: stri
     <Input value={value && COLOR_TOKENS[value] ? COLOR_TOKENS[value].label : text} placeholder="#275C38" aria-invalid={invalid}
       className={invalid ? "border-destructive" : ""}
       onChange={(e) => { const v = e.target.value.trim(); setText(v); if (!v) onChange(undefined); else if (isValidColor(v)) onChange(v); }} />
-    {invalid && <p className="text-xs text-destructive">Ongeldige kleur — gebruik bijvoorbeeld #275C38</p>}
+    {invalid && <p className="text-xs text-destructive">Ongeldige kleur - gebruik bijvoorbeeld #275C38</p>}
   </div>;
 }
 
@@ -58,7 +58,7 @@ export function ResponsiveNumberField({ label, value, onChange, min, max, step =
   const set = (k: "mobile" | "desktop", v: number | undefined) => { const n = { ...value, [k]: v }; onChange(n.mobile === undefined && n.desktop === undefined ? undefined : n); };
   return <Field label={label} changed={!!value} onReset={() => onChange(undefined)}>
     <div className="grid grid-cols-2 gap-2">
-      <div><span className="text-[11px] text-muted-foreground">Desktop {unit && `(${unit})`}</span><Input type="number" min={min} max={max} step={step} value={value?.desktop ?? ""} placeholder="—" onChange={(e) => set("desktop", num(e.target.value))} /></div>
+      <div><span className="text-[11px] text-muted-foreground">Desktop {unit && `(${unit})`}</span><Input type="number" min={min} max={max} step={step} value={value?.desktop ?? ""} placeholder="-" onChange={(e) => set("desktop", num(e.target.value))} /></div>
       <div><span className="text-[11px] text-muted-foreground">Mobiel {unit && `(${unit})`}</span><Input type="number" min={min} max={max} step={step} value={value?.mobile ?? ""} placeholder="= desktop" onChange={(e) => set("mobile", num(e.target.value))} /></div>
     </div>
   </Field>;
@@ -72,8 +72,8 @@ export function TypographyEditor({ role, value, onChange }: { role: RoleId; valu
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
       <Field label="Lettertype"><select className={sel} value={v.font ?? ""} onChange={(e) => set({ font: e.target.value || undefined })}><option value="">Standaard</option>{Object.keys(FONTS).map((f) => <option key={f}>{f}</option>)}</select></Field>
       <Field label="Dikte"><select className={sel} value={v.weight ?? ""} onChange={(e) => set({ weight: num(e.target.value) })}><option value="">Standaard</option>{[100, 200, 300, 400, 500, 600, 700, 800, 900].map((w) => <option key={w} value={w}>{w}</option>)}</select></Field>
-      <Field label="Regelhoogte"><Input type="number" step={0.05} min={0.8} max={3} value={v.lineHeight ?? ""} placeholder="—" onChange={(e) => set({ lineHeight: num(e.target.value) })} /></Field>
-      <Field label="Letterafstand"><Input type="number" step={0.01} min={-0.1} max={0.5} value={v.letterSpacing ?? ""} placeholder="—" onChange={(e) => set({ letterSpacing: num(e.target.value) })} /></Field>
+      <Field label="Regelhoogte"><Input type="number" step={0.05} min={0.8} max={3} value={v.lineHeight ?? ""} placeholder="-" onChange={(e) => set({ lineHeight: num(e.target.value) })} /></Field>
+      <Field label="Letterafstand"><Input type="number" step={0.01} min={-0.1} max={0.5} value={v.letterSpacing ?? ""} placeholder="-" onChange={(e) => set({ letterSpacing: num(e.target.value) })} /></Field>
       <Field label="Hoofdletters"><select className={sel} value={v.transform ?? "default"} onChange={(e) => set({ transform: e.target.value === "default" ? undefined : (e.target.value as TypographyStyle["transform"]) })}><option value="default">Standaard</option><option value="uppercase">HOOFDLETTERS</option><option value="lowercase">kleine letters</option><option value="capitalize">Eerste Letter Groot</option></select></Field>
       <Field label="Uitlijning"><select className={sel} value={v.align ?? ""} onChange={(e) => set({ align: (e.target.value || undefined) as TypographyStyle["align"] })}><option value="">Standaard</option><option value="left">Links</option><option value="center">Midden</option><option value="right">Rechts</option></select></Field>
       <div className="sm:col-span-2"><ResponsiveNumberField label="Grootte" unit="px" min={8} max={160} value={v.size} onChange={(size) => set({ size })} /></div>
@@ -103,7 +103,7 @@ function BackgroundEditor({ value, onChange, image }: { value: BackgroundStyle |
 export function ButtonEditor({ value, onChange, title = "Knoppen" }: { value: ButtonStyle | undefined; onChange: (v: ButtonStyle | undefined) => void; title?: string }) {
   const v = value ?? {};
   const set = (patch: Partial<ButtonStyle>) => onChange({ ...v, ...patch });
-  const n = (k: keyof ButtonStyle, label: string, min: number, max: number) => <Field label={label}><Input type="number" min={min} max={max} value={(v[k] as number | undefined) ?? ""} placeholder="—" onChange={(e) => set({ [k]: num(e.target.value) })} /></Field>;
+  const n = (k: keyof ButtonStyle, label: string, min: number, max: number) => <Field label={label}><Input type="number" min={min} max={max} value={(v[k] as number | undefined) ?? ""} placeholder="-" onChange={(e) => set({ [k]: num(e.target.value) })} /></Field>;
   return <div className="space-y-3 rounded-sm border border-border p-4">
     <div className="flex items-center justify-between"><p className="font-medium">{title}</p>{value && <ResetLink onClick={() => onChange(undefined)} />}</div>
     <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
@@ -121,9 +121,9 @@ export function ButtonEditor({ value, onChange, title = "Knoppen" }: { value: Bu
       <Field label="Randkleur"><ColorField value={v.border} onChange={(border) => set({ border })} /></Field>
     </div>
     <div className="grid gap-3 md:grid-cols-3">
-      <Field label="Aanwijzen — achtergrond"><ColorField value={v.hoverBg} onChange={(hoverBg) => set({ hoverBg })} /></Field>
-      <Field label="Aanwijzen — tekstkleur"><ColorField value={v.hoverColor} onChange={(hoverColor) => set({ hoverColor })} /></Field>
-      <Field label="Aanwijzen — randkleur"><ColorField value={v.hoverBorder} onChange={(hoverBorder) => set({ hoverBorder })} /></Field>
+      <Field label="Aanwijzen - achtergrond"><ColorField value={v.hoverBg} onChange={(hoverBg) => set({ hoverBg })} /></Field>
+      <Field label="Aanwijzen - tekstkleur"><ColorField value={v.hoverColor} onChange={(hoverColor) => set({ hoverColor })} /></Field>
+      <Field label="Aanwijzen - randkleur"><ColorField value={v.hoverBorder} onChange={(hoverBorder) => set({ hoverBorder })} /></Field>
     </div>
   </div>;
 }
@@ -174,7 +174,7 @@ export function SectionEditor({ def, value, onChange, version }: { def: SectionD
       {def.id === "footer-main" && <FooterNewsletterEditor />}
       {buttonFields.map((f) => {
         const id = f.key.replace("_label", "");
-        return <ButtonEditor key={id} title={`${f.label.replace(" — tekst", "")} — opmaak & kleuren`} value={value.buttons?.[id]} onChange={(style) => {
+        return <ButtonEditor key={id} title={`${f.label.replace(" - tekst", "")} - opmaak & kleuren`} value={value.buttons?.[id]} onChange={(style) => {
           const buttons = { ...value.buttons };
           if (style) buttons[id] = style; else delete buttons[id];
           set({ buttons });

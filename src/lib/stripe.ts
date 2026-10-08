@@ -2,7 +2,7 @@ import { loadStripe, Stripe } from "@stripe/stripe-js";
 
 // Declared locally (duplicated with the server utility) so this client
 // module has no cross-tree imports. Structurally identical to the server
-// StripeEnv — values pass through server-function inputs without issue.
+// StripeEnv - values pass through server-function inputs without issue.
 type StripeEnv = 'sandbox' | 'live';
 
 const clientToken = import.meta.env['VITE_PAYMENTS_CLIENT_TOKEN'];

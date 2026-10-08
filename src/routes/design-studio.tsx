@@ -18,9 +18,9 @@ import { discountedTiers, imageFor, studioProducts, studioQuery, tiersFor } from
 
 export const Route = createFileRoute("/design-studio")({
   head: () => ({ meta: [
-    { title: "CREATEE Design Studio — jouw eigen design" },
+    { title: "CREATEE Design Studio - jouw eigen design" },
     { name: "description", content: "Unieke premium kleding voor jouw groep. Drie persoonlijke designvoorstellen en twee feedbackrondes bij CREATEE Design Studio." },
-    { property: "og:title", content: "CREATEE Design Studio — jouw eigen design" },
+    { property: "og:title", content: "CREATEE Design Studio - jouw eigen design" },
     { property: "og:description", content: "Breng je idee tot leven. Vraag jouw persoonlijke CREATEE ontwerp aan." },
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
   ] }),

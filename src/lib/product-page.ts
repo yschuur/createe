@@ -14,6 +14,8 @@ export type ProductPageContent = {
   featureTitle: string;
   featureLinkLabel: string;
   featureLinkUrl: string;
+  featureButtonBg: string;
+  featureButtonColor: string;
   featureBadges: string[];
   accordions: PdpAccordion[];
 };
@@ -38,6 +40,8 @@ export function defaultPage(p: P): ProductPageContent {
     featureTitle: "De HYBR™ polo",
     featureLinkLabel: "Meer informatie",
     featureLinkUrl: "/pages/de-hybr-polo",
+    featureButtonBg: "",
+    featureButtonColor: "",
     featureBadges: ["360° stretch", "Premium finish", "Smart-collar", "Kreukvrij & ademend"],
     accordions: [
       { title: "Productdetails", open: false, html: '<p><strong>Materiaal</strong></p><ul><li>95% Organisch Katoen</li><li>5% Dynamisch Elastaan</li></ul><p><strong>Specificaties</strong></p><ul><li>215g/m²</li><li>Glad afgewerkte sluiting</li><li>Dubbel voorgekrompen</li><li>Plat gebreide kraag met elastaan</li></ul>' },

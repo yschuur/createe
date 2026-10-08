@@ -11,7 +11,7 @@ import { POLICY_SLUGS, policiesQuery, policiesSchema, type Policies } from "@/li
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/admin/policies")({
-  head: () => ({ meta: [{ title: "Beleidspagina's — CREATEE beheer" }, { name: "description", content: "Beheer privacy, voorwaarden, retouren en verzendbeleid van CREATEE." }, { property: "og:title", content: "Beleidspagina's — CREATEE beheer" }, { property: "og:description", content: "Beheer privacy, voorwaarden, retouren en verzendbeleid van CREATEE." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Beleidspagina's | CREATEE beheer" }, { name: "description", content: "Beheer privacy, voorwaarden, retouren en verzendbeleid van CREATEE." }, { property: "og:title", content: "Beleidspagina's | CREATEE beheer" }, { property: "og:description", content: "Beheer privacy, voorwaarden, retouren en verzendbeleid van CREATEE." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: AdminPolicies,
 });
 

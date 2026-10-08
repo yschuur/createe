@@ -10,9 +10,9 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Inloggen — CREATEE beheer" },
+      { title: "Inloggen | CREATEE beheer" },
       { name: "description", content: "Inloggen op het CREATEE beheerpaneel." },
-      { property: "og:title", content: "Inloggen — CREATEE beheer" },
+      { property: "og:title", content: "Inloggen | CREATEE beheer" },
       { property: "og:description", content: "Inloggen op het CREATEE beheerpaneel." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
