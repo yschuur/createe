@@ -132,6 +132,13 @@ function EditProduct() {
               <div><Label>Merk</Label><Input value={p.vendor ?? ""} onChange={(e) => set("vendor", e.target.value)} /></div>
               <div><Label>Pasvorm</Label><Input value={p.fit ?? ""} onChange={(e) => set("fit", e.target.value)} /></div>
               <div><Label>Materiaal</Label><Input value={p.fabric ?? ""} onChange={(e) => set("fabric", e.target.value)} /></div>
+              <div className="col-span-2"><Label>Blanco model (gedeelde voorraad)</Label>
+                <select value={p.blank_model ?? ""} onChange={(e) => set("blank_model", e.target.value || null)} className="h-9 w-full rounded-sm border border-input bg-background px-2 text-sm">
+                  <option value="">Geen — eigen voorraad per variant</option>
+                  {BLANK_MODELS.map((m) => <option key={m.key} value={m.key}>{m.label}</option>)}
+                </select>
+                {p.blank_model && <p className="mt-1 text-xs text-muted-foreground">Voorraad komt uit Blanco voorraad; aantallen bij varianten worden daar automatisch van overgenomen.</p>}
+              </div>
             </div>
             <div><Label>Sport</Label><select className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" value={p.sport_id ?? ""} onChange={(e) => { const v = e.target.value || null; set("sport_id", v); setColls(colls.filter((cid) => data.collections.find((c) => c.id === cid)?.sport_ids.includes(v ?? ""))); }}><option value="">Geen sport (niet zichtbaar in een shop)</option>{data.sports.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}</select><p className="mt-1 text-xs text-muted-foreground">Het product verschijnt alleen in de shop van deze sport. Nieuwe sporten maak je aan onder Sporten.</p></div>
             <div><Label>Tags (komma-gescheiden)</Label><Input value={p.tags.join(", ")} onChange={(e) => set("tags", e.target.value.split(",").map((t) => t.trim()).filter(Boolean))} /></div>

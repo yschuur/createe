@@ -16,6 +16,7 @@ const groups: NavGroup[] = [
       { to: "/admin/submissions", label: "Inzendingen", icon: MessageSquare },
       { to: "/admin/customers", label: "Klanten", icon: Users },
       { to: "/admin/products", label: "Producten", icon: Package },
+      { to: "/admin/stock", label: "Blanco voorraad", icon: Layers },
       { to: "/admin/collections", label: "Collecties", icon: Layers },
       { to: "/admin/sports", label: "Sporten", icon: Trophy },
       { to: "/admin/discounts", label: "Acties", icon: Tag },
