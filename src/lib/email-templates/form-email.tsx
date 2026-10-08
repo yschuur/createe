@@ -12,7 +12,7 @@ export interface FormEmailProps {
 }
 
 const GREEN = '#275C38'
-const LOGO = new URL(whiteLogo.url, 'https://createe.lovable.app').href
+const LOGO = new URL(whiteLogo.url, 'https://createe.nl').href
 
 export const FormEmail = (p: FormEmailProps) => (
   <Html lang="nl" dir="ltr">

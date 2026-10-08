@@ -82,12 +82,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     scripts: [
       { type: "application/ld+json", children: JSON.stringify({
         "@context": "https://schema.org", "@type": "Organization", name: "CREATEE",
-        url: "https://createe.lovable.app", logo: "https://createe.lovable.app/apple-touch-icon.png",
+        url: "https://createe.nl", logo: "https://createe.nl/apple-touch-icon.png",
         email: "contact@createe.nl",
       }) },
       { type: "application/ld+json", children: JSON.stringify({
         "@context": "https://schema.org", "@type": "WebSite", name: "CREATEE",
-        url: "https://createe.lovable.app", inLanguage: "nl-NL",
+        url: "https://createe.nl", inLanguage: "nl-NL",
       }) },
     ],
   }),

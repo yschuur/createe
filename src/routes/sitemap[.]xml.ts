@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { defaultMenu, type MenuItem } from "@/lib/menu";
 
-const BASE_URL = "https://createe.lovable.app";
+const BASE_URL = "https://createe.nl";
 
 function collectPaths(items: MenuItem[], out: Set<string>) {
   for (const item of items) {
