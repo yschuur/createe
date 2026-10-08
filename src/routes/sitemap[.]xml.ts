@@ -8,7 +8,7 @@ function collectPaths(items: MenuItem[], out: Set<string>) {
     const link = (item.link || "").trim();
     if (link.startsWith("/") && !link.startsWith("//")) {
       const path = link.split(/[?#]/)[0] || "/";
-      if (!/^\/(admin|auth|checkout|api)(\/|$)/.test(path)) out.add(path);
+      if (!/^\/(admin|auth|checkout|api|pages\/design-studio)(\/|$)/.test(path)) out.add(path);
     }
     if (item.children?.length) collectPaths(item.children, out);
   }
@@ -39,6 +39,35 @@ export const Route = createFileRoute("/sitemap.xml")({
         const items = (data?.value as { items?: MenuItem[] } | null)?.items;
         const paths = new Set<string>(["/"]);
         collectPaths(items?.length ? items : defaultMenu, paths);
+
+        const pageSize = 1000;
+        async function all<T>(fetchPage: (from: number, to: number) => PromiseLike<{ data: T[] | null; error: unknown }>) {
+          const rows: T[] = [];
+          for (let offset = 0; ; ) {
+            const { data, error } = await fetchPage(offset, offset + pageSize - 1);
+            if (error) throw error;
+            if (!data?.length) break;
+            rows.push(...data);
+            offset += data.length;
+          }
+          return rows;
+        }
+        try {
+          const [sports, collections, products] = await Promise.all([
+            all<{ id: string; slug: string }>((a, b) => supabase.from("sports").select("id, slug").order("id").range(a, b)),
+            all<{ slug: string; sport_ids: string[] }>((a, b) => supabase.from("collections").select("id, slug, sport_ids").eq("published", true).order("id").range(a, b)),
+            all<{ slug: string }>((a, b) => supabase.from("products").select("id, slug").eq("status", "active").eq("published", true).eq("is_service", false).order("id").range(a, b)),
+          ]);
+          const sportSlug = new Map(sports.map((s) => [s.id, s.slug]));
+          for (const s of sports) paths.add(`/collections/${encodeURIComponent(s.slug)}`);
+          for (const c of collections) {
+            const sport = c.sport_ids.map((id) => sportSlug.get(id)).find(Boolean);
+            if (sport) paths.add(`/collections/${encodeURIComponent(sport)}?collection=${encodeURIComponent(c.slug)}`);
+          }
+          for (const p of products) paths.add(`/products/${encodeURIComponent(p.slug)}`);
+        } catch {
+          return new Response("Sitemap unavailable", { status: 503, headers: { "Cache-Control": "no-store" } });
+        }
         const urls = [...paths]
           .map((p) => `<url><loc>${esc(new URL(p, BASE_URL).href)}</loc></url>`)
           .join("");
