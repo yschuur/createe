@@ -18,6 +18,7 @@ import { Route as PagesContactRouteImport } from './routes/pages.contact'
 import { Route as PagesDeHybrPoloRouteImport } from './routes/pages.de-hybr-polo'
 import { Route as PagesDesignStudioRouteImport } from './routes/pages.design-studio'
 import { Route as PagesOnsVerhaalRouteImport } from './routes/pages.ons-verhaal'
+import { Route as PoliciesSlugRouteImport } from './routes/policies.$slug'
 import { Route as ProductsHandleRouteImport } from './routes/products.$handle'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminCollectionsRouteImport } from './routes/_authenticated/admin.collections'
@@ -27,6 +28,7 @@ import { Route as AuthenticatedAdminHomepageRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminImportRouteImport } from './routes/_authenticated/admin.import'
 import { Route as AuthenticatedAdminMediaRouteImport } from './routes/_authenticated/admin.media'
 import { Route as AuthenticatedAdminMenuRouteImport } from './routes/_authenticated/admin.menu'
+import { Route as AuthenticatedAdminPoliciesRouteImport } from './routes/_authenticated/admin.policies'
 import { Route as AuthenticatedAdminStudioRouteImport } from './routes/_authenticated/admin.studio'
 import { Route as AuthenticatedAdminStylesRouteImport } from './routes/_authenticated/admin.styles'
 import { Route as AuthenticatedAdminPagesIndexRouteImport } from './routes/_authenticated/admin.pages.index'
@@ -76,6 +78,11 @@ const PagesDesignStudioRoute = PagesDesignStudioRouteImport.update({
 const PagesOnsVerhaalRoute = PagesOnsVerhaalRouteImport.update({
   id: '/pages/ons-verhaal',
   path: '/pages/ons-verhaal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PoliciesSlugRoute = PoliciesSlugRouteImport.update({
+  id: '/policies/$slug',
+  path: '/policies/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProductsHandleRoute = ProductsHandleRouteImport.update({
@@ -128,6 +135,12 @@ const AuthenticatedAdminMenuRoute = AuthenticatedAdminMenuRouteImport.update({
   path: '/admin/menu',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAdminPoliciesRoute =
+  AuthenticatedAdminPoliciesRouteImport.update({
+    id: '/admin/policies',
+    path: '/admin/policies',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminStudioRoute =
   AuthenticatedAdminStudioRouteImport.update({
     id: '/admin/studio',
@@ -174,6 +187,7 @@ export interface FileRoutesByFullPath {
   '/pages/de-hybr-polo': typeof PagesDeHybrPoloRoute
   '/pages/design-studio': typeof PagesDesignStudioRoute
   '/pages/ons-verhaal': typeof PagesOnsVerhaalRoute
+  '/policies/$slug': typeof PoliciesSlugRoute
   '/products/$handle': typeof ProductsHandleRoute
   '/admin/collections': typeof AuthenticatedAdminCollectionsRoute
   '/admin/contact': typeof AuthenticatedAdminContactRoute
@@ -182,6 +196,7 @@ export interface FileRoutesByFullPath {
   '/admin/import': typeof AuthenticatedAdminImportRoute
   '/admin/media': typeof AuthenticatedAdminMediaRoute
   '/admin/menu': typeof AuthenticatedAdminMenuRoute
+  '/admin/policies': typeof AuthenticatedAdminPoliciesRoute
   '/admin/studio': typeof AuthenticatedAdminStudioRoute
   '/admin/styles': typeof AuthenticatedAdminStylesRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
@@ -199,6 +214,7 @@ export interface FileRoutesByTo {
   '/pages/de-hybr-polo': typeof PagesDeHybrPoloRoute
   '/pages/design-studio': typeof PagesDesignStudioRoute
   '/pages/ons-verhaal': typeof PagesOnsVerhaalRoute
+  '/policies/$slug': typeof PoliciesSlugRoute
   '/products/$handle': typeof ProductsHandleRoute
   '/admin/collections': typeof AuthenticatedAdminCollectionsRoute
   '/admin/contact': typeof AuthenticatedAdminContactRoute
@@ -207,6 +223,7 @@ export interface FileRoutesByTo {
   '/admin/import': typeof AuthenticatedAdminImportRoute
   '/admin/media': typeof AuthenticatedAdminMediaRoute
   '/admin/menu': typeof AuthenticatedAdminMenuRoute
+  '/admin/policies': typeof AuthenticatedAdminPoliciesRoute
   '/admin/studio': typeof AuthenticatedAdminStudioRoute
   '/admin/styles': typeof AuthenticatedAdminStylesRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
@@ -226,6 +243,7 @@ export interface FileRoutesById {
   '/pages/de-hybr-polo': typeof PagesDeHybrPoloRoute
   '/pages/design-studio': typeof PagesDesignStudioRoute
   '/pages/ons-verhaal': typeof PagesOnsVerhaalRoute
+  '/policies/$slug': typeof PoliciesSlugRoute
   '/products/$handle': typeof ProductsHandleRoute
   '/_authenticated/admin/collections': typeof AuthenticatedAdminCollectionsRoute
   '/_authenticated/admin/contact': typeof AuthenticatedAdminContactRoute
@@ -234,6 +252,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/import': typeof AuthenticatedAdminImportRoute
   '/_authenticated/admin/media': typeof AuthenticatedAdminMediaRoute
   '/_authenticated/admin/menu': typeof AuthenticatedAdminMenuRoute
+  '/_authenticated/admin/policies': typeof AuthenticatedAdminPoliciesRoute
   '/_authenticated/admin/studio': typeof AuthenticatedAdminStudioRoute
   '/_authenticated/admin/styles': typeof AuthenticatedAdminStylesRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
@@ -253,6 +272,7 @@ export interface FileRouteTypes {
     | '/pages/de-hybr-polo'
     | '/pages/design-studio'
     | '/pages/ons-verhaal'
+    | '/policies/$slug'
     | '/products/$handle'
     | '/admin/collections'
     | '/admin/contact'
@@ -261,6 +281,7 @@ export interface FileRouteTypes {
     | '/admin/import'
     | '/admin/media'
     | '/admin/menu'
+    | '/admin/policies'
     | '/admin/studio'
     | '/admin/styles'
     | '/admin/'
@@ -278,6 +299,7 @@ export interface FileRouteTypes {
     | '/pages/de-hybr-polo'
     | '/pages/design-studio'
     | '/pages/ons-verhaal'
+    | '/policies/$slug'
     | '/products/$handle'
     | '/admin/collections'
     | '/admin/contact'
@@ -286,6 +308,7 @@ export interface FileRouteTypes {
     | '/admin/import'
     | '/admin/media'
     | '/admin/menu'
+    | '/admin/policies'
     | '/admin/studio'
     | '/admin/styles'
     | '/admin'
@@ -304,6 +327,7 @@ export interface FileRouteTypes {
     | '/pages/de-hybr-polo'
     | '/pages/design-studio'
     | '/pages/ons-verhaal'
+    | '/policies/$slug'
     | '/products/$handle'
     | '/_authenticated/admin/collections'
     | '/_authenticated/admin/contact'
@@ -312,6 +336,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/import'
     | '/_authenticated/admin/media'
     | '/_authenticated/admin/menu'
+    | '/_authenticated/admin/policies'
     | '/_authenticated/admin/studio'
     | '/_authenticated/admin/styles'
     | '/_authenticated/admin/'
@@ -331,6 +356,7 @@ export interface RootRouteChildren {
   PagesDeHybrPoloRoute: typeof PagesDeHybrPoloRoute
   PagesDesignStudioRoute: typeof PagesDesignStudioRoute
   PagesOnsVerhaalRoute: typeof PagesOnsVerhaalRoute
+  PoliciesSlugRoute: typeof PoliciesSlugRoute
   ProductsHandleRoute: typeof ProductsHandleRoute
 }
 
@@ -399,6 +425,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PagesOnsVerhaalRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/policies/$slug': {
+      id: '/policies/$slug'
+      path: '/policies/$slug'
+      fullPath: '/policies/$slug'
+      preLoaderRoute: typeof PoliciesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/products/$handle': {
       id: '/products/$handle'
       path: '/products/$handle'
@@ -462,6 +495,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminMenuRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/policies': {
+      id: '/_authenticated/admin/policies'
+      path: '/admin/policies'
+      fullPath: '/admin/policies'
+      preLoaderRoute: typeof AuthenticatedAdminPoliciesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/studio': {
       id: '/_authenticated/admin/studio'
       path: '/admin/studio'
@@ -515,6 +555,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminImportRoute: typeof AuthenticatedAdminImportRoute
   AuthenticatedAdminMediaRoute: typeof AuthenticatedAdminMediaRoute
   AuthenticatedAdminMenuRoute: typeof AuthenticatedAdminMenuRoute
+  AuthenticatedAdminPoliciesRoute: typeof AuthenticatedAdminPoliciesRoute
   AuthenticatedAdminStudioRoute: typeof AuthenticatedAdminStudioRoute
   AuthenticatedAdminStylesRoute: typeof AuthenticatedAdminStylesRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
@@ -532,6 +573,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminImportRoute: AuthenticatedAdminImportRoute,
   AuthenticatedAdminMediaRoute: AuthenticatedAdminMediaRoute,
   AuthenticatedAdminMenuRoute: AuthenticatedAdminMenuRoute,
+  AuthenticatedAdminPoliciesRoute: AuthenticatedAdminPoliciesRoute,
   AuthenticatedAdminStudioRoute: AuthenticatedAdminStudioRoute,
   AuthenticatedAdminStylesRoute: AuthenticatedAdminStylesRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
@@ -554,6 +596,7 @@ const rootRouteChildren: RootRouteChildren = {
   PagesDeHybrPoloRoute: PagesDeHybrPoloRoute,
   PagesDesignStudioRoute: PagesDesignStudioRoute,
   PagesOnsVerhaalRoute: PagesOnsVerhaalRoute,
+  PoliciesSlugRoute: PoliciesSlugRoute,
   ProductsHandleRoute: ProductsHandleRoute,
 }
 export const routeTree = rootRouteImport
