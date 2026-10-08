@@ -6,13 +6,12 @@ import { toast } from "sonner";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { POLICY_SLUGS, policiesQuery, policiesSchema, type Policies } from "@/lib/policies";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/admin/policies")({
-  head: () => ({ meta: [{ title: "Beleidspagina's — Beheer" }] }),
+  head: () => ({ meta: [{ title: "Beleidspagina's — CREATEE beheer" }, { name: "description", content: "Beheer privacy, voorwaarden, retouren en verzendbeleid van CREATEE." }, { property: "og:title", content: "Beleidspagina's — CREATEE beheer" }, { property: "og:description", content: "Beheer privacy, voorwaarden, retouren en verzendbeleid van CREATEE." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: AdminPolicies,
 });
 
@@ -25,7 +24,7 @@ function AdminPolicies() {
   const set = (slug: (typeof POLICY_SLUGS)[number], k: "label" | "title" | "body", v: string) => setDraft({ ...cur, [slug]: { ...cur[slug], [k]: v } });
   async function save() {
     const r = policiesSchema.safeParse(cur);
-    if (!r.success) { toast.error("Vul bij elke pagina een linktekst en titel in."); return; }
+    if (!r.success) { toast.error("Vul bij elke pagina een titel in."); return; }
     const { error } = await supabase.from("site_settings").upsert({ key: "policies", value: r.data }, { onConflict: "key" });
     if (error) { toast.error("Opslaan mislukt."); return; }
     qc.setQueryData(policiesQuery().queryKey, r.data); setDraft(null); toast.success("Beleidspagina's opgeslagen");
@@ -35,7 +34,6 @@ function AdminPolicies() {
       <TabsList>{POLICY_SLUGS.map(s => <TabsTrigger key={s} value={s}>{cur[s].label}</TabsTrigger>)}</TabsList>
       {POLICY_SLUGS.map(s => <TabsContent key={s} value={s} className="space-y-4">
         <a href={`/policies/${s}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-sm underline">Bekijk pagina<ExternalLink className="size-3" /></a>
-        <label className="block text-sm">Linktekst in footer<Input value={cur[s].label} onChange={e => set(s, "label", e.target.value)} /></label>
         <label className="block text-sm">Titel<RichTextEditor minHeight={50} value={cur[s].title} onChange={v => set(s, "title", v)} /></label>
         <label className="block text-sm">Inhoud<RichTextEditor minHeight={400} value={cur[s].body} onChange={v => set(s, "body", v)} /></label>
       </TabsContent>)}
