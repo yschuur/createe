@@ -101,8 +101,7 @@ export const PAGE_DEFS: PageDef[] = [
     description: "Intro, missie, oorsprong, kernwaarden en afsluiter.",
     sections: [
       { id: "story-intro", label: "Intro", roles: ["kicker", "heading", "subheading", "body"], background: true, backgroundImage: true, spacing: true,
-        content: [txt("kicker", "Kicker", "Het verhaal achter het merk"), txt("headline", "Hoofdtitel", "Exclusieve"), txt("headline_em", "Hoofdtitel — vervolg", "designs."),
-          txt("subtitle", "Subtitel", "Echte identiteit."),
+        content: [txt("kicker", "Kicker", "Het verhaal achter het merk"), txt("title_line1", "Titel regel 1", "Exclusieve designs."), txt("title_line2", "Titel regel 2", "Echte identiteit."),
           area("lead", "Introtekst", "Je techniek is uniek, je tactiek is uniek, dus waarom zou je kleding dat niet zijn? CREATEE combineert de luxe van een premium fit met het lef van unieke designs."),
           area("note", "Extra tekst", "Kies uit onze eigen exclusieve collectie of ontwerp samen met ons een custom meesterwerk voor je volgende reis of bedrijfsuitje. Speciaal hiervoor ontwikkelden we de HYBR™ Polo."),
           area("signature", "Slotzin", "Tradities zijn er om te eren, niet om te dragen. Wij geloven dat sportkleding meer mag zijn dan standaard.")],

@@ -25,7 +25,7 @@ function Story() {
       <section data-section="story-intro" className="about-band about-opening">
         <div className="about-opening-copy">
           <PageText className="about-kicker text-primary" value={t("story-intro", "kicker")} />
-          <h1 className="about-headline text-primary"><span><PageText as="span" inline value={t("story-intro", "headline")} />{" "}<PageText as="span" inline value={t("story-intro", "headline_em")} /></span><PageText as="span" inline value={t("story-intro", "subtitle")} /></h1>
+          <h1 className="about-headline text-primary"><PageText as="span" inline value={t("story-intro", "title_line1")} /><PageText as="span" inline value={t("story-intro", "title_line2")} /></h1>
           <div className="about-intro-prose">{t("story-intro", "signature") && <PageText className="contents" value={t("story-intro", "signature")} />}<PageText className="contents" value={t("story-intro", "lead")} /></div>
           {t("story-intro", "note") && <PageText className="about-note" value={t("story-intro", "note")} />}
         </div>
