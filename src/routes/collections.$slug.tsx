@@ -126,3 +126,30 @@ function SportShopPage() {
     </ShopLayout>
   );
 }
+
+function FilterMenu({ label, active, align, children }: { label: string; active?: boolean; align?: "right"; children: React.ReactNode }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const close = (e: MouseEvent) => { if (!ref.current?.contains(e.target as Node)) setOpen(false); };
+    const esc = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
+    document.addEventListener("mousedown", close);
+    document.addEventListener("keydown", esc);
+    return () => { document.removeEventListener("mousedown", close); document.removeEventListener("keydown", esc); };
+  }, [open]);
+  return (
+    <div ref={ref} className="relative">
+      <button type="button" aria-expanded={open} onClick={() => setOpen((o) => !o)}
+        className={`flex items-center gap-1.5 text-[15px] ${active ? "font-semibold" : ""} hover:opacity-70`}>
+        {label}
+        <ChevronDown className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+      {open && (
+        <div className={`absolute top-full z-30 mt-2 min-w-44 rounded-md border border-border bg-background py-1 shadow-lg ${align === "right" ? "right-0" : "left-0"}`}>
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
