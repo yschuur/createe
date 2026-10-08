@@ -103,7 +103,7 @@ export const PAGE_DEFS: PageDef[] = [
         contentLink: { to: "/admin/homepage", label: "Knopteksten, links, video's en foto's" },
         extras: [{ key: "height", label: "Hoogte (% van scherm)", min: 30, max: 100, unit: "vh", responsive: true }, { key: "overlay", label: "Donkere overlay (%)", min: 0, max: 100, unit: "%" }] },
       { id: "home-ratings", label: "Beoordelingenbalk", roles: ["body", "link"], background: true, spacing: true,
-        content: [txt("google_label", "Google-tekst", "Google ★★★★★"), txt("trust_label", "Trustpilot-tekst", "Trustpilot ★★★★★"), url("trust_url", "Trustpilot-link", "https://nl.trustpilot.com/review/createe.nl")] },
+        content: [txt("google_label", "Google-tekst", "Google ★★★★★"), url("google_url", "Google-link", ""), txt("trust_label", "Trustpilot-tekst", "Trustpilot ★★★★★"), url("trust_url", "Trustpilot-link", "https://nl.trustpilot.com/review/createe.nl")] },
       { id: "home-products", label: "Productcarrousel", roles: ["heading", "subheading", "body", "link"], background: true, spacing: true, buttons: true,
         contentLink: { to: "/admin/homepage", label: "Titel, linktekst en uitgelichte producten" },
         content: [url("collection_url", "Link onder carrousel", "/collections/golf")],
