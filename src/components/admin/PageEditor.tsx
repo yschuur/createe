@@ -9,6 +9,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MediaField } from "@/components/admin/MediaLibrary";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
+import { ImageFocusEditor } from "@/components/admin/ImageFocusEditor";
+import { legacyFocus } from "@/lib/image-focus";
 import { FONTS } from "@/lib/section-styles";
 import {
   COLOR_TOKENS, isValidColor, safeColor,
@@ -182,10 +184,9 @@ export function SectionEditor({ def, value, onChange, version }: { def: SectionD
         const cur = { url: ov?.url ?? f.default, alt: ov?.alt ?? f.alt, position: ov?.position ?? "center" };
         return <div key={f.key} className="space-y-3 rounded-sm border border-border p-4">
           <div className="flex items-center justify-between"><p className="font-medium">{f.label}</p>{ov && <ResetLink onClick={() => setMedia(f.key, undefined)} />}</div>
-          {cur.url && <img src={cur.url} alt="" className="h-40 w-full rounded-sm bg-muted object-cover" style={{ objectPosition: cur.position }} />}
+          {cur.url && (f.kind === "image" ? <ImageFocusEditor url={cur.url} value={ov?.focus ?? legacyFocus(cur.position)} onChange={(focus) => setMedia(f.key, { focus })} /> : <video src={cur.url} controls className="h-40 w-full rounded-sm bg-muted object-cover" />)}
           <MediaField kind={f.kind} value={ov?.url ?? ""} placeholder="Leeg = standaardfoto" onChange={(u) => setMedia(f.key, { url: u || undefined })} />
           <Field label="Omschrijving (voor zoekmachines en schermlezers)"><Input value={cur.alt} onChange={(e) => setMedia(f.key, { alt: e.target.value })} /></Field>
-          <Field label="Focuspunt"><select className={sel} value={cur.position} onChange={(e) => setMedia(f.key, { position: e.target.value })}>{Object.entries(POS_LABELS).map(([k, l]) => <option key={k} value={k}>{l}</option>)}</select></Field>
         </div>;
       })}
     </TabsContent>}

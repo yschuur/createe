@@ -37,7 +37,7 @@ function Story() {
       </section>
       <section data-section="story-begin" className="about-band bg-shop-surface">
         <div className="about-history-grid">
-          {begin.url && <img src={begin.url} alt={begin.alt} style={begin.style} loading="lazy" className="about-history-image" />}
+          {begin.url && <div className="about-editorial-photo"><img src={begin.url} alt={begin.alt} style={begin.style} loading="lazy" className="about-history-image" /></div>}
           <div className="about-history-copy"><PageText as="h2" className="about-section-title" value={t("story-begin", "title")} inline /><div className="about-prose"><PageText as="div" className="about-lead" value={t("story-begin", "lead")} /><PageText className="contents" value={t("story-begin", "body")} /></div></div>
         </div>
       </section>

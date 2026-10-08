@@ -3,11 +3,9 @@ import { ShopLayout } from "@/components/shop/ShopLayout";
 import { Button } from "@/components/ui/button";
 import { PageText } from "@/components/shop/PageText";
 import { pageSettingsQuery, usePageSettings } from "@/lib/page-settings";
-import hybrGolf from "@/assets/hybr-golf.jpg.asset.json";
 
 export const Route = createFileRoute("/pages/de-hybr-polo")({
   head: () => ({ meta: [
-    { property: "og:image", content: hybrGolf.url }, { name: "twitter:image", content: hybrGolf.url },
     { title: "De HYBR™ polo — CREATEE" },
     { name: "description", content: "De HYBR™ polo: 360° stretch, premium finish, smart-collar en kreukvrij, ademend draagcomfort." },
     { property: "og:title", content: "De HYBR™ polo — CREATEE" },
@@ -32,11 +30,11 @@ function Hybr() {
           <PageText as="div" className="about-lead" value={t("hybr-1", "lead")} />
           <div className="about-actions">{t("hybr-1", "btn1_label") && <Button asChild><a data-page-button="btn1" href={t("hybr-1", "btn1_url")}>{t("hybr-1", "btn1_label")}</a></Button>}{t("hybr-1", "btn2_label") && <Button asChild variant="outline"><a data-page-button="btn2" href={t("hybr-1", "btn2_url")}>{t("hybr-1", "btn2_label")}</a></Button>}</div>
         </div>
-        {main.url && <img className="about-hybr-image" src={main.url} alt={main.alt} style={main.style} fetchPriority="high" />}
+        {main.url && <div className="about-editorial-photo"><img className="about-hybr-image" src={main.url} alt={main.alt} style={main.style} fetchPriority="high" /></div>}
       </div>
     </section>
     <section data-section="hybr-2" className="bg-shop-surface text-shop-ink about-technology-grid">
-      {tech.url && <img src={tech.url} alt={tech.alt} style={tech.style} loading="lazy" className="about-hybr-image" />}
+      {tech.url && <div className="about-editorial-photo"><img src={tech.url} alt={tech.alt} style={tech.style} loading="lazy" className="about-hybr-image" /></div>}
       <div className="about-technology-copy"><h2 className="about-section-title text-primary"><PageText as="span" inline value={t("hybr-2", "title_1")} /><PageText as="span" inline value={t("hybr-2", "title_2")} /></h2>
       <dl className="about-features">{features.map((f) => <div key={f.n}><dt className="text-primary"><PageText as="span" inline value={f.title} /></dt><PageText as="dd" value={f.text} /></div>)}</dl></div>
     </section>
