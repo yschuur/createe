@@ -16,6 +16,10 @@ function PagesIndex() {
         <div><p className="font-semibold">{p.label}</p><p className="mt-1 text-sm text-muted-foreground">{p.description}</p><p className="mt-2 text-xs text-muted-foreground">{p.sections.length} onderdelen</p></div>
         <ChevronRight className="size-5 shrink-0 text-muted-foreground" />
       </Link>)}
+      {extras.map((e) => <Link key={e.to} to={e.to} className="flex items-center justify-between gap-4 rounded-sm bg-card p-5 hover:ring-1 hover:ring-primary">
+        <div><p className="font-semibold">{e.label}</p><p className="mt-1 text-sm text-muted-foreground">{e.description}</p></div>
+        <ChevronRight className="size-5 shrink-0 text-muted-foreground" />
+      </Link>)}
     </div>
   </AdminLayout>;
 }
