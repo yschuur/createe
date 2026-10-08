@@ -436,6 +436,7 @@ export type Database = {
           seo_title: string | null
           slug: string
           sort_order: number
+          sports: string[]
           status: string
           tags: string[]
           target_gender: string | null
@@ -459,6 +460,7 @@ export type Database = {
           seo_title?: string | null
           slug: string
           sort_order?: number
+          sports?: string[]
           status?: string
           tags?: string[]
           target_gender?: string | null
@@ -482,6 +484,7 @@ export type Database = {
           seo_title?: string | null
           slug?: string
           sort_order?: number
+          sports?: string[]
           status?: string
           tags?: string[]
           target_gender?: string | null

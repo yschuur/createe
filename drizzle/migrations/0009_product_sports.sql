@@ -1,0 +1,2 @@
+ALTER TABLE public.products ADD COLUMN sports text[] NOT NULL DEFAULT '{}';
+UPDATE public.products p SET sports = ARRAY(SELECT c.slug FROM public.collection_products cp JOIN public.collections c ON c.id = cp.collection_id WHERE cp.product_id = p.id AND c.slug IN ('golf','padel') ORDER BY c.slug);
