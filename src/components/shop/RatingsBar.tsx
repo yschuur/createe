@@ -1,13 +1,13 @@
 const GOOGLE_COLORS = ["#4285F4", "#EA4335", "#FBBC05", "#4285F4", "#34A853", "#EA4335"];
 
 function GoogleWordmark() {
-  return <span aria-hidden className="flex text-[22px] font-medium leading-none tracking-tight" style={{ fontFamily: "Arial, 'Helvetica Neue', sans-serif" }}>
+  return <span aria-hidden className="flex text-[22px] font-medium leading-none tracking-tight" style={{ fontFamily: "'Fraunces', serif" }}>
     {"Google".split("").map((letter, i) => <span key={i} style={{ color: GOOGLE_COLORS[i] }}>{letter}</span>)}
   </span>;
 }
 
 function TrustpilotWordmark() {
-  return <span aria-hidden className="text-[21px] font-bold leading-none tracking-tight text-[#191919]" style={{ fontFamily: "Arial, 'Helvetica Neue', sans-serif" }}>Trustpilot</span>;
+  return <span aria-hidden className="text-[21px] font-bold leading-none tracking-tight text-[#191919]" style={{ fontFamily: "'Fraunces', serif" }}>Trustpilot</span>;
 }
 
 function GoogleStars() {
@@ -38,15 +38,15 @@ function TrustpilotStars() {
   </span>;
 }
 
-export function RatingsBar({ googleLabel, trustLabel, trustUrl }: { googleLabel: string; trustLabel: string; trustUrl?: string }) {
+export function RatingsBar({ googleLabel, trustLabel, trustUrl, googleUrl }: { googleLabel: string; trustLabel: string; trustUrl?: string; googleUrl?: string }) {
   const block = "flex items-center gap-3 rounded-md bg-white px-6 py-3.5 shadow-[0_1px_3px_rgba(0,0,0,0.08)] ring-1 ring-black/5";
   return (
     <div data-section="home-ratings" className="flex flex-wrap items-center justify-center gap-3 bg-shop-surface px-4 py-4 sm:gap-5">
-      <div className={block}>
+      <a href={googleUrl || undefined} target="_blank" rel="noreferrer" className={`${block} transition hover:shadow-[0_2px_8px_rgba(0,0,0,0.12)]`}>
         <GoogleWordmark />
         <GoogleStars />
         <span className="sr-only">{googleLabel}</span>
-      </div>
+      </a>
       <a href={trustUrl || undefined} target="_blank" rel="noreferrer" className={`${block} transition hover:shadow-[0_2px_8px_rgba(0,0,0,0.12)]`}>
         <TrustpilotWordmark />
         <TrustpilotStars />
