@@ -17,7 +17,7 @@ export function BannerEditor({ slug, name }: { slug: string; name: string }) {
   const set = (i: number, p: Partial<Banner>) => setList(list.map((b, j) => (j === i ? { ...b, ...p } : b)));
   async function save() {
     const { error } = await saveBanners({ ...(data ?? {}), [slug]: list.filter((b) => b.url) });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Afbeeldingen opgeslagen"); qc.invalidateQueries({ queryKey: ["site-settings", "collection_banners"] }); setOpen(false);
   }
   return <>
