@@ -101,7 +101,7 @@ function ProductPage() {
         </div>
         <div className="px-4 pb-10 md:sticky md:top-24 md:self-start md:px-0 md:pt-6">
           <div className="flex items-baseline justify-between gap-4">
-            <h1 className="pdp-title text-3xl">{product.name}</h1>
+            <h1 className="pdp-title min-w-0 truncate text-3xl md:whitespace-normal md:overflow-visible">{product.name}</h1>
             <div data-role="price" className="text-right text-base">
               <span>{formatPrice(variant?.price ?? variants[0]?.price)}</span>
               {compareAt && <span className="ml-2 text-sm text-muted-foreground line-through">{formatPrice(compareAt)}</span>}
@@ -152,10 +152,10 @@ function ProductPage() {
             <p className="mt-2 text-center text-sm text-muted-foreground">Nog maar {variant.inventory_quantity} op voorraad</p>
           )}
 
-          <div className="mt-4 flex items-center justify-between gap-4 border-b border-border pb-4">
-            <dl className="font-label space-y-1 text-[11px] uppercase tracking-wide">
-              {page.fitValue && <div><dt className="inline font-bold">{page.fitLabel}</dt> <dd className="inline text-muted-foreground">{page.fitValue}</dd></div>}
-              {page.modelValue && <div><dt className="inline font-bold">{page.modelLabel}</dt> <dd className="inline text-muted-foreground">{page.modelValue}</dd></div>}
+          <div className="mt-4 flex flex-col items-start gap-3 border-b border-border pb-4 md:flex-row md:items-center md:justify-between md:gap-4">
+            <dl className="font-label w-full min-w-0 space-y-1 text-[11px] uppercase tracking-wide">
+              {page.fitValue && <div className="truncate"><dt className="inline font-bold">{page.fitLabel}</dt> <dd className="inline text-muted-foreground">{page.fitValue}</dd></div>}
+              {page.modelValue && <div className="truncate"><dt className="inline font-bold">{page.modelLabel}</dt> <dd className="inline text-muted-foreground">{page.modelValue}</dd></div>}
             </dl>
             {page.sizeChartLabel && (
               <Button asChild variant="outline"><a data-page-button="chart" href={page.sizeChartUrl || undefined} target={page.sizeChartUrl ? "_blank" : undefined} rel="noreferrer"
