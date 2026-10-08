@@ -340,6 +340,7 @@ export type Database = {
           status: string
           stripe_session_id: string | null
           total: number
+          tracking_url: string | null
           updated_at: string
           user_id: string | null
         }
@@ -357,6 +358,7 @@ export type Database = {
           status?: string
           stripe_session_id?: string | null
           total?: number
+          tracking_url?: string | null
           updated_at?: string
           user_id?: string | null
         }
@@ -374,6 +376,7 @@ export type Database = {
           status?: string
           stripe_session_id?: string | null
           total?: number
+          tracking_url?: string | null
           updated_at?: string
           user_id?: string | null
         }
