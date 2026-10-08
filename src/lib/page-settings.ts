@@ -25,6 +25,7 @@ export type MediaValue = { url?: string | undefined; alt?: string | undefined; p
 export type Position = "center" | "top" | "bottom" | "left" | "right";
 export type ButtonStyle = {
   variant?: "filled" | "outline" | "ghost" | undefined; bg?: string | undefined; color?: string | undefined; border?: string | undefined;
+  hoverBg?: string | undefined; hoverColor?: string | undefined; hoverBorder?: string | undefined; borderWidth?: number | undefined; borderStyle?: "solid" | "dashed" | "dotted" | "none" | undefined; font?: string | undefined;
   size?: number | undefined; weight?: number | undefined; radius?: number | undefined; px?: number | undefined; py?: number | undefined;
 };
 export type BackgroundStyle = {
@@ -54,6 +55,7 @@ export type SectionDef = {
   id: string; label: string;
   content?: ContentFieldDef[]; media?: MediaFieldDef[]; roles: RoleId[];
   background?: boolean; backgroundImage?: boolean; buttons?: boolean; spacing?: boolean; extras?: ExtraDef[];
+  buttonTargets?: { id: string; label: string; selector: string }[];
   contentLink?: { to: "/admin/homepage" | "/admin/studio" | "/admin/menu"; label: string };
 };
 export type PageDef = { key: PageKey; slug: string; label: string; storageKey: string; viewUrl: string; description: string; sections: SectionDef[] };
@@ -99,10 +101,9 @@ export const PAGE_DEFS: PageDef[] = [
     description: "Intro, missie, oorsprong, kernwaarden en afsluiter.",
     sections: [
       { id: "story-intro", label: "Intro", roles: ["kicker", "heading", "subheading", "body"], background: true, backgroundImage: true, spacing: true,
-        content: [txt("kicker", "Kicker", "CREATEE · Het verhaal achter het merk"), txt("headline", "Hoofdtitel", "Exclusieve"), txt("headline_em", "Schuingedrukt titeldeel", "designs."),
-          txt("subtitle", "Subtitel", "Echte identiteit."),
+        content: [txt("kicker", "Kicker", "Het verhaal achter het merk"), txt("title_line1", "Titel regel 1", "Exclusieve designs."), txt("title_line2", "Titel regel 2", "Echte identiteit."),
           area("lead", "Introtekst", "Je techniek is uniek, je tactiek is uniek, dus waarom zou je kleding dat niet zijn? CREATEE combineert de luxe van een premium fit met het lef van unieke designs."),
-          area("note", "Extra tekst", "Kies uit onze eigen exclusieve collectie of ontwerp samen met ons een custom meesterwerk voor je volgende reis of bedrijfsuitje. Speciale illustraties onderscheiden ons in HYBR™ Polo."),
+          area("note", "Extra tekst", "Kies uit onze eigen exclusieve collectie of ontwerp samen met ons een custom meesterwerk voor je volgende reis of bedrijfsuitje. Speciaal hiervoor ontwikkelden we de HYBR™ Polo."),
           area("signature", "Slotzin", "Tradities zijn er om te eren, niet om te dragen. Wij geloven dat sportkleding meer mag zijn dan standaard.")],
         media: [img("main", "Hoofdafbeelding", creativity.url, "Een persoonlijk CREATEE ontwerp"), img("detail", "Detailafbeelding", fabric.url, "Detail van de premium HYBR stof")] },
       { id: "story-mission", label: "Onze missie", roles: ["heading", "body"], background: true, backgroundImage: true, spacing: true,
@@ -113,14 +114,14 @@ export const PAGE_DEFS: PageDef[] = [
       { id: "story-begin", label: "Hoe het begon", roles: ["kicker", "heading", "body"], background: true, spacing: true,
         content: [txt("kicker", "Kicker", "De oorsprong"), txt("title", "Titel", "Hoe het begon"),
           area("lead", "Introzin", "CREATEE begon met een simpele vraag: waarom ziet sportkleding er vaak uit alsof niemand er plezier in mag hebben?"),
-          { key: "body", label: "Verhaal", type: "rich", default: "<p>Overal zagen we dezelfde veilige shirts, dezelfde brave kleuren en dezelfde designs die vooral niets verkeerd wilden doen. Prima voor wie graag opgaat in de massa. Minder prima voor sporters met karakter, humor en een goed verhaal.</p><p>Dus besloten we het anders te doen. Premium sportkleding, maar dan met designs die wél iets losmaken. Soms artistiek, soms scherp, soms met een knipoog die pas na de tweede hole landt. Designs zoals geen enkel anoniem concept om te willen winnen, leuk genoeg om er niet saai bij te lopen.</p><p>Zo ontstond <strong>CREATEE</strong>. Voor teams, vriendengroepen, bedrijven en sporters die denken: als we toch samen het veld, de baan of de club op gaan, dan liever in iets dat blijft hangen.</p>" }],
+          { key: "body", label: "Verhaal", type: "rich", default: "<p>Overal zagen we dezelfde veilige shirts, dezelfde brave kleuren en dezelfde designs die vooral niets verkeerd wilden doen. Prima voor wie graag opgaat in de massa. Minder prima voor sporters met karakter, humor en een goed verhaal.</p><p>Dus besloten we het anders te doen. Premium sportkleding, maar dan met designs die wél iets losmaken. Soms artistiek, soms scherp, soms met een knipoog die pas na de tweede hole landt. Precies zoals sport zelf: <strong>serieus genoeg om te willen winnen, leuk genoeg om er niet saai bij te lopen.</strong></p><p>Zo ontstond <strong>CREATEE</strong>. Voor teams, vriendengroepen, bedrijven en sporters die denken: als we toch samen het veld, de baan of de club op gaan, dan liever in iets dat blijft hangen.</p>" }],
         media: [img("image", "Afbeelding", laptop.url, "CREATEE design op een laptop")] },
       { id: "story-values", label: "Kernwaarden", roles: ["heading", "subheading", "body"], background: true, spacing: true,
         content: [txt("title", "Titel", "Onze kernwaarden"),
           ...valueFields(1, "Premium kwaliteit", "Onze toewijding aan premium kwaliteit begint bij de stof, de pasvorm en het draagcomfort. We combineren technische materialen met een verfijnde afwerking om kleding te maken die goed voelt tijdens het sporten en daarna nog steeds scherp uitziet. Voor ons is kwaliteit de voorwaarde voor creativiteit. Het een kan niet zonder het ander."),
           ...valueFields(2, "Grenzeloze creativiteit", "Vanuit die premium basis laten we de creativiteit pas echt de vrije loop. We geloven niet in de standaard grijze massa, dus ontwerpen we uitsluitend exclusieve designs die je nergens anders op de fairway tegenkomt. Bovendien bieden we een podium aan sporters die zelf hun visie willen uiten via onze Design Studio."),
           ...valueFields(3, "Persoonlijke aanpak", "Die creativiteit krijgt pas echt betekenis door de persoonlijke klik die we met je hebben. We zijn namelijk geen anonieme fabriek, maar golfers die de sport begrijpen en er plezier in hebben. Om jouw ideeën echt tot leven te wekken, bieden we in onze Design Studio altijd een gratis online meeting aan. Op die manier kennen we echt samen wat je nodig hebt en maken we samen iets unieks.")],
-        media: [img("v1_image", "Kaart 1 — foto", fabric.url, "Detail van de HYBR stof"), img("v2_image", "Kaart 2 — foto", creativity.url, "Een persoonlijk CREATEE ontwerp"), img("v3_image", "Kaart 3 — foto", personal.url, "CREATEE kleding op de golfbaan")] },
+        media: [img("v1_image", "Kaart 1 — foto", fabric.url, "Detail van de HYBR stof"), img("v2_image", "Kaart 2 — foto", "", "Een persoonlijk CREATEE ontwerp"), img("v3_image", "Kaart 3 — foto", "", "CREATEE kleding op de golfbaan")] },
       { id: "story-cta", label: "Afsluiter", roles: ["heading", "body", "button"], background: true, spacing: true, buttons: true,
         content: [txt("title", "Titel", "Klaar om op te vallen?"),
           area("text", "Tekst", "Ruil jouw voorspelbare kleding in voor een exclusief design of creëer samen met ons een uniek meesterwerk. Wij staan voor je klaar."),
@@ -133,9 +134,9 @@ export const PAGE_DEFS: PageDef[] = [
     description: "Opening en HYBR™-technologie.",
     sections: [
       { id: "hybr-1", label: "Eerste blok", roles: ["kicker", "heading", "subheading", "body", "button"], background: true, backgroundImage: true, spacing: true, buttons: true,
-        content: [txt("kicker", "Kicker", "CREATEE · Signature HYBR™"), txt("headline", "Hoofdtitel", "De HYBR™"), txt("headline_em", "Schuingedrukt titeldeel", "polo."),
+        content: [txt("kicker", "Kicker", "HYBR™"), txt("headline", "Hoofdtitel", "De HYBR™"), txt("headline_em", "Hoofdtitel — vervolg", "polo."),
           txt("subtitle", "Subtitel", "Ultieme veelzijdigheid."),
-          area("lead", "Introtekst", "Ontdek de ultieme veelzijdigheid. De HYBR™ Polo is ontwikkeld voor de golfer die prestatie niet zonder in te leveren op een volmaakte look. Onze unieke hybride stof biedt volledige bewegingsvrijheid, maar keert daarna direct terug naar de perfecte pasvorm. Ervaar het comfort van een sportpolo met de uitstraling van premium kwaliteit."),
+          area("lead", "Introtekst", "Ontdek de ultieme veelzijdigheid. De HYBR™ Polo is ontwikkeld voor de golfer die prestatie eist zonder in te leveren op een volmaakte look. Onze unieke hybride stof biedt volledige bewegingsvrijheid, maar keert daarna direct terug naar de perfecte pasvorm. Ervaar het comfort van een sportpolo met de uitstraling van premium kwaliteit."),
           txt("btn1_label", "Knop 1 — tekst", "Ontdek HYBR"), url("btn1_url", "Knop 1 — link", "/collections/polos"),
           txt("btn2_label", "Knop 2 — tekst", "Personaliseer nu"), url("btn2_url", "Knop 2 — link", "/design-studio"),
           area("signature", "Slotzin", "Het comfort van een sportpolo met de uitstraling van premium kwaliteit.")],
@@ -170,6 +171,12 @@ export const PAGE_DEFS: PageDef[] = [
     key: "global", slug: "global", label: "Algemene layout", storageKey: "page_global", viewUrl: "/",
     description: "Aankondigingsbalk, menu-balk, USP-balk, reviews en footer op alle pagina's.",
     sections: [
+      { id: "site-buttons", label: "Alle knoppen", roles: [], buttons: true, buttonTargets: [
+        { id: "filled", label: "Gevulde knoppen", selector: '[data-slot=button][data-variant=default]' },
+        { id: "outline", label: "Omlijnde knoppen", selector: '[data-slot=button][data-variant=outline]' },
+        { id: "ghost", label: "Tekst- en icoonknoppen", selector: '[data-slot=button][data-variant=ghost]' },
+        { id: "cart", label: "Winkelmand — afrekenen", selector: '[data-page-button=checkout]' },
+      ] },
       { id: "site-announcement", label: "Aankondigingsbalk", roles: ["body", "link"], background: true, contentLink: { to: "/admin/homepage", label: "Teksten en links" } },
       { id: "site-header", label: "Menu-balk", roles: ["link"], background: true, contentLink: { to: "/admin/menu", label: "Menu-onderdelen" },
         content: [{ key: "logo", label: "Logo", type: "select", default: "green", options: [{ value: "green", label: "Groen" }, { value: "white", label: "Wit" }] }, { key: "sticky", label: "Blijft bovenaan bij scrollen", type: "select", default: "yes", options: yesNo }],
@@ -189,6 +196,20 @@ export const PAGE_DEFS: PageDef[] = [
     ],
   },
 ];
+
+const actionTargets: Record<string, { id: string; label: string; selector: string }[]> = {
+  "home-hero": ["golf", "studio", "padel"].map((id) => ({ id, label: id === "studio" ? "Studio" : id === "golf" ? "Golf" : "Padel", selector: `[data-page-button=${id}]` })),
+  "home-products": [{ id: "previous", label: "Vorige producten", selector: '[aria-label="Vorige producten"]' }, { id: "next", label: "Volgende producten", selector: '[aria-label="Volgende producten"]' }],
+  "studio-intro": [{ id: "request", label: "Vraag je design aan", selector: '[href="#aanvraag"]' }],
+  "studio-form": [{ id: "submit", label: "Verzend aanvraag", selector: '[type=submit]' }, { id: "gender", label: "Heren / Dames", selector: '.atelier-toggle button' }, { id: "product", label: "Productkeuzes", selector: '.atelier-sample' }, { id: "color", label: "Kleurkeuzes", selector: '.atelier-swatch' }],
+  "product-main": [{ id: "add", label: "Aan winkelwagen toevoegen", selector: '[data-page-button=add]' }, { id: "size", label: "Maatkeuzes", selector: '[data-page-button=size]' }, { id: "chart", label: "Maattabel", selector: '[data-page-button=chart]' }],
+  "site-header": [{ id: "menu", label: "Mobiel menu", selector: '[aria-label="Menu openen"]' }, { id: "account", label: "Mijn account", selector: '[aria-label="Mijn account"]' }, { id: "basket", label: "Winkelmand", selector: '[aria-label="Winkelmand"]' }],
+  "site-reviews": [{ id: "previous", label: "Vorige review", selector: '[aria-label="Vorige reviews"]' }, { id: "next", label: "Volgende review", selector: '[aria-label="Volgende reviews"]' }, { id: "expand", label: "Lees meer / minder", selector: '[data-page-button=expand]' }],
+};
+for (const page of PAGE_DEFS) for (const section of page.sections) {
+  const targets = actionTargets[section.id];
+  if (targets) { section.buttonTargets = targets; section.buttons = true; }
+}
 
 // Editorial copy is formatted per field, not through a shared heading/body style.
 for (const page of PAGE_DEFS.filter((p) => p.key === "story" || p.key === "hybr")) {
@@ -252,7 +273,7 @@ const typo = z.object({
   letterSpacing: num(-0.1, 0.5), transform: z.enum(["default", "uppercase", "lowercase", "capitalize"]).optional().catch(undefined),
   align: z.enum(["left", "center", "right"]).optional().catch(undefined), color,
 }).optional().catch(undefined);
-const buttonSchema = z.object({ variant: z.enum(["filled", "outline", "ghost"]).optional().catch(undefined), bg: color, color, border: color, size: num(8, 40), weight: num(100, 900), radius: num(0, 999), px: num(0, 80), py: num(0, 40) });
+const buttonSchema = z.object({ variant: z.enum(["filled", "outline", "ghost"]).optional().catch(undefined), bg: color, color, border: color, hoverBg: color, hoverColor: color, hoverBorder: color, borderWidth: num(0, 12), borderStyle: z.enum(["solid", "dashed", "dotted", "none"]).optional().catch(undefined), font: z.string().refine((f) => !!FONTS[f]).optional().catch(undefined), size: num(8, 40), weight: num(100, 900), radius: num(0, 999), px: num(0, 80), py: num(0, 40) });
 const sectionSchema = z.object({
   visible: z.boolean().optional().catch(undefined), hideMobile: z.boolean().optional().catch(undefined), hideDesktop: z.boolean().optional().catch(undefined),
   content: z.record(z.string().max(20000)).optional().catch(undefined),
@@ -369,7 +390,7 @@ export function buildPageCss(key: PageKey, overrides: PageConfig | undefined): s
   for (const s of def.sections) {
     const c = overrides.sections?.[s.id];
     if (!c) continue;
-    const root = `.storefront [data-section="${s.id}"]`;
+    const root = s.id === "site-buttons" ? ".storefront" : `.storefront [data-section="${s.id}"]`;
     if (c.visible === false) out.push(`${root}{display:none !important}`);
     if (c.hideMobile) out.push(`@media (max-width: 767px){${root}{display:none !important}}`);
     if (c.hideDesktop) out.push(`${MD}{${root}{display:none !important}}`);
@@ -395,6 +416,7 @@ export function buildPageCss(key: PageKey, overrides: PageConfig | undefined): s
     }
     // Typography per role
     for (const [role, selector] of ROLE_SELECTORS) {
+      if ((key === "story" || key === "hybr") && role !== "button") continue;
       const st = c.typography?.[role];
       if (!st || !s.roles.includes(role)) continue;
       const sel = selector.split(",").map((x) => `${root} :is(${x}):not(.cms-rich *)`).join(",");
@@ -410,9 +432,11 @@ export function buildPageCss(key: PageKey, overrides: PageConfig | undefined): s
       responsive(sel, "font-size", st.size, 8, 160, "px", out);
     }
     // Buttons
-    const buttonEntries: [string, ButtonStyle | undefined][] = [[`${root} [data-slot=button]`, c.button]];
+    const buttonEntries: [string, ButtonStyle | undefined][] = [[`${root} :is(button,[data-slot=button])`, c.button]];
     for (const [id, style] of Object.entries(c.buttons ?? {})) {
-      if (/^btn\d+$/.test(id) && s.content?.some((f) => f.key === `${id}_label`)) buttonEntries.push([`${root} [data-slot=button][data-page-button="${id}"]`, style]);
+      const target = s.buttonTargets?.find((t) => t.id === id);
+      if (target) buttonEntries.push([`${root} ${target.selector}`, style]);
+      else if (/^btn\d+$/.test(id) && s.content?.some((f) => f.key === `${id}_label`)) buttonEntries.push([`${root} [data-page-button="${id}"]`, style]);
     }
     for (const [sel, b] of buttonEntries) {
       if (!b || !s.buttons) continue;
@@ -423,12 +447,17 @@ export function buildPageCss(key: PageKey, overrides: PageConfig | undefined): s
       const bgc = safeColor(b.bg); if (bgc) decl.push(`background:${bgc}`);
       const fc = safeColor(b.color); if (fc) decl.push(`color:${fc}`);
       const bc = safeColor(b.border); if (bc) decl.push(`border:1px solid ${bc}`);
+      if (b.font && FONTS[b.font]) decl.push(`font-family:${FONTS[b.font]}`);
+      const bw = clampN(b.borderWidth, 0, 12); if (bw !== undefined) decl.push(`border-width:${bw}px`, "border-style:solid");
+      if (b.borderStyle && ["solid", "dashed", "dotted", "none"].includes(b.borderStyle)) decl.push(`border-style:${b.borderStyle}`);
       const fs = clampN(b.size, 8, 40); if (fs) decl.push(`font-size:${fs}px`);
       const fw = clampN(b.weight, 100, 900); if (fw) decl.push(`font-weight:${Math.round(fw / 100) * 100}`);
       const r = clampN(b.radius, 0, 999); if (r !== undefined) decl.push(`border-radius:${r}px`);
       const px = clampN(b.px, 0, 80); if (px !== undefined) decl.push(`padding-left:${px}px`, `padding-right:${px}px`);
       const py = clampN(b.py, 0, 40); if (py !== undefined) decl.push(`padding-top:${py}px`, `padding-bottom:${py}px`, "height:auto");
       if (decl.length) out.push(`${sel}{${decl.map((d) => d + " !important").join(";")}}`);
+      const hover = [["background", b.hoverBg], ["color", b.hoverColor], ["border-color", b.hoverBorder]].flatMap(([prop, value]) => { const col = safeColor(value); return col ? [`${prop}:${col} !important`] : []; });
+      if (hover.length) out.push(`${sel}:is(:hover,:focus-visible){${hover.join(";")}}`);
     }
     // Section-specific whitelisted extras
     const ex = c.extra ?? {};

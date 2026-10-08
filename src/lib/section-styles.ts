@@ -52,7 +52,7 @@ export function buildCss(styles: SectionStyles): string {
       if (st.uppercase === "no") decl.push("text-transform:none");
       if (st.color && COLORS[st.color]) decl.push(`color:${COLORS[st.color]}`);
       if (!decl.length) continue;
-      const sel = r.selector.split(",").map((x) => `.storefront [data-section="${sid}"] :is(${x}):not(.cms-rich *)`).join(",");
+      const sel = r.selector.split(",").map((x) => `.storefront [data-section="${sid}"] :is(${x}):not(.cms-rich):not(.cms-rich *):not(.about-reference *):not([data-slot=button]):not(button)`).join(",");
       out.push(`${sel}{${decl.map((d) => d + " !important").join(";")}}`);
     }
   }

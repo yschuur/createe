@@ -23,7 +23,7 @@
 - Hero videos are transcoded to H.264 MP4 without audio before upload — .mov/PCM audio is heavy and not reliably playable in browsers.
 - Site navigation is a nested JSON tree in `site_settings` (key "menu") rendered by SiteMenu — supports unlimited submenu depth without schema changes.
 - Storefront design-pack tokens are scoped under .storefront with per-page classes (page-home/page-studio/page-story) via ShopLayout `page` prop — page-specific styling without touching admin.
-- About pages share AboutCollage and scoped page-story atelier styles, retaining existing data-section identifiers — one coherent image-led presentation stays compatible with owner typography overrides.
+- About pages use scoped screenshot-led page-story layouts and retain existing data-section identifiers and rich-text fields — reference composition stays editable without affecting Studio/admin.
 - Legacy section_styles remains read-compatible without a separate admin editor, and its CSS never targets rich-copy descendants — preserves saved defaults without overriding per-field formatting.
 - Design Studio scorecard reviews and per-color configurator photos live in `site_settings` (key "studio") via src/lib/studio.ts, edited at /admin/studio; photos are referenced by URL because public storage buckets are blocked in this workspace.
 - All admin photo/video fields pick from the shared media library (media_assets table + MediaField/MediaLibraryDialog in src/components/admin/MediaLibrary.tsx); uploads go to the private studio-assets bucket under media/ with long-lived signed URLs — one reusable source of media because public buckets are blocked.
@@ -31,3 +31,5 @@
 - Page-level CMS lives in `src/lib/page-settings.ts`: a section registry (PAGE_DEFS) holds code defaults, overrides are stored per page in `site_settings` (`page_<key>`), deep-merged over defaults, Zod-validated and turned into CSS only via the whitelisted `buildPageCss`; edited at /admin/pages — site never depends on a DB row and admin input cannot inject CSS. New editable sections are added to PAGE_DEFS plus `data-section`/`data-role` markers.
 - Editorial page button overrides are keyed by button ID in each section and compiled by the validated page CSS builder — individual buttons can change independently while existing section-wide defaults remain compatible.
 - The router serializes and hydrates its request-scoped QueryClient — saved page content must match on server render and the first browser render.
+- Storefront button styles use the page CMS with global defaults, registered section/action targets and per-button overrides, including hover/focus colors — one validated CSS builder covers native buttons and portaled shop dialogs while admin stays unchanged.
+- RichTextEditor renders EditorContent as soon as its editor exists, with toolbar state fallbacks — remounting a populated field must not leave an invisible editor waiting for its first transaction.
