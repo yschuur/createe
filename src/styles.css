@@ -301,6 +301,7 @@
 .about-history-copy { padding-block: 8px; }
 .about-prose { font-size: 16px; line-height: 1.85; }
 .about-prose p + p { margin-top: 24px; }
+.about-prose > .contents > p { margin-top: 24px; }
 .about-values-title { padding-bottom: 16px; }
 .about-values-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; }
 .about-value { min-width: 0; }
