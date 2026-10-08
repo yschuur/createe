@@ -2,6 +2,7 @@ import { queryOptions } from "@tanstack/react-query";
 import sanitizeHtml from "sanitize-html";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
+import { colorsInGroup, normalizeColorName } from "@/lib/product-colors";
 
 export type Product = Tables<"products">;
 export type Variant = Tables<"product_variants">;
@@ -111,7 +112,10 @@ export function filterProducts(products: ProductWithRelations[], f: ShopFilters)
     const price = priceRange(p).min;
     if (f.min != null && price < f.min) return false;
     if (f.max != null && price > f.max) return false;
-    if (f.color && !p.product_variants.some((v) => v.color === f.color)) return false;
+    if (f.color) {
+      const group = colorsInGroup(f.color);
+      if (!p.product_variants.some((v) => v.color && group.includes(normalizeColorName(v.color)))) return false;
+    }
     return true;
   });
 }
