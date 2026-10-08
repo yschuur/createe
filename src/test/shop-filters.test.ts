@@ -27,6 +27,17 @@ describe("shop filters", () => {
   it("color filter keeps only products with a variant in that color", () => {
     expect(filterProducts(all, { color: "Groen" }).map((p) => p.name)).toEqual(["Alpha"]);
   });
+  it("combined swatches match both color names", () => {
+    const beige = product({ name: "Beige", product_variants: [variant({ color: "beige" })] });
+    const sand = product({ name: "Sand", product_variants: [variant({ color: "sand" })] });
+    const navy = product({ name: "Navy", product_variants: [variant({ color: "navy" })] });
+    const ocean = product({ name: "Ocean", product_variants: [variant({ color: "oceaan-blauw" })] });
+    const list = [beige, sand, navy, ocean, soldOut];
+    expect(filterProducts(list, { color: "beige" }).map((p) => p.name)).toEqual(["Beige", "Sand"]);
+    expect(filterProducts(list, { color: "sand" }).map((p) => p.name)).toEqual(["Beige", "Sand"]);
+    expect(filterProducts(list, { color: "navy" }).map((p) => p.name)).toEqual(["Navy", "Ocean"]);
+    expect(filterProducts(list, { color: "oceaan-blauw" }).map((p) => p.name)).toEqual(["Navy", "Ocean"]);
+  });
 });
 
 describe("shop sorting", () => {

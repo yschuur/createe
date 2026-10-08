@@ -1,5 +1,5 @@
 import { sanitizeDescription, collectionQuery, filterSportShop, filterProducts, sortProducts } from "@/lib/shop";
-import { productColor } from "@/lib/product-colors";
+import { colorGroupKey, colorGroupLabel, productColor } from "@/lib/product-colors";
 import { createFileRoute, Link, notFound, redirect, useNavigate } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
@@ -60,7 +60,7 @@ function SportShopPage() {
   const base = filterSportShop(data.products, data.sport.id, inColl);
   if (order) base.sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
 
-  const colors = [...new Set(base.flatMap((p) => p.product_variants.map((v) => v.color).filter((c): c is string => !!c)))].sort((a, b) => a.localeCompare(b, "nl"));
+  const colors = [...new Set(base.flatMap((p) => p.product_variants.map((v) => v.color).filter((c): c is string => !!c)).map(colorGroupKey))].sort((a, b) => a.localeCompare(b, "nl"));
   const products = sortProducts(filterProducts(base, { avail, min, max, color }), sort);
   const hasFilters = !!avail || min != null || max != null || !!color || !!sort;
 
@@ -99,7 +99,7 @@ function SportShopPage() {
               <FilterMenu label="Kleur" active={!!color}>
                 <div className="flex flex-wrap gap-2 px-4 py-3" role="listbox" aria-label="Kleur">
                   {colors.map((c) => (
-                    <button key={c} type="button" title={c} aria-label={c} aria-pressed={color === c} onClick={() => setSearch({ color: color === c ? undefined : c })}
+                    <button key={c} type="button" title={colorGroupLabel(c)} aria-label={colorGroupLabel(c)} aria-pressed={color === c} onClick={() => setSearch({ color: color === c ? undefined : c })}
                       className={`h-7 w-7 rounded-full border transition ${color === c ? "ring-2 ring-primary ring-offset-2" : "border-black/15 hover:scale-110"}`}
                       style={{ background: productColor(c) }} />
                   ))}
