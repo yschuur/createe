@@ -101,7 +101,7 @@ export const collectionQuery = (slug: string) =>
     },
   });
 
-export type ShopFilters = { avail?: string; min?: number; max?: number; color?: string };
+export type ShopFilters = { avail?: string | undefined; min?: number | undefined; max?: number | undefined; color?: string | undefined };
 
 /** Shop filters: availability, price range and color apply within the current sport/collection selection. */
 export function filterProducts(products: ProductWithRelations[], f: ShopFilters): ProductWithRelations[] {
