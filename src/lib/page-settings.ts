@@ -416,6 +416,7 @@ export function buildPageCss(key: PageKey, overrides: PageConfig | undefined): s
     }
     // Typography per role
     for (const [role, selector] of ROLE_SELECTORS) {
+      if ((key === "story" || key === "hybr") && role !== "button") continue;
       const st = c.typography?.[role];
       if (!st || !s.roles.includes(role)) continue;
       const sel = selector.split(",").map((x) => `${root} :is(${x}):not(.cms-rich *)`).join(",");
