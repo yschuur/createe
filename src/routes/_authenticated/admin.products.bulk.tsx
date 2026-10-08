@@ -64,7 +64,7 @@ function BulkEdit() {
   const [saving, setSaving] = useState(false);
 
   const rows = data?.rows ?? [];
-  const filtered = useMemo(() => rows.filter((r) => (r.name + String(r.slug)).toLowerCase().includes(q.toLowerCase())), [rows, q]);
+  const filtered = useMemo(() => rows.filter((r) => (r.name + String(r["slug"])).toLowerCase().includes(q.toLowerCase())), [rows, q]);
   const chosen = FIELDS.filter((f) => fields.includes(f.key));
   const val = (r: Row, k: string) => (edits[r.id] && k in edits[r.id]! ? edits[r.id]![k] : r[k]);
   const setVal = (id: string, k: string, v: unknown) => setEdits((e) => ({ ...e, [id]: { ...e[id], [k]: v } }));
@@ -78,7 +78,7 @@ function BulkEdit() {
     setSaving(true);
     try {
       for (const [id, e] of Object.entries(edits)) {
-        const { price, compare_at_price, ...prod } = e;
+        const { price: price, compare_at_price: compare_at_price, ...prod } = e as { price?: unknown; compare_at_price?: unknown } & Record<string, unknown>;
         if (Object.keys(prod).length) {
           const { error } = await supabase.from("products").update(prod as never).eq("id", id);
           if (error) throw new Error(`${rows.find((r) => r.id === id)?.name}: ${error.message}`);
@@ -126,7 +126,7 @@ function BulkEdit() {
                 <Button size="sm" variant="outline" onClick={() => setSel([...new Set([...sel, ...filtered.map((r) => r.id)])])}>Alles</Button>
                 <Button size="sm" variant="outline" onClick={() => setSel([])}>Geen</Button></div></div>
             <div className="max-h-[60vh] space-y-1 overflow-y-auto">
-              {filtered.map((r) => <label key={r.id} className="flex items-center gap-2 text-sm"><input type="checkbox" checked={sel.includes(r.id)} onChange={(e) => setSel(e.target.checked ? [...sel, r.id] : sel.filter((x) => x !== r.id))} />{r.name}<span className="text-xs text-muted-foreground">{String(r.status)}</span></label>)}
+              {filtered.map((r) => <label key={r.id} className="flex items-center gap-2 text-sm"><input type="checkbox" checked={sel.includes(r.id)} onChange={(e) => setSel(e.target.checked ? [...sel, r.id] : sel.filter((x) => x !== r.id))} />{r.name}<span className="text-xs text-muted-foreground">{String(r["status"])}</span></label>)}
             </div>
           </div>
         </div>
