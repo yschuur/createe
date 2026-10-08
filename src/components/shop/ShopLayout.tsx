@@ -6,6 +6,10 @@ import { useCart } from "@/lib/cart";
 import { formatPrice, sanitizeDescription } from "@/lib/shop";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { checkDiscount } from "@/lib/checkout.functions";
+import { discountAmount } from "@/lib/discounts";
+import { NewsletterForm } from "@/components/shop/NewsletterForm";
 import { Reviews } from "@/components/shop/Reviews";
 import { useQuery } from "@tanstack/react-query";
 import { homepageQuery, defaultHomepage } from "@/lib/site-settings";
@@ -69,19 +73,14 @@ export function ShopLayout({ children, page, cms }: { children: ReactNode; page?
         </div>}
       </div>
       <footer data-section="site-footer" className="bg-primary text-primary-foreground">
-        <div className="mx-auto grid max-w-7xl gap-10 px-6 py-14 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1.3fr] md:px-8">
+        <div className="grid w-full gap-10 px-6 py-14 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1.3fr] md:px-10 xl:px-16">
           <div className="space-y-4">
             <Logo variant={g.t("site-footer", "logo") === "green" ? "green" : "white"} className="h-7 md:h-8" />
             <p className="max-w-sm text-sm leading-relaxed opacity-80">{g.t("site-footer", "about")}</p>
           </div>
           <div className="space-y-2 text-sm">
             <p data-role="heading" className="mb-4 text-xs font-bold uppercase">{g.t("site-footer", "h_discover")}</p>
-            <Link to="/" className="block opacity-80 hover:opacity-100">Home</Link>
-            <Link to="/collections/$slug" params={{ slug: "golf" }} search={{}} className="block opacity-80 hover:opacity-100">Golf</Link>
-            <Link to="/collections/$slug" params={{ slug: "padel" }} search={{}} className="block opacity-80 hover:opacity-100">Padel</Link>
-            <Link to="/design-studio" className="block opacity-80 hover:opacity-100">CREATEE Design Studio</Link>
-            <Link to="/pages/de-hybr-polo" className="block opacity-80 hover:opacity-100">De HYBR™ Polo</Link>
-            <Link to="/pages/ons-verhaal" className="block opacity-80 hover:opacity-100">Over ons</Link>
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => ({ label: g.t("site-footer", `d${n}_label`), url: g.t("site-footer", `d${n}_url`) })).filter((l) => l.label.trim()).map((l) => <a key={l.label} href={l.url || "#"} className="block opacity-80 hover:opacity-100">{l.label}</a>)}
           </div>
           <div className="space-y-2 text-sm">
             <p data-role="heading" className="mb-4 text-xs font-bold uppercase">{g.t("site-footer", "h_info")}</p>
@@ -93,6 +92,7 @@ export function ShopLayout({ children, page, cms }: { children: ReactNode; page?
           <div className="space-y-3 text-sm">
             <p data-role="heading" className="text-xs font-bold uppercase">{g.t("site-footer", "club_title")}</p>
             <div className="leading-relaxed opacity-80 [&_p]:m-0" dangerouslySetInnerHTML={{ __html: sanitizeDescription(g.t("site-footer", "club_text")) }} />
+            {g.t("site-footer", "club_show") !== "no" && <NewsletterForm placeholder={g.t("site-footer", "club_placeholder")} button={g.t("site-footer", "club_button")} success={g.t("site-footer", "club_success")} />}
           </div>
         </div>
         <div className="border-t border-primary-foreground/20 py-4 text-center text-xs opacity-70">© {new Date().getFullYear()} {g.t("site-footer", "copyright")}</div>
@@ -110,6 +110,19 @@ export function ShopLayout({ children, page, cms }: { children: ReactNode; page?
 
 function CartSheet() {
   const cart = useCart();
+  const [code, setCode] = useState("");
+  const [msg, setMsg] = useState("");
+  const [busy, setBusy] = useState(false);
+  const off = cart.discount ? discountAmount(cart.discount, cart.subtotal) : 0;
+  async function apply(e: React.FormEvent) {
+    e.preventDefault();
+    if (!code.trim()) return;
+    setBusy(true);
+    const r = await checkDiscount({ data: { code: code.trim(), subtotal: cart.subtotal } });
+    setBusy(false);
+    if (r.ok) { cart.setDiscount({ code: r.code, type: r.type, value: r.value, label: r.label }); setCode(""); setMsg(""); }
+    else setMsg(r.error);
+  }
   return (
     <Sheet open={cart.open} onOpenChange={cart.setOpen}>
       <SheetContent className="storefront flex w-full flex-col bg-background sm:max-w-md">
@@ -142,7 +155,19 @@ function CartSheet() {
         )}
         {cart.items.length > 0 && (
           <div className="space-y-3 border-t border-border pt-4">
-            <div className="flex justify-between font-medium"><span>Subtotaal</span><span>{formatPrice(cart.subtotal)}</span></div>
+            {cart.discount ? (
+              <div className="flex items-center justify-between text-sm text-primary">
+                <span>{cart.discount.code} · {cart.discount.label} <button className="ml-1 underline" onClick={() => cart.setDiscount(null)}>verwijderen</button></span>
+                {off > 0 && <span>−{formatPrice(off)}</span>}
+              </div>
+            ) : (
+              <form onSubmit={apply} className="flex gap-2">
+                <Input value={code} onChange={(e) => setCode(e.target.value)} placeholder="Actiecode" aria-label="Actiecode" className="h-9 uppercase" />
+                <Button type="submit" variant="outline" size="sm" disabled={busy || !code.trim()}>Toepassen</Button>
+              </form>
+            )}
+            {msg && <p className="text-xs text-destructive">{msg}</p>}
+            <div className="flex justify-between font-medium"><span>Subtotaal</span><span>{formatPrice(cart.subtotal - off)}</span></div>
             <Button asChild data-page-button="checkout" className="w-full" size="lg" onClick={() => cart.setOpen(false)}>
               <Link to="/checkout">Afrekenen</Link>
             </Button>
