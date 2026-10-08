@@ -183,7 +183,7 @@
 .studio-option img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
 .studio-option span { padding: 10px 4px; font-size: 11px; }
 @media (max-width: 767px) {
-  .home-hero { height: 56vh; min-height: 380px; max-height: 560px; }
+  .home-hero { height: 84vh; min-height: 520px; max-height: 760px; }
   .home-product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 12px; }
   .home-product-grid > :last-child { display: none; }
   .home-product-carousel { grid-auto-columns: calc((100% - 12px) / 2); }
