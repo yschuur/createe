@@ -1,6 +1,9 @@
 import { sanitizeDescription, collectionQuery, filterSportShop, filterProducts, sortProducts } from "@/lib/shop";
+import { productColor } from "@/lib/product-colors";
 import { createFileRoute, Link, notFound, redirect, useNavigate } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
+import { ChevronDown } from "lucide-react";
 import { z } from "zod";
 import { ShopLayout } from "@/components/shop/ShopLayout";
 import { ProductCard } from "@/components/shop/ProductCard";
@@ -65,7 +68,6 @@ function SportShopPage() {
 
   const chip = "rounded-full border border-border px-4 py-1.5 text-sm hover:border-primary";
   const on = "bg-primary text-primary-foreground border-primary";
-  const select = "rounded-full border border-border bg-background px-4 py-1.5 text-sm";
   return (
     <ShopLayout cms="collection">
       <section data-section="collection-header" className="mx-auto max-w-7xl px-4 pt-12 md:px-8">
@@ -75,29 +77,46 @@ function SportShopPage() {
           <Link to="/collections/$slug" params={{ slug }} search={{}} className={`${chip} ${!active ? on : ""}`}>Alles</Link>
           {data.collections.map((c) => <Link key={c.id} to="/collections/$slug" params={{ slug }} search={{ collection: c.slug }} className={`${chip} ${active?.id === c.id ? on : ""}`}>{c.name}</Link>)}
         </div>
-        <div className="mt-4 flex flex-wrap items-center gap-2" aria-label="Filters">
-          <select aria-label="Sorteren" className={select} value={sort ?? "default"} onChange={(e) => setSearch({ sort: e.target.value === "default" ? undefined : e.target.value })}>
-            {SORTS.map((s) => <option key={s.id} value={s.id}>Sorteer: {s.label}</option>)}
-          </select>
-          <select aria-label="Beschikbaarheid" className={select} value={avail ?? ""} onChange={(e) => setSearch({ avail: e.target.value || undefined })}>
-            <option value="">Beschikbaarheid: alles</option>
-            <option value="in">Op voorraad</option>
-            <option value="out">Uitverkocht</option>
-          </select>
-          <label className="flex items-center gap-1 text-sm">
-            <span className="text-xs font-bold uppercase">Prijs</span>
-            <input type="number" min={0} placeholder="van" className="w-20 rounded-full border border-border bg-background px-3 py-1.5 text-sm" value={min ?? ""} onChange={(e) => setSearch({ min: e.target.value ? Number(e.target.value) : undefined })} />
-            <span>–</span>
-            <input type="number" min={0} placeholder="tot" className="w-20 rounded-full border border-border bg-background px-3 py-1.5 text-sm" value={max ?? ""} onChange={(e) => setSearch({ max: e.target.value ? Number(e.target.value) : undefined })} />
-          </label>
-          {colors.length > 0 && (
-            <select aria-label="Kleur" className={select} value={color ?? ""} onChange={(e) => setSearch({ color: e.target.value || undefined })}>
-              <option value="">Kleur: alles</option>
-              {colors.map((c) => <option key={c} value={c}>{c}</option>)}
-            </select>
-          )}
-        </div>
       </section>
+      <div data-section="collection-filters" className="mt-8 bg-[#F5F5F5]">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-8 gap-y-2 px-4 py-3.5 md:px-8" aria-label="Filters">
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
+            <FilterMenu label="Beschikbaarheid" active={!!avail}>
+              {[{ v: "", l: "Alles" }, { v: "in", l: "Op voorraad" }, { v: "out", l: "Uitverkocht" }].map((o) => (
+                <button key={o.v} type="button" onClick={() => setSearch({ avail: o.v || undefined })}
+                  className={`block w-full px-4 py-2 text-left text-sm hover:bg-black/5 ${(avail ?? "") === o.v ? "font-semibold" : ""}`}>{o.l}</button>
+              ))}
+            </FilterMenu>
+            <FilterMenu label="Prijs" active={min != null || max != null}>
+              <div className="flex items-center gap-2 px-4 py-3">
+                <input type="number" min={0} placeholder="van" aria-label="Prijs van" className="w-20 rounded border border-border bg-background px-2 py-1.5 text-sm" value={min ?? ""} onChange={(e) => setSearch({ min: e.target.value ? Number(e.target.value) : undefined })} />
+                <span>–</span>
+                <input type="number" min={0} placeholder="tot" aria-label="Prijs tot" className="w-20 rounded border border-border bg-background px-2 py-1.5 text-sm" value={max ?? ""} onChange={(e) => setSearch({ max: e.target.value ? Number(e.target.value) : undefined })} />
+              </div>
+            </FilterMenu>
+            {colors.length > 0 && (
+              <FilterMenu label="Kleur" active={!!color}>
+                <div className="flex flex-wrap gap-2 px-4 py-3" role="listbox" aria-label="Kleur">
+                  {colors.map((c) => (
+                    <button key={c} type="button" title={c} aria-label={c} aria-pressed={color === c} onClick={() => setSearch({ color: color === c ? undefined : c })}
+                      className={`h-7 w-7 rounded-full border transition ${color === c ? "ring-2 ring-primary ring-offset-2" : "border-black/15 hover:scale-110"}`}
+                      style={{ background: productColor(c) }} />
+                  ))}
+                </div>
+              </FilterMenu>
+            )}
+          </div>
+          <div className="ml-auto flex items-center gap-x-8">
+            <span className="text-sm text-foreground/80">{products.length} artikelen</span>
+            <FilterMenu label="Sorteren" active={!!sort} align="right">
+              {SORTS.map((s) => (
+                <button key={s.id} type="button" onClick={() => setSearch({ sort: s.id === "default" ? undefined : s.id })}
+                  className={`block w-full whitespace-nowrap px-4 py-2 text-left text-sm hover:bg-black/5 ${(sort ?? "default") === s.id ? "font-semibold" : ""}`}>{s.label}</button>
+              ))}
+            </FilterMenu>
+          </div>
+        </div>
+      </div>
       <section data-section="collection-grid" className="mx-auto max-w-7xl px-4 pb-12 md:px-8">
         <div data-role="grid" className="mt-10 grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-4 md:gap-x-6">
           {products.map((p, i) => <ProductCard key={p.id} product={p} index={i} />)}
@@ -105,5 +124,32 @@ function SportShopPage() {
         {products.length === 0 && <p className="py-16 text-center text-muted-foreground">Nog geen producten in deze selectie.</p>}
       </section>
     </ShopLayout>
+  );
+}
+
+function FilterMenu({ label, active, align, children }: { label: string; active?: boolean; align?: "right"; children: React.ReactNode }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const close = (e: MouseEvent) => { if (!ref.current?.contains(e.target as Node)) setOpen(false); };
+    const esc = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
+    document.addEventListener("mousedown", close);
+    document.addEventListener("keydown", esc);
+    return () => { document.removeEventListener("mousedown", close); document.removeEventListener("keydown", esc); };
+  }, [open]);
+  return (
+    <div ref={ref} className="relative">
+      <button type="button" aria-expanded={open} onClick={() => setOpen((o) => !o)}
+        className={`flex items-center gap-1.5 text-[15px] ${active ? "font-semibold" : ""} hover:opacity-70`}>
+        {label}
+        <ChevronDown className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+      {open && (
+        <div className={`absolute top-full z-30 mt-2 min-w-44 rounded-md border border-border bg-background py-1 shadow-lg ${align === "right" ? "right-0" : "left-0"}`}>
+          {children}
+        </div>
+      )}
+    </div>
   );
 }
