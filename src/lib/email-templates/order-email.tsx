@@ -23,7 +23,7 @@ export interface OrderEmailProps {
 
 const eur = (n?: number) => `€${(n ?? 0).toFixed(2).replace('.', ',')}`
 const GREEN = '#275C38'
-const LOGO = new URL(whiteLogo.url, 'https://createe.lovable.app').href
+const LOGO = new URL(whiteLogo.url, 'https://createe.nl').href
 
 export const OrderEmail = (p: OrderEmailProps) => (
   <Html lang="nl" dir="ltr">

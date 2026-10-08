@@ -37,7 +37,7 @@ export const Route = createFileRoute("/products/$handle")({
     if (hasImage && loaderData?.image) {
       meta.push({ property: "og:image", content: loaderData.image }, { name: "twitter:image", content: loaderData.image } as never);
     }
-    const url = `https://createe.lovable.app/products/${loaderData?.handle ?? ""}`;
+    const url = `https://createe.nl/products/${loaderData?.handle ?? ""}`;
     const scripts = loaderData ? [{ type: "application/ld+json", children: JSON.stringify({
       "@context": "https://schema.org", "@type": "Product", name: loaderData.name, description,
       ...(hasImage ? { image: [loaderData.image] } : {}),
