@@ -68,7 +68,6 @@ function SportShopPage() {
 
   const chip = "rounded-full border border-border px-4 py-1.5 text-sm hover:border-primary";
   const on = "bg-primary text-primary-foreground border-primary";
-  const select = "rounded-full border border-border bg-background px-4 py-1.5 text-sm";
   return (
     <ShopLayout cms="collection">
       <section data-section="collection-header" className="mx-auto max-w-7xl px-4 pt-12 md:px-8">
