@@ -30,7 +30,7 @@ type ResolvedItem = {
  * Prices and availability are always resolved server-side from the database;
  * out-of-stock variants are denied per the deny policy. */
 export const createCheckoutSession = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) => checkoutInput.parse(data))
+  .validator((data: unknown) => checkoutInput.parse(data))
   .handler(async ({ data }): Promise<CheckoutSessionResult> => {
     try {
       const ids = data.items.map((i) => i.variantId);
@@ -188,7 +188,7 @@ async function createSession(
 
 /** Read back the payment state of a finished checkout for the return page. */
 export const getCheckoutStatus = createServerFn({ method: "GET" })
-  .inputValidator((data: { sessionId: string; environment: StripeEnv }) =>
+  .validator((data: { sessionId: string; environment: StripeEnv }) =>
     z.object({
       sessionId: z.string().regex(/^[A-Za-z0-9_-]+$/),
       environment: z.enum(["sandbox", "live"]),
