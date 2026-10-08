@@ -173,3 +173,22 @@ function DesignStudio() {
     </section>
   </div></ShopLayout>;
 }
+
+function ScoreCard({ r, i, hidden }: { r: { image: string; name: string; text: string; rating: number }; i: number; hidden: boolean }) {
+  const [open, setOpen] = useState(false);
+  const plain = r.text.replace(/<[^>]*>/g, "").trim();
+  return <figure className="studio-card" aria-hidden={hidden || undefined}>
+    {r.image && <img src={r.image} alt={hidden ? "" : r.name ? `CREATEE ontwerp voor ${r.name}` : `Persoonlijk CREATEE ontwerp voor een klant ${i + 1}`} className="aspect-[4/5] w-full object-cover" loading="lazy" draggable={false} />}
+    <figcaption className="pt-3">
+      <div className="flex gap-1">{Array.from({ length: 5 }).map((_, n) => <span key={n} className={`inline-block size-4 ${n < r.rating ? "bg-primary" : "bg-muted"}`} style={{ clipPath: "polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)" }} />)}</div>
+      {plain && <>
+        <div className={`prose-shop mt-2 text-sm leading-snug ${open ? "" : "line-clamp-4"}`} dangerouslySetInnerHTML={{ __html: sanitizeDescription(r.text) }} />
+        {plain.length > 140 && <button type="button" tabIndex={hidden ? -1 : 0} onClick={() => setOpen(!open)} className="mt-1 font-label text-[11px] font-bold uppercase tracking-wider text-primary">{open ? "Lees minder" : "Lees meer"}</button>}
+      </>}
+      <div className="mt-3 border-t border-border pt-3">
+        <span className="block font-label text-xs font-bold uppercase tracking-wider text-primary">{r.name || "Klant"}</span>
+        <span className="block text-xs text-muted-foreground">CREATEE Design Studio</span>
+      </div>
+    </figcaption>
+  </figure>;
+}
