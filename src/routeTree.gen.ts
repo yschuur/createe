@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DesignStudioRouteImport } from './routes/design-studio'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as CheckoutIndexRouteImport } from './routes/checkout.index'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as CollectionsSlugRouteImport } from './routes/collections.$slug'
@@ -64,6 +65,11 @@ const AuthRoute = AuthRouteImport.update({
 const DesignStudioRoute = DesignStudioRouteImport.update({
   id: '/design-studio',
   path: '/design-studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CheckoutIndexRoute = CheckoutIndexRouteImport.update({
@@ -257,6 +263,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/design-studio': typeof DesignStudioRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/collections/$slug': typeof CollectionsSlugRoute
   '/pages/contact': typeof PagesContactRoute
@@ -295,6 +302,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/design-studio': typeof DesignStudioRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/collections/$slug': typeof CollectionsSlugRoute
   '/pages/contact': typeof PagesContactRoute
@@ -335,6 +343,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/design-studio': typeof DesignStudioRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/collections/$slug': typeof CollectionsSlugRoute
   '/pages/contact': typeof PagesContactRoute
@@ -375,6 +384,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/design-studio'
+    | '/sitemap.xml'
     | '/checkout/return'
     | '/collections/$slug'
     | '/pages/contact'
@@ -413,6 +423,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/design-studio'
+    | '/sitemap.xml'
     | '/checkout/return'
     | '/collections/$slug'
     | '/pages/contact'
@@ -452,6 +463,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/design-studio'
+    | '/sitemap.xml'
     | '/checkout/return'
     | '/collections/$slug'
     | '/pages/contact'
@@ -492,6 +504,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   DesignStudioRoute: typeof DesignStudioRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   CollectionsSlugRoute: typeof CollectionsSlugRoute
   PagesContactRoute: typeof PagesContactRoute
@@ -533,6 +546,13 @@ declare module '@tanstack/react-router' {
       path: '/design-studio'
       fullPath: '/design-studio'
       preLoaderRoute: typeof DesignStudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/checkout/': {
@@ -827,6 +847,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   DesignStudioRoute: DesignStudioRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,
   CollectionsSlugRoute: CollectionsSlugRoute,
   PagesContactRoute: PagesContactRoute,
