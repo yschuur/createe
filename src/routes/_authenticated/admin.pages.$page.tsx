@@ -10,7 +10,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { isPlainObject, pageDefBySlug, pageSettingsQuery, parsePageConfig, type PageConfig, type SectionConfig } from "@/lib/page-settings";
 
 export const Route = createFileRoute("/_authenticated/admin/pages/$page")({
-  head: () => ({ meta: [{ title: "Pagina bewerken — CREATEE beheer" }, { name: "description", content: "Pas de onderdelen van een CREATEE-pagina aan." }, { property: "og:title", content: "Pagina bewerken — CREATEE beheer" }, { property: "og:description", content: "Pas de onderdelen van een CREATEE-pagina aan." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
+  head: ({ params }) => {
+    const def = pageDefBySlug(params.page);
+    const title = `${def?.label ?? "Pagina bewerken"} — CREATEE beheer`;
+    const description = def?.description ?? "Pas de onderdelen van een CREATEE-pagina aan.";
+    return { meta: [{ title }, { name: "description", content: description }, { property: "og:title", content: title }, { property: "og:description", content: description }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] };
+  },
   component: PageEditorRoute,
 });
 
@@ -31,15 +36,14 @@ function PageEditorRoute() {
   const { page } = Route.useParams();
   const def = pageDefBySlug(page);
   if (!def) return <AdminLayout title="Pagina niet gevonden"><Link to="/admin/pages" className="underline">Terug naar pagina's</Link></AdminLayout>;
-  return <Editor key={def.key} slug={page} />;
+  return <Editor key={def.key} def={def} />;
 }
 
-function Editor({ slug }: { slug: string }) {
-  const def = pageDefBySlug(slug)!;
+function Editor({ def }: { def: NonNullable<ReturnType<typeof pageDefBySlug>> }) {
   const qc = useQueryClient();
   const { data, isLoading } = useQuery(pageSettingsQuery(def.key));
   const [draft, setDraft] = useState<PageConfig | null>(null);
-  const [active, setActive] = useState(def.sections[0]!.id);
+  const [active, setActive] = useState(def.sections[0]?.id ?? "");
   const [busy, setBusy] = useState(false);
   const [version, setVersion] = useState(0);
   useEffect(() => { if (data && !draft) setDraft(structuredClone(data)); }, [data, draft]);
@@ -49,7 +53,8 @@ function Editor({ slug }: { slug: string }) {
   useBlocker({ shouldBlockFn: () => dirty && !window.confirm("Je hebt niet-opgeslagen wijzigingen. Toch weggaan?"), enableBeforeUnload: () => dirty });
 
   if (isLoading || !draft) return <AdminLayout title={def.label}><p>Laden…</p></AdminLayout>;
-  const section = def.sections.find((s) => s.id === active)!;
+  const section = def.sections.find((s) => s.id === active);
+  if (!section) return <AdminLayout title={def.label}><p>Geen onderdelen beschikbaar.</p></AdminLayout>;
   const setSection = (id: string, v: SectionConfig | undefined) => {
     const sections = { ...draft.sections };
     if (v) sections[id] = v; else delete sections[id];
@@ -64,6 +69,8 @@ function Editor({ slug }: { slug: string }) {
     const { error } = await supabase.from("site_settings").upsert({ key: def.storageKey, value: { sections: clean.sections ?? {} }, updated_at: new Date().toISOString() } as never);
     setBusy(false);
     if (error) { toast.error("Opslaan mislukt: " + error.message); return; }
+    qc.setQueryData(pageSettingsQuery(def.key).queryKey, parsed);
+    setDraft(structuredClone(parsed));
     await qc.invalidateQueries({ queryKey: ["site-settings", "page", def.key] });
     toast.success("Wijzigingen opgeslagen");
   }
