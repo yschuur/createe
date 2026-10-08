@@ -3,7 +3,7 @@ import { productColor } from "@/lib/product-colors";
 import { createFileRoute, Link, notFound, redirect, useNavigate } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, X } from "lucide-react";
 import { z } from "zod";
 import { ShopLayout } from "@/components/shop/ShopLayout";
 import { ProductCard } from "@/components/shop/ProductCard";
@@ -104,6 +104,13 @@ function SportShopPage() {
                   ))}
                 </div>
               </FilterMenu>
+            )}
+            {hasFilters && (
+              <button type="button" onClick={() => setSearch({ avail: undefined, min: undefined, max: undefined, color: undefined, sort: undefined })}
+                className="flex items-center gap-1.5 text-[15px] font-semibold underline underline-offset-4 hover:opacity-70">
+                <X className="h-4 w-4" />
+                Alles wissen
+              </button>
             )}
           </div>
           <div className="ml-auto flex items-center gap-x-8">
