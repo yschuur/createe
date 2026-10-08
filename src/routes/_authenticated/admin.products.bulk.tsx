@@ -84,8 +84,8 @@ function BulkEdit() {
           if (error) throw new Error(`${rows.find((r) => r.id === id)?.name}: ${error.message}`);
         }
         const vp: Record<string, unknown> = {};
-        if (price !== undefined) vp.price = Number(price) || 0;
-        if (compare_at_price !== undefined) vp.compare_at_price = compare_at_price === "" || compare_at_price == null ? null : Number(compare_at_price);
+        if (price !== undefined) vp["price"] = Number(price) || 0;
+        if (compare_at_price !== undefined) vp["compare_at_price"] = compare_at_price === "" || compare_at_price == null ? null : Number(compare_at_price);
         if (Object.keys(vp).length) {
           const { error } = await supabase.from("product_variants").update(vp as never).eq("product_id", id);
           if (error) throw error;
