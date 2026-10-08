@@ -9,9 +9,9 @@ function ItemLink({ item, className, onClick }: { item: MenuItem; className?: st
 }
 
 function Flyout({ items, nested }: { items: MenuItem[]; nested?: boolean }) {
-  return <ul className={`invisible absolute z-50 min-w-52 border border-border bg-background py-2 normal-case opacity-0 shadow-lg transition group-hover/m:visible group-hover/m:opacity-100 group-focus-within/m:visible group-focus-within/m:opacity-100 ${nested ? "left-full top-0 -mt-2" : "left-0 top-full"}`}>
+  return <ul className={`invisible absolute z-50 min-w-56 border border-border bg-background py-4 normal-case tracking-normal opacity-0 shadow-2xl ring-1 ring-foreground/5 transition-all duration-200 group-hover/m:visible group-hover/m:opacity-100 group-focus-within/m:visible group-focus-within/m:opacity-100 ${nested ? "left-full top-0 -mt-4" : "left-0 top-full pt-0"}`}>
     {items.map((c, i) => <li key={i} className="group/m relative">
-      <div className="flex items-center justify-between gap-4 px-4 py-2 text-sm hover:bg-muted hover:text-primary">
+      <div className="flex items-center justify-between gap-4 px-6 py-2.5 font-label text-sm font-medium hover:bg-muted hover:text-primary">
         <ItemLink item={c} />{c.children.length > 0 && <ChevronRight className="size-3.5" />}
       </div>
       {c.children.length > 0 && <Flyout items={c.children} nested />}
@@ -20,10 +20,10 @@ function Flyout({ items, nested }: { items: MenuItem[]; nested?: boolean }) {
 }
 
 export function DesktopMenu({ items }: { items: MenuItem[] }) {
-  return <ul className="flex min-w-0 gap-4 text-xs font-medium uppercase lg:gap-5">
+  return <ul className="flex min-w-0 gap-8 font-display text-sm font-bold uppercase tracking-[0.22em] lg:gap-10">
     {items.map((it, i) => <li key={i} className="group/m relative">
-      <div className="flex items-center gap-1 py-5 hover:text-primary">
-        <ItemLink item={it} />{it.children.length > 0 && <ChevronDown className="size-3" aria-hidden />}
+      <div className="flex items-center gap-1.5 border-b-2 border-transparent py-6 transition-colors hover:border-primary hover:text-primary">
+        <ItemLink item={it} />{it.children.length > 0 && <ChevronDown className="size-3 transition-transform group-hover/m:rotate-180" aria-hidden />}
       </div>
       {it.children.length > 0 && <Flyout items={it.children} />}
     </li>)}
