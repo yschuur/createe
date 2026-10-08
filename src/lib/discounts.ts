@@ -1,5 +1,6 @@
 export type DiscountRow = {
   type: string;
+  value?: number;
   active: boolean;
   min_order_amount: number | null;
   starts_at: string | null;
@@ -21,6 +22,19 @@ export function discountProblem(d: DiscountRow | null, subtotal: number, now = n
   if (d.ends_at && new Date(d.ends_at).getTime() + 86_400_000 <= now.getTime()) return "Deze kortingscode is verlopen.";
   if (d.usage_limit != null && d.times_used >= d.usage_limit) return "Deze kortingscode is al maximaal gebruikt.";
   if (d.min_order_amount != null && subtotal < Number(d.min_order_amount)) return `Deze code geldt vanaf €${Number(d.min_order_amount).toFixed(2).replace(".", ",")}.`;
-  if (d.type !== "free_shipping") return "Deze kortingscode kan nog niet online worden gebruikt.";
   return null;
+}
+
+/** Amount off the product subtotal (shipping is handled separately). */
+export function discountAmount(d: { type: string; value?: number }, subtotal: number): number {
+  const v = Number(d.value ?? 0);
+  if (d.type === "percentage") return Math.round(subtotal * Math.min(100, v)) / 100;
+  if (d.type === "fixed") return Math.min(subtotal, v);
+  return 0;
+}
+
+export function discountLabel(d: { type: string; value?: number }): string {
+  if (d.type === "free_shipping") return "Gratis bezorging";
+  if (d.type === "percentage") return `${Number(d.value)}% korting`;
+  return `€${Number(d.value).toFixed(2).replace(".", ",")} korting`;
 }
