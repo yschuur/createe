@@ -441,7 +441,7 @@
 .studio-marquee { overflow: hidden; }
 .studio-marquee-track { display: flex; width: max-content; align-items: flex-start; animation: studio-marquee var(--marquee-duration, 40s) linear infinite; }
 .studio-marquee:hover .studio-marquee-track { animation-play-state: paused; }
-.studio-card { width: 280px; flex-shrink: 0; margin-right: 1.5rem; background: var(--shop-surface); padding: .75rem .75rem 1rem; box-shadow: 0 18px 40px -18px oklch(0.2 0.03 151 / .45); }
+.studio-card { width: 280px; flex-shrink: 0; margin-right: 1.5rem; background: var(--shop-surface); padding: .75rem .75rem 1rem; box-shadow: 0 10px 24px -18px oklch(0.2 0.03 151 / .45); }
 .studio-card:nth-child(even) { margin-top: 2.5rem; }
 @keyframes studio-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @media (max-width: 640px) { .studio-card { width: 220px; margin-right: 1rem; } .studio-card:nth-child(even) { margin-top: 1.5rem; } }
