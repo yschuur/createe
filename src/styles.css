@@ -261,6 +261,7 @@
 /* Screenshot-led editorial pages: green gutters, white bands, original hierarchy. */
 .page-story { --primary: #275C38; --shop-surface: oklch(1 0 0); --shop-ink: oklch(.22 0 0); --foreground: var(--shop-ink); --muted: oklch(.97 0 0); --about-hairline: color-mix(in oklab,var(--primary) 20%,transparent); }
 .about-reference { background: var(--primary); padding: 0 10px 24px; overflow-x: clip; }
+.about-reference.about-story { padding-top: 15px; }
 .about-reference > section { width: 74%; max-width: 1180px; margin-inline: auto; }
 .about-reference .cms-rich { min-width: 0; overflow-wrap: break-word; }
 .about-reference .cms-rich :is(p,h1,h2,h3,h4) { font: inherit; color: inherit; margin: 0; }
