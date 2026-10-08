@@ -1,3 +1,4 @@
+import { usePageSettings } from "@/lib/page-settings";
 import { sanitizeDescription, collectionQuery, filterSportShop, filterProducts, sortProducts } from "@/lib/shop";
 import { colorGroupKey, colorGroupLabel, productColor } from "@/lib/product-colors";
 import { createFileRoute, Link, notFound, redirect, useNavigate } from "@tanstack/react-router";
@@ -68,6 +69,8 @@ function SportShopPage() {
     navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, ...patch }), replace: true });
 
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const { t, m } = usePageSettings("collection");
+  const banners = [1, 2, 3, 4, 5, 6].map((n) => ({ ...m("collection-banners", `b${n}_image`), link: t("collection-banners", `b${n}_url`) })).filter((b) => b.url);
   const chip = "rounded-full border border-border px-4 py-1.5 text-sm hover:border-primary";
   const on = "bg-primary text-primary-foreground border-primary";
   return (
@@ -152,6 +155,14 @@ function SportShopPage() {
         </div>
         {products.length === 0 && <p className="py-16 text-center text-muted-foreground">Nog geen producten in deze selectie.</p>}
       </section>
+      {banners.length > 0 && (
+        <section data-section="collection-banners" className="flex w-full gap-1">
+          {banners.map((b, i) => {
+            const im = <img src={b.url} alt={b.alt} style={b.style} loading="lazy" className="aspect-[3/4] h-full w-full object-cover transition-opacity hover:opacity-90" />;
+            return <div key={i} className="min-w-0 flex-1">{b.link ? <a href={b.link} className="block">{im}</a> : im}</div>;
+          })}
+        </section>
+      )}
     </ShopLayout>
   );
 }

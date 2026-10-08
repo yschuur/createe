@@ -179,6 +179,9 @@ export const PAGE_DEFS: PageDef[] = [
       { id: "collection-header", label: "Titel & filters", roles: ["heading", "body", "link"], background: true, spacing: true },
       { id: "collection-grid", label: "Productoverzicht", roles: ["subheading", "body", "price"], background: true, spacing: true,
         extras: [{ key: "colsMobile", label: "Kolommen mobiel", min: 1, max: 3, unit: "" }, { key: "colsDesktop", label: "Kolommen desktop", min: 2, max: 6, unit: "" }, { key: "gap", label: "Ruimte tussen producten", min: 0, max: 80, unit: "px" }] },
+      { id: "collection-banners", label: "Afbeeldingen onder producten", roles: [], spacing: true,
+        media: Array.from({ length: 6 }, (_, i) => img(`b${i + 1}_image`, `Afbeelding ${i + 1}`, "", "CREATEE in actie")),
+        content: Array.from({ length: 6 }, (_, i) => url(`b${i + 1}_url`, `Afbeelding ${i + 1} - link`, "")) },
     ],
   },
   {
