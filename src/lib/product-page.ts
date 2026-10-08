@@ -7,6 +7,7 @@ export type ProductPageContent = {
   modelValue: string;
   sizeChartLabel: string;
   sizeChartUrl: string;
+  sizeChartImage: string;
   addToCartLabel: string;
   intro: string;
   featureShow: boolean;
@@ -30,6 +31,7 @@ export function defaultPage(p: P): ProductPageContent {
     modelValue: "1.82m en draagt maat M",
     sizeChartLabel: "Maattabel",
     sizeChartUrl: "",
+    sizeChartImage: "",
     addToCartLabel: "Aan winkelwagen toevoegen",
     intro: p.description_html ?? "",
     featureShow: isPolo,

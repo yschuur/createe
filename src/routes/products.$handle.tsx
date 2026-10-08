@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { ShopLayout } from "@/components/shop/ShopLayout";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { productColor } from "@/lib/product-colors";
 import { ShoppingBag, Ruler, ChevronRight, ChevronUp as ChevronUpIcon } from "lucide-react";
 import { getPage } from "@/lib/product-page";
@@ -173,7 +174,12 @@ function ProductPage() {
               {page.fitValue && <div><dt className="inline font-bold">{page.fitLabel}</dt> <dd className="inline text-muted-foreground">{page.fitValue}</dd></div>}
               {page.modelValue && <div><dt className="inline font-bold">{page.modelLabel}</dt> <dd className="inline text-muted-foreground">{page.modelValue}</dd></div>}
             </dl>
-            {page.sizeChartLabel && (
+            {page.sizeChartLabel && page.sizeChartImage ? (
+              <Dialog>
+                <DialogTrigger asChild><Button variant="outline" data-page-button="chart" className="font-label flex items-center gap-1 border border-primary px-4 py-2 text-xs text-primary"><Ruler className="h-3.5 w-3.5" /> {page.sizeChartLabel}</Button></DialogTrigger>
+                <DialogContent className="max-w-3xl"><DialogTitle>{page.sizeChartLabel}</DialogTitle><img src={page.sizeChartImage} alt={`Maattabel ${product.name}`} className="max-h-[75vh] w-full object-contain" /></DialogContent>
+              </Dialog>
+            ) : page.sizeChartLabel && (
               <Button asChild variant="outline"><a data-page-button="chart" href={page.sizeChartUrl || undefined} target={page.sizeChartUrl ? "_blank" : undefined} rel="noreferrer"
                 className="font-label flex items-center gap-1 border border-primary px-4 py-2 text-xs text-primary">
                 <Ruler className="h-3.5 w-3.5" /> {page.sizeChartLabel}
