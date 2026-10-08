@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { bannersFor, bannersQuery } from "@/lib/collection-banners";
+import { bannerHeightsQuery, bannersFor, bannersQuery } from "@/lib/collection-banners";
+import { focusPosition } from "@/lib/image-focus";
 import { sanitizeDescription, collectionQuery, filterSportShop, filterProducts, sortProducts } from "@/lib/shop";
 import { colorGroupKey, colorGroupLabel, productColor } from "@/lib/product-colors";
 import { createFileRoute, Link, notFound, redirect, useNavigate } from "@tanstack/react-router";
@@ -72,6 +73,9 @@ function SportShopPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { data: bannerMap } = useQuery(bannersQuery());
   const banners = bannersFor(bannerMap ?? {}, data.sport.slug, active?.slug);
+  const { data: heightMap } = useQuery(bannerHeightsQuery());
+  const ownBanners = !!active && (bannerMap?.[active.slug] ?? []).some((b) => b.url);
+  const bannerHeight = heightMap?.[ownBanners && active ? active.slug : data.sport.slug] ?? 0;
   const chip = "rounded-full border border-border px-4 py-1.5 text-sm hover:border-primary";
   const on = "bg-primary text-primary-foreground border-primary";
   return (
@@ -157,10 +161,10 @@ function SportShopPage() {
         {products.length === 0 && <p className="py-16 text-center text-muted-foreground">Nog geen producten in deze selectie.</p>}
       </section>
       {banners.length > 0 && (
-        <section data-section="collection-banners" className="flex w-full gap-1">
+        <section data-section="collection-banners" className="flex w-full gap-1" style={bannerHeight ? { height: `min(${bannerHeight}px, ${(bannerHeight / 14.4).toFixed(2)}vw)` } : undefined}>
           {banners.map((b, i) => {
-            const im = <img src={b.url} alt={`CREATEE ${active?.name ?? data.sport.name}`} loading="lazy" className="aspect-[3/4] h-full w-full object-cover transition-opacity hover:opacity-90" />;
-            return <div key={i} className="min-w-0 flex-1">{b.link ? <a href={b.link} className="block">{im}</a> : im}</div>;
+            const im = <img src={b.url} alt={`CREATEE ${active?.name ?? data.sport.name}`} loading="lazy" className={`${bannerHeight ? "" : "aspect-[3/4] "}block h-full w-full object-cover transition-opacity hover:opacity-90`} style={{ objectPosition: b.focus ? focusPosition(b.focus) : undefined }} />;
+            return <div key={i} className="h-full min-w-0 flex-1">{b.link ? <a href={b.link} className="block h-full">{im}</a> : im}</div>;
           })}
         </section>
       )}
