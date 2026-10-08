@@ -18,7 +18,12 @@ export const Route = createFileRoute("/products/$handle")({
     if (params.handle === "createe-design-studio") throw redirect({ to: "/design-studio" });
     const p = await context.queryClient.ensureQueryData(productQuery(params.handle));
     if (!p) throw notFound();
-    return { name: p.name, seoTitle: p.seo_title, seoDescription: p.seo_description, image: p.product_images[0]?.url ?? null };
+    const active = p.product_variants.filter((v) => v.active);
+    const prices = active.map((v) => Number(v.price)).filter((n) => Number.isFinite(n));
+    return {
+      name: p.name, seoTitle: p.seo_title, seoDescription: p.seo_description, image: p.product_images[0]?.url ?? null,
+      handle: params.handle, price: prices.length ? Math.min(...prices) : null, inStock: active.some(isPurchasable),
+    };
   },
   head: ({ loaderData }) => {
     const title = loaderData?.seoTitle || `${loaderData?.name ?? "Product"} — CREATEE`;
@@ -28,10 +33,21 @@ export const Route = createFileRoute("/products/$handle")({
       { property: "og:title", content: title }, { property: "og:description", content: description },
       { property: "og:type", content: "product" }, { name: "twitter:card", content: "summary_large_image" },
     ];
-    if (loaderData?.image?.startsWith("https://")) {
+    const hasImage = !!loaderData?.image?.startsWith("https://");
+    if (hasImage && loaderData?.image) {
       meta.push({ property: "og:image", content: loaderData.image }, { name: "twitter:image", content: loaderData.image } as never);
     }
-    return { meta };
+    const url = `https://createe.lovable.app/products/${loaderData?.handle ?? ""}`;
+    const scripts = loaderData ? [{ type: "application/ld+json", children: JSON.stringify({
+      "@context": "https://schema.org", "@type": "Product", name: loaderData.name, description,
+      ...(hasImage ? { image: [loaderData.image] } : {}),
+      brand: { "@type": "Brand", name: "CREATEE" }, url,
+      ...(loaderData.price != null ? { offers: {
+        "@type": "Offer", priceCurrency: "EUR", price: loaderData.price.toFixed(2), url,
+        availability: loaderData.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      } } : {}),
+    }) }] : [];
+    return { meta, scripts };
   },
   component: ProductPage,
   notFoundComponent: () => <ShopLayout><p className="py-24 text-center">Product niet gevonden.</p></ShopLayout>,

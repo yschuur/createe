@@ -79,6 +79,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,800&family=Jost:wght@400;500;700&family=Montserrat:wght@400;500;600;700&family=Instrument+Sans:wght@400;500;600&display=swap" },
     ],
+    scripts: [
+      { type: "application/ld+json", children: JSON.stringify({
+        "@context": "https://schema.org", "@type": "Organization", name: "CREATEE",
+        url: "https://createe.lovable.app", logo: "https://createe.lovable.app/apple-touch-icon.png",
+        email: "contact@createe.nl",
+      }) },
+      { type: "application/ld+json", children: JSON.stringify({
+        "@context": "https://schema.org", "@type": "WebSite", name: "CREATEE",
+        url: "https://createe.lovable.app", inLanguage: "nl-NL",
+      }) },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
