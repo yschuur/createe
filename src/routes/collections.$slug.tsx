@@ -62,6 +62,7 @@ function SportShopPage() {
 
   const colors = [...new Set(base.flatMap((p) => p.product_variants.map((v) => v.color).filter((c): c is string => !!c)))].sort((a, b) => a.localeCompare(b, "nl"));
   const products = sortProducts(filterProducts(base, { avail, min, max, color }), sort);
+  const hasFilters = !!avail || min != null || max != null || !!color || !!sort;
 
   const setSearch = (patch: Record<string, unknown>) =>
     navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, ...patch }), replace: true });
