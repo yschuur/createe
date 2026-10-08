@@ -1,3 +1,4 @@
+import { pageMeta, seoQuery } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -19,18 +20,12 @@ export const Route = createFileRoute("/pages/contact")({
     const faq: Faq | undefined = (loaderData as unknown as Faq[] | undefined)?.[0];
     const strip = (s: string) => s.replace(/<[^>]*>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
     const items: { question: string; answer: string }[] = faq ? faq.categories.flatMap((c) => c.items).filter((i) => strip(i.question) && strip(i.answer)) : [];
-    return { meta: [
-      { title: "Contact & veelgestelde vragen | CREATEE" },
-      { name: "description", content: "Neem contact op met CREATEE en vind antwoorden over bestellingen, verzending, retouren en de Design Studio." },
-      { property: "og:title", content: "Contact & veelgestelde vragen | CREATEE" },
-      { property: "og:description", content: "Een vraag over je bestelling of een persoonlijk design? Neem contact op met CREATEE." },
-      { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
-    ], scripts: items.length ? [{ type: "application/ld+json", children: JSON.stringify({
+    return { meta: pageMeta(loaderData, "contact", "summary"), scripts: items.length ? [{ type: "application/ld+json", children: JSON.stringify({
       "@context": "https://schema.org", "@type": "FAQPage",
       mainEntity: items.map((i) => ({ "@type": "Question", name: strip(i.question), acceptedAnswer: { "@type": "Answer", text: strip(i.answer) } })),
     }) }] : [] };
   },
-  loader: ({ context }) => Promise.all([context.queryClient.ensureQueryData(contactFaqQuery()), context.queryClient.ensureQueryData(pageSettingsQuery("contact")), context.queryClient.ensureQueryData(pageSettingsQuery("global"))]),
+  loader: ({ context }) => Promise.all([context.queryClient.ensureQueryData(contactFaqQuery()), context.queryClient.ensureQueryData(pageSettingsQuery("contact")), context.queryClient.ensureQueryData(pageSettingsQuery("global")), context.queryClient.ensureQueryData(seoQuery())]),
   component: ContactPage,
 });
 
