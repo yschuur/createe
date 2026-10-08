@@ -77,8 +77,8 @@ export function ShopLayout({ children, page, cms }: { children: ReactNode; page?
           <div className="space-y-2 text-sm">
             <p data-role="heading" className="mb-4 text-xs font-bold uppercase">{g.t("site-footer", "h_discover")}</p>
             <Link to="/" className="block opacity-80 hover:opacity-100">Home</Link>
-            <Link to="/collections/$slug" params={{ slug: "golf" }} className="block opacity-80 hover:opacity-100">Golf</Link>
-            <Link to="/collections/$slug" params={{ slug: "padel" }} className="block opacity-80 hover:opacity-100">Padel</Link>
+            <Link to="/collections/$slug" params={{ slug: "golf" }} search={{}} className="block opacity-80 hover:opacity-100">Golf</Link>
+            <Link to="/collections/$slug" params={{ slug: "padel" }} search={{}} className="block opacity-80 hover:opacity-100">Padel</Link>
             <Link to="/design-studio" className="block opacity-80 hover:opacity-100">CREATEE Design Studio</Link>
             <Link to="/pages/de-hybr-polo" className="block opacity-80 hover:opacity-100">De HYBR™ Polo</Link>
             <Link to="/pages/ons-verhaal" className="block opacity-80 hover:opacity-100">Over ons</Link>

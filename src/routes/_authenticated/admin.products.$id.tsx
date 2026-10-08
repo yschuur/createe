@@ -30,15 +30,16 @@ function EditProduct() {
   const { data, refetch } = useQuery({
     queryKey: ["admin", "product", id],
     queryFn: async () => {
-      const [p, v, i, c, cp] = await Promise.all([
+      const [p, v, i, c, cp, sp] = await Promise.all([
         supabase.from("products").select("*").eq("id", id).single(),
         supabase.from("product_variants").select("*").eq("product_id", id).order("sort_order"),
         supabase.from("product_images").select("*").eq("product_id", id).order("sort_order"),
-        supabase.from("collections").select("id, name").order("sort_order"),
+        supabase.from("collections").select("id, name, sport_ids").order("sort_order"),
         supabase.from("collection_products").select("collection_id").eq("product_id", id),
+        supabase.from("sports").select("id, name").order("sort_order"),
       ]);
       if (p.error) throw p.error;
-      return { product: p.data, variants: v.data ?? [], images: i.data ?? [], collections: c.data ?? [], inCollections: (cp.data ?? []).map((x) => x.collection_id) };
+      return { product: p.data, variants: v.data ?? [], images: i.data ?? [], collections: c.data ?? [], sports: sp.data ?? [], inCollections: (cp.data ?? []).map((x) => x.collection_id) };
     },
   });
 
@@ -132,7 +133,7 @@ function EditProduct() {
               <div><Label>Pasvorm</Label><Input value={p.fit ?? ""} onChange={(e) => set("fit", e.target.value)} /></div>
               <div><Label>Materiaal</Label><Input value={p.fabric ?? ""} onChange={(e) => set("fabric", e.target.value)} /></div>
             </div>
-            <div><Label>Sport</Label><div className="mt-2 flex gap-4">{(["golf", "padel"] as const).map((sp) => <label key={sp} className="flex items-center gap-2 text-sm"><input type="checkbox" checked={p.sports.includes(sp)} onChange={(e) => set("sports", e.target.checked ? [...p.sports, sp] : p.sports.filter((x) => x !== sp))} />{sp === "golf" ? "Golf" : "Padel"}</label>)}</div><p className="mt-1 text-xs text-muted-foreground">Bepaalt bij welke sport het product verschijnt, ook in categorieën zoals Tees.</p></div>
+            <div><Label>Sport</Label><select className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" value={p.sport_id ?? ""} onChange={(e) => { const v = e.target.value || null; set("sport_id", v); setColls(colls.filter((cid) => data.collections.find((c) => c.id === cid)?.sport_ids.includes(v ?? ""))); }}><option value="">Geen sport (niet zichtbaar in een shop)</option>{data.sports.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}</select><p className="mt-1 text-xs text-muted-foreground">Het product verschijnt alleen in de shop van deze sport. Nieuwe sporten maak je aan onder Sporten.</p></div>
             <div><Label>Tags (komma-gescheiden)</Label><Input value={p.tags.join(", ")} onChange={(e) => set("tags", e.target.value.split(",").map((t) => t.trim()).filter(Boolean))} /></div>
           </Box>
 
@@ -203,7 +204,8 @@ function EditProduct() {
             <Toggle label="Dienst (geen voorraad)" checked={p.is_service} onChange={(c) => { set("is_service", c); setVariants(variants.map((v) => ({ ...v, track_inventory: !c }))); }} />
           </Box>
           <Box title="Collecties">
-            {data.collections.map((c) => (
+            {!p.sport_id && <p className="text-sm text-muted-foreground">Kies eerst een sport.</p>}
+            {data.collections.filter((c) => p.sport_id && c.sport_ids.includes(p.sport_id)).map((c) => (
               <label key={c.id} className="flex items-center gap-2 text-sm">
                 <input type="checkbox" checked={colls.includes(c.id)} onChange={(e) => setColls(e.target.checked ? [...colls, c.id] : colls.filter((x) => x !== c.id))} /> {c.name}
               </label>
