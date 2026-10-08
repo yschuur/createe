@@ -13,6 +13,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DesignStudioRouteImport } from './routes/design-studio'
+import { Route as CheckoutIndexRouteImport } from './routes/checkout.index'
+import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as CollectionsSlugRouteImport } from './routes/collections.$slug'
 import { Route as PagesContactRouteImport } from './routes/pages.contact'
 import { Route as PagesDeHybrPoloRouteImport } from './routes/pages.de-hybr-polo'
@@ -36,6 +38,7 @@ import { Route as AuthenticatedAdminPagesIndexRouteImport } from './routes/_auth
 import { Route as AuthenticatedAdminPagesPageRouteImport } from './routes/_authenticated/admin.pages.$page'
 import { Route as AuthenticatedAdminProductsIndexRouteImport } from './routes/_authenticated/admin.products.index'
 import { Route as AuthenticatedAdminProductsIdRouteImport } from './routes/_authenticated/admin.products.$id'
+import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -54,6 +57,16 @@ const AuthRoute = AuthRouteImport.update({
 const DesignStudioRoute = DesignStudioRouteImport.update({
   id: '/design-studio',
   path: '/design-studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutIndexRoute = CheckoutIndexRouteImport.update({
+  id: '/checkout/',
+  path: '/checkout/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutReturnRoute = CheckoutReturnRouteImport.update({
+  id: '/checkout/return',
+  path: '/checkout/return',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CollectionsSlugRoute = CollectionsSlugRouteImport.update({
@@ -184,11 +197,18 @@ const AuthenticatedAdminProductsIdRoute =
     path: '/admin/products/$id',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ApiPublicPaymentsWebhookRoute =
+  ApiPublicPaymentsWebhookRouteImport.update({
+    id: '/api/public/payments/webhook',
+    path: '/api/public/payments/webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/design-studio': typeof DesignStudioRoute
+  '/checkout/return': typeof CheckoutReturnRoute
   '/collections/$slug': typeof CollectionsSlugRoute
   '/pages/contact': typeof PagesContactRoute
   '/pages/de-hybr-polo': typeof PagesDeHybrPoloRoute
@@ -196,6 +216,7 @@ export interface FileRoutesByFullPath {
   '/pages/ons-verhaal': typeof PagesOnsVerhaalRoute
   '/policies/$slug': typeof PoliciesSlugRoute
   '/products/$handle': typeof ProductsHandleRoute
+  '/checkout/': typeof CheckoutIndexRoute
   '/admin/collections': typeof AuthenticatedAdminCollectionsRoute
   '/admin/contact': typeof AuthenticatedAdminContactRoute
   '/admin/discounts': typeof AuthenticatedAdminDiscountsRoute
@@ -210,6 +231,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/admin/pages/$page': typeof AuthenticatedAdminPagesPageRoute
   '/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
+  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/admin/pages/': typeof AuthenticatedAdminPagesIndexRoute
   '/admin/products/': typeof AuthenticatedAdminProductsIndexRoute
 }
@@ -217,6 +239,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/design-studio': typeof DesignStudioRoute
+  '/checkout/return': typeof CheckoutReturnRoute
   '/collections/$slug': typeof CollectionsSlugRoute
   '/pages/contact': typeof PagesContactRoute
   '/pages/de-hybr-polo': typeof PagesDeHybrPoloRoute
@@ -224,6 +247,7 @@ export interface FileRoutesByTo {
   '/pages/ons-verhaal': typeof PagesOnsVerhaalRoute
   '/policies/$slug': typeof PoliciesSlugRoute
   '/products/$handle': typeof ProductsHandleRoute
+  '/checkout': typeof CheckoutIndexRoute
   '/admin/collections': typeof AuthenticatedAdminCollectionsRoute
   '/admin/contact': typeof AuthenticatedAdminContactRoute
   '/admin/discounts': typeof AuthenticatedAdminDiscountsRoute
@@ -238,6 +262,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/admin/pages/$page': typeof AuthenticatedAdminPagesPageRoute
   '/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
+  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/admin/pages': typeof AuthenticatedAdminPagesIndexRoute
   '/admin/products': typeof AuthenticatedAdminProductsIndexRoute
 }
@@ -247,6 +272,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/design-studio': typeof DesignStudioRoute
+  '/checkout/return': typeof CheckoutReturnRoute
   '/collections/$slug': typeof CollectionsSlugRoute
   '/pages/contact': typeof PagesContactRoute
   '/pages/de-hybr-polo': typeof PagesDeHybrPoloRoute
@@ -254,6 +280,7 @@ export interface FileRoutesById {
   '/pages/ons-verhaal': typeof PagesOnsVerhaalRoute
   '/policies/$slug': typeof PoliciesSlugRoute
   '/products/$handle': typeof ProductsHandleRoute
+  '/checkout/': typeof CheckoutIndexRoute
   '/_authenticated/admin/collections': typeof AuthenticatedAdminCollectionsRoute
   '/_authenticated/admin/contact': typeof AuthenticatedAdminContactRoute
   '/_authenticated/admin/discounts': typeof AuthenticatedAdminDiscountsRoute
@@ -268,6 +295,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/admin/pages/$page': typeof AuthenticatedAdminPagesPageRoute
   '/_authenticated/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
+  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
   '/_authenticated/admin/pages/': typeof AuthenticatedAdminPagesIndexRoute
   '/_authenticated/admin/products/': typeof AuthenticatedAdminProductsIndexRoute
 }
@@ -277,6 +305,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/design-studio'
+    | '/checkout/return'
     | '/collections/$slug'
     | '/pages/contact'
     | '/pages/de-hybr-polo'
@@ -284,6 +313,7 @@ export interface FileRouteTypes {
     | '/pages/ons-verhaal'
     | '/policies/$slug'
     | '/products/$handle'
+    | '/checkout/'
     | '/admin/collections'
     | '/admin/contact'
     | '/admin/discounts'
@@ -298,6 +328,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/admin/pages/$page'
     | '/admin/products/$id'
+    | '/api/public/payments/webhook'
     | '/admin/pages/'
     | '/admin/products/'
   fileRoutesByTo: FileRoutesByTo
@@ -305,6 +336,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/design-studio'
+    | '/checkout/return'
     | '/collections/$slug'
     | '/pages/contact'
     | '/pages/de-hybr-polo'
@@ -312,6 +344,7 @@ export interface FileRouteTypes {
     | '/pages/ons-verhaal'
     | '/policies/$slug'
     | '/products/$handle'
+    | '/checkout'
     | '/admin/collections'
     | '/admin/contact'
     | '/admin/discounts'
@@ -326,6 +359,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/admin/pages/$page'
     | '/admin/products/$id'
+    | '/api/public/payments/webhook'
     | '/admin/pages'
     | '/admin/products'
   id:
@@ -334,6 +368,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/design-studio'
+    | '/checkout/return'
     | '/collections/$slug'
     | '/pages/contact'
     | '/pages/de-hybr-polo'
@@ -341,6 +376,7 @@ export interface FileRouteTypes {
     | '/pages/ons-verhaal'
     | '/policies/$slug'
     | '/products/$handle'
+    | '/checkout/'
     | '/_authenticated/admin/collections'
     | '/_authenticated/admin/contact'
     | '/_authenticated/admin/discounts'
@@ -355,6 +391,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/'
     | '/_authenticated/admin/pages/$page'
     | '/_authenticated/admin/products/$id'
+    | '/api/public/payments/webhook'
     | '/_authenticated/admin/pages/'
     | '/_authenticated/admin/products/'
   fileRoutesById: FileRoutesById
@@ -364,6 +401,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   DesignStudioRoute: typeof DesignStudioRoute
+  CheckoutReturnRoute: typeof CheckoutReturnRoute
   CollectionsSlugRoute: typeof CollectionsSlugRoute
   PagesContactRoute: typeof PagesContactRoute
   PagesDeHybrPoloRoute: typeof PagesDeHybrPoloRoute
@@ -371,6 +409,8 @@ export interface RootRouteChildren {
   PagesOnsVerhaalRoute: typeof PagesOnsVerhaalRoute
   PoliciesSlugRoute: typeof PoliciesSlugRoute
   ProductsHandleRoute: typeof ProductsHandleRoute
+  CheckoutIndexRoute: typeof CheckoutIndexRoute
+  ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -401,6 +441,20 @@ declare module '@tanstack/react-router' {
       path: '/design-studio'
       fullPath: '/design-studio'
       preLoaderRoute: typeof DesignStudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout/': {
+      id: '/checkout/'
+      path: '/checkout'
+      fullPath: '/checkout/'
+      preLoaderRoute: typeof CheckoutIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout/return': {
+      id: '/checkout/return'
+      path: '/checkout/return'
+      fullPath: '/checkout/return'
+      preLoaderRoute: typeof CheckoutReturnRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/collections/$slug': {
@@ -564,6 +618,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminProductsIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/payments/webhook': {
+      id: '/api/public/payments/webhook'
+      path: '/api/public/payments/webhook'
+      fullPath: '/api/public/payments/webhook'
+      preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -613,6 +674,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   DesignStudioRoute: DesignStudioRoute,
+  CheckoutReturnRoute: CheckoutReturnRoute,
   CollectionsSlugRoute: CollectionsSlugRoute,
   PagesContactRoute: PagesContactRoute,
   PagesDeHybrPoloRoute: PagesDeHybrPoloRoute,
@@ -620,6 +682,8 @@ const rootRouteChildren: RootRouteChildren = {
   PagesOnsVerhaalRoute: PagesOnsVerhaalRoute,
   PoliciesSlugRoute: PoliciesSlugRoute,
   ProductsHandleRoute: ProductsHandleRoute,
+  CheckoutIndexRoute: CheckoutIndexRoute,
+  ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

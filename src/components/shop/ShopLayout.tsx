@@ -143,8 +143,10 @@ function CartSheet() {
         {cart.items.length > 0 && (
           <div className="space-y-3 border-t border-border pt-4">
             <div className="flex justify-between font-medium"><span>Subtotaal</span><span>{formatPrice(cart.subtotal)}</span></div>
-            <Button data-page-button="checkout" className="w-full" size="lg" disabled>Afrekenen (binnenkort)</Button>
-            <p className="text-center text-xs text-muted-foreground">Online betalen wordt binnenkort gekoppeld.</p>
+            <Button asChild data-page-button="checkout" className="w-full" size="lg" onClick={() => cart.setOpen(false)}>
+              <Link to="/checkout">Afrekenen</Link>
+            </Button>
+            <p className="text-center text-xs text-muted-foreground">Veilig betalen met iDEAL, Bancontact of creditcard.</p>
           </div>
         )}
       </SheetContent>

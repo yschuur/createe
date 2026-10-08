@@ -278,6 +278,107 @@ export type Database = {
         }
         Relationships: []
       }
+      order_items: {
+        Row: {
+          created_at: string
+          id: string
+          line_total: number
+          order_id: string
+          product_id: string | null
+          product_name: string
+          quantity: number
+          unit_price: number
+          variant_id: string | null
+          variant_label: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          line_total: number
+          order_id: string
+          product_id?: string | null
+          product_name: string
+          quantity: number
+          unit_price: number
+          variant_id?: string | null
+          variant_label?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          line_total?: number
+          order_id?: string
+          product_id?: string | null
+          product_name?: string
+          quantity?: number
+          unit_price?: number
+          variant_id?: string | null
+          variant_label?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          created_at: string
+          currency: string
+          email: string | null
+          environment: string
+          id: string
+          name: string | null
+          order_number: string
+          phone: string | null
+          shipping_address: Json | null
+          shipping_total: number
+          status: string
+          stripe_session_id: string | null
+          total: number
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          email?: string | null
+          environment?: string
+          id?: string
+          name?: string | null
+          order_number: string
+          phone?: string | null
+          shipping_address?: Json | null
+          shipping_total?: number
+          status?: string
+          stripe_session_id?: string | null
+          total?: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          email?: string | null
+          environment?: string
+          id?: string
+          name?: string | null
+          order_number?: string
+          phone?: string | null
+          shipping_address?: Json | null
+          shipping_total?: number
+          status?: string
+          stripe_session_id?: string | null
+          total?: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       product_images: {
         Row: {
           alt_text: string | null
@@ -572,6 +673,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      decrement_variant_stock: {
+        Args: { _qty: number; _variant: string }
+        Returns: undefined
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
