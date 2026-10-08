@@ -34,7 +34,7 @@ export const submitStudio = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => studioSchema.parse(input))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: row, error } = await supabaseAdmin.from("design_requests").insert(data).select("id").single();
+    const { data: row, error } = await supabaseAdmin.from("design_requests").insert({ name: data.name, email: data.email, message: data.message, phone: data.phone ?? null, quantity: data.quantity ?? null }).select("id").single();
     if (error || !row) return { ok: false };
     const { sendFormEmails } = await import("@/lib/form-emails.server");
     await sendFormEmails({
