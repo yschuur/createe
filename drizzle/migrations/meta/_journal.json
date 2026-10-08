@@ -113,6 +113,13 @@
       "when": 1791463923095,
       "tag": "0015_newsletter_and_customers",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1791464135065,
+      "tag": "0016_allow_free_shipping_discount_type",
+      "breakpoints": true
     }
   ]
 }
