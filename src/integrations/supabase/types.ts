@@ -95,6 +95,7 @@ export type Database = {
           name: string
           order_number: string
           phone: string
+          replies: Json
         }
         Insert: {
           created_at?: string
@@ -104,6 +105,7 @@ export type Database = {
           name: string
           order_number?: string
           phone?: string
+          replies?: Json
         }
         Update: {
           created_at?: string
@@ -113,6 +115,7 @@ export type Database = {
           name?: string
           order_number?: string
           phone?: string
+          replies?: Json
         }
         Relationships: []
       }
@@ -126,6 +129,7 @@ export type Database = {
           occasion: string | null
           phone: string | null
           quantity: number | null
+          replies: Json
           status: string
         }
         Insert: {
@@ -137,6 +141,7 @@ export type Database = {
           occasion?: string | null
           phone?: string | null
           quantity?: number | null
+          replies?: Json
           status?: string
         }
         Update: {
@@ -148,6 +153,7 @@ export type Database = {
           occasion?: string | null
           phone?: string | null
           quantity?: number | null
+          replies?: Json
           status?: string
         }
         Relationships: []
