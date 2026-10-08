@@ -167,6 +167,7 @@ export type Database = {
           ends_at: string | null
           id: string
           min_order_amount: number | null
+          newsletter: boolean
           starts_at: string | null
           times_used: number
           type: string
@@ -182,6 +183,7 @@ export type Database = {
           ends_at?: string | null
           id?: string
           min_order_amount?: number | null
+          newsletter?: boolean
           starts_at?: string | null
           times_used?: number
           type?: string
@@ -197,6 +199,7 @@ export type Database = {
           ends_at?: string | null
           id?: string
           min_order_amount?: number | null
+          newsletter?: boolean
           starts_at?: string | null
           times_used?: number
           type?: string
@@ -281,6 +284,24 @@ export type Database = {
           size_bytes?: number | null
           storage_path?: string | null
           url?: string
+        }
+        Relationships: []
+      }
+      newsletter_subscribers: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
         }
         Relationships: []
       }
