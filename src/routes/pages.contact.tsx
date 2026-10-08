@@ -15,9 +15,10 @@ import { pageSettingsQuery, usePageSettings } from "@/lib/page-settings";
 
 export const Route = createFileRoute("/pages/contact")({
   head: ({ loaderData }) => {
-    const faq = (loaderData as unknown as [{ categories: { items: { question: string; answer: string }[] }[] }] | undefined)?.[0];
+    type Faq = { categories: { items: { question: string; answer: string }[] }[] };
+    const faq: Faq | undefined = (loaderData as unknown as Faq[] | undefined)?.[0];
     const strip = (s: string) => s.replace(/<[^>]*>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
-    const items = faq ? faq.categories.flatMap((c) => c.items).filter((i) => strip(i.question) && strip(i.answer)) : [];
+    const items: { question: string; answer: string }[] = faq ? faq.categories.flatMap((c) => c.items).filter((i) => strip(i.question) && strip(i.answer)) : [];
     return { meta: [
       { title: "Contact & veelgestelde vragen — CREATEE" },
       { name: "description", content: "Neem contact op met CREATEE en vind antwoorden over bestellingen, verzending, retouren en de Design Studio." },
