@@ -8,6 +8,12 @@ export const Route = createFileRoute("/_authenticated/admin/pages/")({
   component: PagesIndex,
 });
 
+const extras = [
+  { to: "/admin/homepage", label: "Homepage — inhoud", description: "Header-video's, knoppen, uitgelichte producten en aankondigingsbalk." },
+  { to: "/admin/studio", label: "Design Studio — inhoud", description: "Prijzen, scorecard-reviews en kleurfoto's van de Studio." },
+  { to: "/admin/policies", label: "Juridische pagina's", description: "Privacy, algemene voorwaarden, retouren en verzending." },
+] as const;
+
 function PagesIndex() {
   return <AdminLayout title="Pagina's">
     <p className="mb-6 text-sm text-muted-foreground">Kies een pagina. Per onderdeel pas je teksten, foto's, kleuren, lettertypes en ruimte aan. Wat je niet invult, blijft zoals het nu is.</p>
