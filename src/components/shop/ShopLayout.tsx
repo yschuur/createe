@@ -13,10 +13,10 @@ import { menuQuery, defaultMenu } from "@/lib/menu";
 import { sectionStylesQuery, buildCss } from "@/lib/section-styles";
 import { DesktopMenu, MobileMenu } from "@/components/shop/SiteMenu";
 import { buildPageCss, makePageView, pageSettingsQuery, type PageKey } from "@/lib/page-settings";
-
-
+import { POLICY_SLUGS, policiesQuery, defaultPolicies } from "@/lib/policies";
 
 export function ShopLayout({ children, page, cms }: { children: ReactNode; page?: "home" | "studio" | "story"; cms?: PageKey }) {
+  const policies = useQuery(policiesQuery()).data ?? defaultPolicies;
   const cart = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
   const { data: home } = useQuery(homepageQuery());
@@ -88,6 +88,7 @@ export function ShopLayout({ children, page, cms }: { children: ReactNode; page?
             {g.t("site-footer", "info1") && <span className="block opacity-80">{g.t("site-footer", "info1")}</span>}
             {g.t("site-footer", "info2") && <span className="block opacity-80">{g.t("site-footer", "info2")}</span>}
             {g.t("site-footer", "info3_label") && <a href={g.t("site-footer", "info3_url")} target="_blank" rel="noreferrer" className="block opacity-80 hover:opacity-100">{g.t("site-footer", "info3_label")}</a>}
+            {POLICY_SLUGS.map(s => <Link key={s} to="/policies/$slug" params={{ slug: s }} className="block opacity-80 hover:opacity-100">{policies[s].label}</Link>)}
           </div>
           <div className="space-y-3 text-sm">
             <p data-role="heading" className="text-xs font-bold uppercase">{g.t("site-footer", "club_title")}</p>

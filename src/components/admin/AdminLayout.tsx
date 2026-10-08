@@ -12,6 +12,7 @@ const items = [
   { to: "/admin/menu", label: "Menu", icon: Menu },
   { to: "/admin/studio", label: "Design Studio", icon: Palette },
   { to: "/admin/contact", label: "Contact & FAQ", icon: MessageSquare },
+  { to: "/admin/policies", label: "Beleidspagina's", icon: FileText },
   { to: "/admin/media", label: "Mediabibliotheek", icon: Images },
   { to: "/admin/products", label: "Producten", icon: Package },
   { to: "/admin/collections", label: "Collecties", icon: Layers },
