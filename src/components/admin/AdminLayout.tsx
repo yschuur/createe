@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { LayoutDashboard, Package, Layers, Tag, Upload, LogOut, ExternalLink, Home, Menu, Palette, Images, FileText, MessageSquare, Trophy } from "lucide-react";
+import { LayoutDashboard, Package, Layers, Tag, Upload, LogOut, ExternalLink, Home, Menu, Palette, Images, FileText, MessageSquare, Trophy, Truck } from "lucide-react";
 import type { ReactNode } from "react";
 import { Logo } from "@/components/Logo";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,6 +18,7 @@ const items = [
   { to: "/admin/sports", label: "Sporten", icon: Trophy },
   { to: "/admin/collections", label: "Collecties", icon: Layers },
   { to: "/admin/discounts", label: "Acties", icon: Tag },
+  { to: "/admin/shipping", label: "Verzending", icon: Truck },
   { to: "/admin/import", label: "Importeren", icon: Upload },
 ] as const;
 
