@@ -71,6 +71,13 @@
       "when": 1791451759946,
       "tag": "0009_product_sports",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1791452267264,
+      "tag": "0010_sports_structure",
+      "breakpoints": true
     }
   ]
 }

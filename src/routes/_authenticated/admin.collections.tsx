@@ -22,12 +22,13 @@ function CollectionsAdmin() {
   const { data } = useQuery({
     queryKey: ["admin", "collections"],
     queryFn: async () => {
-      const [c, cp, p] = await Promise.all([
+      const [c, cp, p, sp] = await Promise.all([
         supabase.from("collections").select("*").order("sort_order"),
         supabase.from("collection_products").select("*"),
-        supabase.from("products").select("id, name, status").order("name"),
+        supabase.from("products").select("id, name, status, sport_id").order("name"),
+        supabase.from("sports").select("id, name").order("sort_order"),
       ]);
-      return { collections: c.data ?? [], links: cp.data ?? [], products: p.data ?? [] };
+      return { collections: c.data ?? [], links: cp.data ?? [], products: p.data ?? [], sports: sp.data ?? [] };
     },
   });
   const refresh = () => qc.invalidateQueries();
@@ -36,7 +37,8 @@ function CollectionsAdmin() {
     const name = prompt("Naam van de collectie");
     if (!name?.trim()) return;
     const slug = name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-    const { error } = await supabase.from("collections").insert({ name: name.trim(), slug, sort_order: data?.collections.length ?? 0 });
+    const { error } = await supabase.from("collections").insert({ name: name.trim(), slug, sort_order: data?.collections.length ?? 0, sport_ids: [] });
+    if (!error) toast.info("Kies nu bij welke sport(en) deze collectie hoort.");
     if (error) toast.error(error.message); else refresh();
   }
   async function update(id: string, patch: Record<string, unknown>) {
@@ -62,7 +64,7 @@ function CollectionsAdmin() {
               <Input defaultValue={c.name} onBlur={(e) => e.target.value !== c.name && update(c.id, { name: e.target.value })} className="font-semibold" />
               <CollectionDescription value={c.description ?? ""} onSave={(v) => update(c.id, { description: v || null })} />
               <MediaField value={c.image_url ?? ""} onChange={(v) => update(c.id, { image_url: v || null })} placeholder="Collectiefoto (link)" />
-              <p className="font-mono text-xs text-muted-foreground">/collections/{c.slug}</p>
+              <div className="flex flex-wrap items-center gap-3 text-sm"><span className="font-medium">Sport:</span>{data.sports.map((s) => <label key={s.id} className="flex items-center gap-1"><input type="checkbox" checked={c.sport_ids.includes(s.id)} onChange={(e) => update(c.id, { sport_ids: e.target.checked ? [...c.sport_ids, s.id] : c.sport_ids.filter((x) => x !== s.id) })} />{s.name}</label>)}{c.sport_ids.length === 0 && <span className="text-destructive">Kies minstens één sport</span>}</div>
             </div>
             <p className="text-sm">{data.links.filter((l) => l.collection_id === c.id).length} producten</p>
             <label className="flex items-center gap-2 text-sm">Zichtbaar <Switch checked={c.published} onCheckedChange={(v) => update(c.id, { published: v })} /></label>
@@ -74,7 +76,7 @@ function CollectionsAdmin() {
       <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
         <DialogContent className="max-h-[80vh] overflow-y-auto">
           <DialogHeader><DialogTitle>Producten in {current?.name}</DialogTitle></DialogHeader>
-          {data?.products.map((p) => {
+          {data?.products.filter((p) => p.sport_id && current?.sport_ids.includes(p.sport_id)).map((p) => {
             const on = data.links.some((l) => l.collection_id === editing && l.product_id === p.id);
             return (
               <label key={p.id} className="flex items-center gap-2 text-sm">

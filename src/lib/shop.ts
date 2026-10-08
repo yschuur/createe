@@ -59,39 +59,45 @@ export const collectionsQuery = () =>
     },
   });
 
-export const SPORTS = ["golf", "padel"] as const;
-export type Sport = (typeof SPORTS)[number];
-export const isSport = (s: unknown): s is Sport => s === "golf" || s === "padel";
+export const sportsQuery = () =>
+  queryOptions({
+    queryKey: ["sports"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("sports").select("*").order("sort_order");
+      if (error) throw error;
+      return data;
+    },
+  });
 
-/** Sport collections list every product marked with that sport; other collections can be narrowed to one sport. */
-export function filterBySport<T extends { sports: string[] }>(products: T[], slug: string, sport?: Sport): T[] {
-  const s = isSport(slug) ? slug : sport;
-  return s ? products.filter((p) => p.sports.includes(s)) : products;
+/** A product only ever appears in the shop of its own sport; collections are filters within that sport. */
+export function filterSportShop<T extends { id: string; sport_id: string | null }>(
+  products: T[], sportId: string, collectionProductIds?: Set<string>,
+): T[] {
+  return products.filter((p) => p.sport_id === sportId && (!collectionProductIds || collectionProductIds.has(p.id)));
 }
 
+/** /collections/$slug: a sport slug opens that sport's shop; a collection slug resolves to its first sport. */
 export const collectionQuery = (slug: string) =>
   queryOptions({
     queryKey: ["collections", slug],
     queryFn: async () => {
-      const { data: c, error } = await supabase.from("collections").select("*").eq("slug", slug).maybeSingle();
-      if (error) throw error;
-      if (!c) return null;
-      if (isSport(slug)) {
-        const { data: sp, error: e3 } = await supabase.from("products").select(SELECT).contains("sports", [slug]).eq("status", "active").eq("published", true).order("sort_order");
-        if (e3) throw e3;
-        return { collection: c, products: (sp as ProductWithRelations[]).map(sortRelations) };
+      const { data: sports, error: se } = await supabase.from("sports").select("*").order("sort_order");
+      if (se) throw se;
+      const sport = sports.find((x) => x.slug === slug);
+      if (!sport) {
+        const { data: c } = await supabase.from("collections").select("slug, sport_ids").eq("slug", slug).eq("published", true).maybeSingle();
+        const first = sports.find((x) => c?.sport_ids.includes(x.id));
+        return first && c ? { redirect: { sport: first.slug, collection: c.slug } } : null;
       }
-      const { data: links } = await supabase.from("collection_products").select("product_id, sort_order").eq("collection_id", c.id);
-      const ids = (links ?? []).map((l) => l.product_id);
-      if (!ids.length) return { collection: c, products: [] as ProductWithRelations[] };
-      const { data: products, error: e2 } = await supabase
-        .from("products").select(SELECT).in("id", ids).eq("status", "active").eq("published", true);
-      if (e2) throw e2;
-      const order = new Map((links ?? []).map((l) => [l.product_id, l.sort_order]));
-      return {
-        collection: c,
-        products: (products as ProductWithRelations[]).map(sortRelations).sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0)),
-      };
+      const { data: colls, error: ce } = await supabase.from("collections").select("*").eq("published", true).contains("sport_ids", [sport.id]).order("sort_order");
+      if (ce) throw ce;
+      const ids = colls.map((c) => c.id);
+      const [{ data: products, error: pe }, { data: links }] = await Promise.all([
+        supabase.from("products").select(SELECT).eq("sport_id", sport.id).eq("status", "active").eq("published", true).order("sort_order"),
+        ids.length ? supabase.from("collection_products").select("collection_id, product_id, sort_order").in("collection_id", ids) : Promise.resolve({ data: [] as { collection_id: string; product_id: string; sort_order: number }[] }),
+      ]);
+      if (pe) throw pe;
+      return { sport, collections: colls, links: links ?? [], products: (products as ProductWithRelations[]).map(sortRelations) };
     },
   });
 

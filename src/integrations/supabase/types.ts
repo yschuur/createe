@@ -57,6 +57,7 @@ export type Database = {
           published: boolean
           slug: string
           sort_order: number
+          sport_ids: string[]
           updated_at: string
         }
         Insert: {
@@ -68,6 +69,7 @@ export type Database = {
           published?: boolean
           slug: string
           sort_order?: number
+          sport_ids?: string[]
           updated_at?: string
         }
         Update: {
@@ -79,6 +81,7 @@ export type Database = {
           published?: boolean
           slug?: string
           sort_order?: number
+          sport_ids?: string[]
           updated_at?: string
         }
         Relationships: []
@@ -436,6 +439,7 @@ export type Database = {
           seo_title: string | null
           slug: string
           sort_order: number
+          sport_id: string | null
           sports: string[]
           status: string
           tags: string[]
@@ -460,6 +464,7 @@ export type Database = {
           seo_title?: string | null
           slug: string
           sort_order?: number
+          sport_id?: string | null
           sports?: string[]
           status?: string
           tags?: string[]
@@ -484,6 +489,7 @@ export type Database = {
           seo_title?: string | null
           slug?: string
           sort_order?: number
+          sport_id?: string | null
           sports?: string[]
           status?: string
           tags?: string[]
@@ -491,7 +497,15 @@ export type Database = {
           updated_at?: string
           vendor?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "products_sport_id_fkey"
+            columns: ["sport_id"]
+            isOneToOne: false
+            referencedRelation: "sports"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       site_settings: {
         Row: {
@@ -508,6 +522,30 @@ export type Database = {
           key?: string
           updated_at?: string
           value?: Json
+        }
+        Relationships: []
+      }
+      sports: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          slug: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          slug: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          slug?: string
+          sort_order?: number
         }
         Relationships: []
       }

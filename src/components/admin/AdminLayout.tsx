@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { LayoutDashboard, Package, Layers, Tag, Upload, LogOut, ExternalLink, Home, Menu, Palette, Images, FileText, MessageSquare } from "lucide-react";
+import { LayoutDashboard, Package, Layers, Tag, Upload, LogOut, ExternalLink, Home, Menu, Palette, Images, FileText, MessageSquare, Trophy } from "lucide-react";
 import type { ReactNode } from "react";
 import { Logo } from "@/components/Logo";
 import { supabase } from "@/integrations/supabase/client";
@@ -11,10 +11,11 @@ const items = [
   { to: "/admin/homepage", label: "Homepage-inhoud", icon: Home },
   { to: "/admin/menu", label: "Menu", icon: Menu },
   { to: "/admin/studio", label: "Design Studio", icon: Palette },
-  { to: "/admin/contact", label: "Contact & FAQ", icon: MessageSquare },
+  { to: "/admin/contact", label: "Contact & FAQ", icon: MessageSquare, Trophy },
   { to: "/admin/policies", label: "Beleidspagina's", icon: FileText },
   { to: "/admin/media", label: "Mediabibliotheek", icon: Images },
   { to: "/admin/products", label: "Producten", icon: Package },
+  { to: "/admin/sports", label: "Sporten", icon: Trophy },
   { to: "/admin/collections", label: "Collecties", icon: Layers },
   { to: "/admin/discounts", label: "Acties", icon: Tag },
   { to: "/admin/import", label: "Importeren", icon: Upload },
