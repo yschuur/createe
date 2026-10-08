@@ -255,12 +255,12 @@ export function parsePageConfig(v: unknown): PageConfig { return pageConfigSchem
 /* ------------------------------------------------------------------ */
 
 export function isPlainObject(v: unknown): v is Record<string, unknown> { return !!v && typeof v === "object" && !Array.isArray(v); }
-/** Recursive merge: override wins, undefined/empty-string values never erase defaults. */
+/** Recursive merge: override wins; undefined never erases defaults (an empty text is a deliberate override). */
 export function deepMerge<T>(base: T, override: unknown): T {
-  if (!isPlainObject(base) || !isPlainObject(override)) return (override === undefined || override === "" ? base : (override as T));
+  if (!isPlainObject(base) || !isPlainObject(override)) return (override === undefined ? base : (override as T));
   const out: Record<string, unknown> = { ...base };
   for (const [k, v] of Object.entries(override)) {
-    if (v === undefined || v === "") continue;
+    if (v === undefined) continue;
     out[k] = k in out ? deepMerge(out[k], v) : v;
   }
   return out as T;
