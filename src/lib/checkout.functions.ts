@@ -17,7 +17,7 @@ const checkoutInput = z.object({
   discountCode: z.string().trim().max(30).nullish(),
 });
 
-type CheckoutSessionResult = { clientSecret: string; freeShipping: boolean; discountError?: string } | { error: string };
+type CheckoutSessionResult = { clientSecret: string; freeShipping: boolean; discountError?: string | undefined } | { error: string };
 
 type ResolvedItem = {
   productId: string | null;
