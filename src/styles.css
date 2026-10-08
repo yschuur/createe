@@ -317,7 +317,7 @@
 .about-features { display: grid; gap: 18px; }
 .about-features dt { font-family: var(--font-display); text-transform: uppercase; font-size: 15px; font-weight: 700; margin-bottom: 6px; }
 .about-features dd { font-size: 13px; line-height: 1.6; }
-@media (max-width: 1023px) { .about-band { padding: 48px; } .about-band:not([data-section="story-values"]) { padding: 28px; } .about-history-grid { gap: 28px; } .about-value-copy { padding: 32px; } .about-hybr .about-opening-copy, .about-technology-copy { padding: 24px; } .about-hybr-image { height: 460px; } }
+@media (max-width: 1023px) { .about-band { padding: 48px; } .about-band:not([data-section="story-values"]) { padding: 28px; } .about-history-grid { gap: 28px; } .about-value-copy { padding: 32px; } .about-hybr .about-opening-copy, .about-technology-copy { padding: 24px; } .about-hybr-image { height: 460px; } .about-reference > section { width: 100%; max-width: 100%; } }
 @media (max-width: 767px) {
  .about-reference { padding: 0 8px 24px; }
  .about-band { padding: 36px 24px; }
