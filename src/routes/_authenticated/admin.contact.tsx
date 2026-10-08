@@ -49,7 +49,7 @@ function ContactAdmin() {
     qc.setQueryData(contactFaqQuery().queryKey, result.data); setDraft(null); toast.success("FAQ opgeslagen");
     qc.setQueryData(pageSettingsQuery("contact").queryKey, savedPage); setPageDraft(null);
   }
-  return <AdminLayout title="Contact & FAQ" actions={<Button onClick={save} disabled={busy || !config}><Save />{busy ? "Opslaan…" : "FAQ opslaan"}</Button>}>
+  return <AdminLayout title="FAQ" actions={<Button onClick={save} disabled={busy || !config}><Save />{busy ? "Opslaan…" : "FAQ opslaan"}</Button>}>
     <Tabs defaultValue="faq"><TabsList><TabsTrigger value="faq">Veelgestelde vragen</TabsTrigger><TabsTrigger value="typography">FAQ-opmaak</TabsTrigger><TabsTrigger value="messages">Berichten</TabsTrigger></TabsList>
       <TabsContent value="typography" className="space-y-4">
         <p className="text-sm text-muted-foreground">Elke instelling geldt voor alle categorieën, alle vragen of alle antwoorden. De teksten zelf blijven afzonderlijk bewerkbaar.</p>
