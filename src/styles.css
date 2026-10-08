@@ -270,7 +270,7 @@
 .about-opening { background: var(--shop-surface); color: var(--shop-ink); }
 .about-reference .about-kicker { display: inline-block; border: 1px solid var(--about-hairline); padding: 4px 9px; font-size: 10px; text-transform: uppercase; margin-bottom: 22px; }
 .about-reference .about-headline { font-family: var(--font-display); font-size: 54px; font-weight: 700; text-transform: uppercase; line-height: 1.25; margin-bottom: 26px; }
-.about-story .about-headline > span { display: block; }
+.about-story .about-headline > span, .about-story .about-headline > .cms-inline { display: block; }
 .about-story .about-headline > span:first-child > .cms-inline { display: inline; }
 .about-intro-prose { max-width: 700px; font-size: 19px; line-height: 1.6; }
 .about-intro-prose .contents, .about-intro-prose .contents > p { display: inline; }

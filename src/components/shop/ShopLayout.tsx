@@ -111,7 +111,7 @@ function CartSheet() {
   const cart = useCart();
   return (
     <Sheet open={cart.open} onOpenChange={cart.setOpen}>
-      <SheetContent className="flex w-full flex-col bg-background sm:max-w-md">
+      <SheetContent className="storefront flex w-full flex-col bg-background sm:max-w-md">
         <SheetHeader><SheetTitle className="font-display text-2xl">Winkelmand</SheetTitle></SheetHeader>
         {cart.items.length === 0 ? (
           <p className="py-10 text-center text-muted-foreground">Je winkelmand is nog leeg.</p>
@@ -142,7 +142,7 @@ function CartSheet() {
         {cart.items.length > 0 && (
           <div className="space-y-3 border-t border-border pt-4">
             <div className="flex justify-between font-medium"><span>Subtotaal</span><span>{formatPrice(cart.subtotal)}</span></div>
-            <Button className="w-full" size="lg" disabled>Afrekenen (binnenkort)</Button>
+            <Button data-page-button="checkout" className="w-full" size="lg" disabled>Afrekenen (binnenkort)</Button>
             <p className="text-center text-xs text-muted-foreground">Online betalen wordt binnenkort gekoppeld.</p>
           </div>
         )}

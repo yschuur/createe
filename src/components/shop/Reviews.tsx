@@ -7,7 +7,7 @@ function ReviewText({ text }: { text: string }) {
   const long = text.length > 180;
   return <div>
     <p className={`whitespace-pre-line text-[13px] leading-[1.4] opacity-90 ${!open && long ? "line-clamp-3" : ""}`}>{text}</p>
-    {long && <button type="button" onClick={() => setOpen(!open)} className="mt-1.5 text-xs font-semibold text-review underline">{open ? "Lees minder" : "Lees meer"}</button>}
+    {long && <button data-page-button="expand" type="button" onClick={() => setOpen(!open)} className="mt-1.5 text-xs font-semibold text-review underline">{open ? "Lees minder" : "Lees meer"}</button>}
   </div>;
 }
 

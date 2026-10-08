@@ -205,7 +205,7 @@ const actionTargets: Record<string, { id: string; label: string; selector: strin
   "studio-form": [{ id: "submit", label: "Verzend aanvraag", selector: '[type=submit]' }, { id: "gender", label: "Heren / Dames", selector: '.atelier-toggle button' }, { id: "product", label: "Productkeuzes", selector: '.atelier-sample' }, { id: "color", label: "Kleurkeuzes", selector: '.atelier-swatch' }],
   "product-main": [{ id: "add", label: "Aan winkelwagen toevoegen", selector: '[data-page-button=add]' }, { id: "size", label: "Maatkeuzes", selector: '[data-page-button=size]' }, { id: "chart", label: "Maattabel", selector: '[data-page-button=chart]' }],
   "site-header": [{ id: "menu", label: "Mobiel menu", selector: '[aria-label="Menu openen"]' }, { id: "account", label: "Mijn account", selector: '[aria-label="Mijn account"]' }, { id: "basket", label: "Winkelmand", selector: '[aria-label="Winkelmand"]' }],
-  "site-reviews": [{ id: "previous", label: "Vorige review", selector: 'button:first-of-type' }, { id: "next", label: "Volgende review", selector: 'button:last-of-type' }],
+  "site-reviews": [{ id: "previous", label: "Vorige review", selector: '[aria-label="Vorige reviews"]' }, { id: "next", label: "Volgende review", selector: '[aria-label="Volgende reviews"]' }, { id: "expand", label: "Lees meer / minder", selector: '[data-page-button=expand]' }],
 };
 for (const page of PAGE_DEFS) for (const section of page.sections) {
   const targets = actionTargets[section.id];

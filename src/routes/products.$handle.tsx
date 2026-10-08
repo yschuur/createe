@@ -132,10 +132,10 @@ function ProductPage() {
                       );
                     }
                     return (
-                      <button key={val} onClick={() => choose(idx, val)}
+                      <Button data-page-button="size" variant="outline" key={val} onClick={() => choose(idx, val)}
                         className={`h-10 border text-xs font-semibold transition ${active ? "border-foreground bg-foreground text-background" : "border-border bg-background hover:border-foreground"} ${!available ? "line-through opacity-50" : ""}`}>
                         {prettyValue(val)}
-                      </button>
+                      </Button>
                     );
                   })}
                 </div>
@@ -143,11 +143,11 @@ function ProductPage() {
             );
           })}
 
-          <button onClick={add} disabled={!variant || !isPurchasable(variant)}
+          <Button data-page-button="add" onClick={add} disabled={!variant || !isPurchasable(variant)}
             className="font-label mt-4 flex h-11 w-full items-center justify-center gap-2 bg-primary text-sm font-semibold uppercase tracking-wider text-primary-foreground transition hover:opacity-90 disabled:opacity-50">
             <ShoppingBag className="h-4 w-4" />
             {!variant ? "Niet beschikbaar" : isPurchasable(variant) ? page.addToCartLabel : "Uitverkocht"}
-          </button>
+          </Button>
           {variant && variant.track_inventory && variant.inventory_quantity > 0 && variant.inventory_quantity <= 2 && (
             <p className="mt-2 text-center text-sm text-muted-foreground">Nog maar {variant.inventory_quantity} op voorraad</p>
           )}
@@ -158,10 +158,10 @@ function ProductPage() {
               {page.modelValue && <div><dt className="inline font-bold">{page.modelLabel}</dt> <dd className="inline text-muted-foreground">{page.modelValue}</dd></div>}
             </dl>
             {page.sizeChartLabel && (
-              <a href={page.sizeChartUrl || undefined} target={page.sizeChartUrl ? "_blank" : undefined} rel="noreferrer"
+              <Button asChild variant="outline"><a data-page-button="chart" href={page.sizeChartUrl || undefined} target={page.sizeChartUrl ? "_blank" : undefined} rel="noreferrer"
                 className="font-label flex items-center gap-1 border border-primary px-4 py-2 text-xs text-primary">
                 <Ruler className="h-3.5 w-3.5" /> {page.sizeChartLabel}
-              </a>
+              </a></Button>
             )}
           </div>
 
@@ -172,9 +172,9 @@ function ProductPage() {
               <div className="flex items-center justify-between gap-3 px-4 py-4">
                 <p className="font-label text-sm font-bold uppercase tracking-wider">{page.featureTitle}</p>
                 {page.featureLinkUrl && (
-                  <a href={page.featureLinkUrl} className="font-label flex items-center gap-1 border border-primary-foreground/70 px-4 py-2 text-[10px] font-semibold uppercase tracking-wider">
+                  <Button asChild variant="outline"><a href={page.featureLinkUrl} className="font-label flex items-center gap-1 border border-primary-foreground/70 px-4 py-2 text-[10px] font-semibold uppercase tracking-wider">
                     {page.featureLinkLabel} <ChevronRight className="h-3 w-3" />
-                  </a>
+                  </a></Button>
                 )}
               </div>
               {page.featureBadges.filter(Boolean).length > 0 && (

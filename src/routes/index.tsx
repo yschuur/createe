@@ -62,9 +62,9 @@ function Home() {
       <HeroPanel side={home.golf} video={golfVideo.url} poster={golfPoster.url} image={golfImg.url} alt="CREATEE golfkleding op de golfbaan" position="object-center" />
       <HeroPanel side={home.padel} video={padelVideo.url} poster={padelPoster.url} image={padelImg.url} alt="CREATEE padelkleding op de padelbaan" position="object-center" />
       <div className="pointer-events-none absolute inset-x-0 bottom-10 flex justify-center gap-2 md:bottom-16">
-        <Button asChild variant="secondary" className={`pointer-events-auto ${btn}`}><a href={home.golf.link}>{home.golf.label}</a></Button>
-        {home.studio_button.label && <Button asChild variant="secondary" className={`pointer-events-auto ${btn}`}><a href={home.studio_button.link}>{home.studio_button.label}</a></Button>}
-        <Button asChild variant="secondary" className={`pointer-events-auto ${btn}`}><a href={home.padel.link}>{home.padel.label}</a></Button>
+        <Button asChild variant="secondary" className={`pointer-events-auto ${btn}`}><a data-page-button="golf" href={home.golf.link}>{home.golf.label}</a></Button>
+        {home.studio_button.label && <Button asChild variant="secondary" className={`pointer-events-auto ${btn}`}><a data-page-button="studio" href={home.studio_button.link}>{home.studio_button.label}</a></Button>}
+        <Button asChild variant="secondary" className={`pointer-events-auto ${btn}`}><a data-page-button="padel" href={home.padel.link}>{home.padel.label}</a></Button>
       </div>
     </section>
     {home.show_ratings && <div data-section="home-ratings" className="flex justify-center gap-6 bg-primary px-4 py-3 text-xs text-primary-foreground">{cms.t("home-ratings", "google_label") && <p>{cms.t("home-ratings", "google_label")}</p>}{cms.t("home-ratings", "trust_label") && <a href={cms.t("home-ratings", "trust_url")} target="_blank" rel="noreferrer">{cms.t("home-ratings", "trust_label")}</a>}</div>}
