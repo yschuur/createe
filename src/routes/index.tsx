@@ -67,7 +67,7 @@ function Home() {
         <Button asChild variant="secondary" className={`pointer-events-auto ${btn}`}><a data-page-button="padel" href={home.padel.link}>{home.padel.label}</a></Button>
       </div>
     </section>
-    {home.show_ratings && <div data-section="home-ratings" className="flex justify-center gap-6 bg-primary px-4 py-3 text-xs text-primary-foreground">{cms.t("home-ratings", "google_label") && <p>{cms.t("home-ratings", "google_label")}</p>}{cms.t("home-ratings", "trust_label") && <a href={cms.t("home-ratings", "trust_url")} target="_blank" rel="noreferrer">{cms.t("home-ratings", "trust_label")}</a>}</div>}
+    {home.show_ratings && <RatingsBar googleLabel={cms.t("home-ratings", "google_label")} trustLabel={cms.t("home-ratings", "trust_label")} trustUrl={cms.t("home-ratings", "trust_url")} />}
     <section data-section="home-products" aria-label="CREATEE collectie" className="px-4 py-7 md:px-6">
       {home.carousel_title && <h2 className="mb-5 font-display text-2xl text-primary md:text-3xl">{home.carousel_title}</h2>}
       <div ref={row} className="home-product-carousel">{featured.slice(0,count).map(p=><ProductCard key={p.id} product={p} index={2} />)}</div>
