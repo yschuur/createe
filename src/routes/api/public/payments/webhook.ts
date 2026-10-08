@@ -77,6 +77,9 @@ async function fulfillOrder(session: any, env: StripeEnv) {
     });
     if (decErr) console.error("Stock decrement failed:", decErr);
   }
+
+  const { sendOrderEmail } = await import("@/lib/order-emails.server");
+  await sendOrderEmail(db, orderId, "confirmation");
 }
 
 async function markOrder(session: any, env: StripeEnv, status: "failed" | "cancelled") {
