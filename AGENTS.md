@@ -32,3 +32,4 @@
 - Storefront button styles use the page CMS with global defaults, per-button-ID overrides keyed per section, registered section/action targets and per-button overrides, including hover/focus colors — one validated CSS builder covers native buttons and portaled shop dialogs while admin stays unchanged.
 - Sports are rows in `sports`; each product has one sport_id and collections list sport_ids; /collections/<sport> is the sport shop with collections/tags as filters — products never leak across sports and new sports need no code.
 - Order email copy lives in site_settings "order_emails" (src/lib/order-emails.ts); one template — owner edits text.
+- Footer uses its own PAGE_DEFS entry and page_footer settings, rendered by ShopFooter; only its dedicated page editor manages content/styles and newsletter-code selection, with no legacy/global/policy-link fallback — prevents competing footer settings.

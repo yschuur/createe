@@ -7,7 +7,7 @@ export type SectionStyles = Record<string, Partial<Record<TextRole, TextStyle>>>
 
 export const PAGES: { label: string; sections: { id: string; label: string }[] }[] = [
   { label: "Algemeen (alle pagina's)", sections: [
-    { id: "site-header", label: "Menu" }, { id: "site-reviews", label: "Reviews" }, { id: "site-footer", label: "Footer" } ] },
+    { id: "site-header", label: "Menu" }, { id: "site-reviews", label: "Reviews" } ] },
   { label: "Homepage", sections: [
     { id: "home-hero", label: "Header met video's" }, { id: "home-products", label: "Productcarrousel" } ] },
   { label: "Design Studio", sections: [

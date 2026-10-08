@@ -31,6 +31,7 @@ export const Route = createFileRoute("/")({
     context.queryClient.ensureQueryData(homepageQuery()),
     context.queryClient.ensureQueryData(pageSettingsQuery("home")),
     context.queryClient.ensureQueryData(pageSettingsQuery("global")),
+    context.queryClient.ensureQueryData(pageSettingsQuery("footer")),
   ]),
   component: Home,
 });

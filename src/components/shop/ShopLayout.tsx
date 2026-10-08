@@ -3,13 +3,13 @@ import { ShoppingBag, Minus, Plus, X, Menu, UserRound, Truck, PackageCheck, Refr
 import { useState, type ReactNode } from "react";
 import { Logo } from "@/components/Logo";
 import { useCart } from "@/lib/cart";
-import { formatPrice, sanitizeDescription } from "@/lib/shop";
+import { formatPrice } from "@/lib/shop";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { checkDiscount } from "@/lib/checkout.functions";
 import { discountAmount } from "@/lib/discounts";
-import { NewsletterForm } from "@/components/shop/NewsletterForm";
+import { ShopFooter } from "@/components/shop/ShopFooter";
 import { Reviews } from "@/components/shop/Reviews";
 import { useQuery } from "@tanstack/react-query";
 import { homepageQuery, defaultHomepage } from "@/lib/site-settings";
@@ -17,10 +17,8 @@ import { menuQuery, defaultMenu } from "@/lib/menu";
 import { sectionStylesQuery, buildCss } from "@/lib/section-styles";
 import { DesktopMenu, MobileMenu } from "@/components/shop/SiteMenu";
 import { buildPageCss, makePageView, pageSettingsQuery, type PageKey } from "@/lib/page-settings";
-import { POLICY_SLUGS, policiesQuery, defaultPolicies } from "@/lib/policies";
 
 export function ShopLayout({ children, page, cms }: { children: ReactNode; page?: "home" | "studio" | "story"; cms?: PageKey }) {
-  const policies = useQuery(policiesQuery()).data ?? defaultPolicies;
   const cart = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
   const { data: home } = useQuery(homepageQuery());
@@ -72,31 +70,7 @@ export function ShopLayout({ children, page, cms }: { children: ReactNode; page?
           {usps.map(({ Icon, text, link }) => { const inner = <><Icon className="size-5" strokeWidth={1.5} /><span>{text}</span></>; return link ? <a key={text} href={link} className="flex items-center justify-center gap-3 py-5">{inner}</a> : <p key={text} className="flex items-center justify-center gap-3 py-5">{inner}</p>; })}
         </div>}
       </div>
-      <footer data-section="site-footer" className="bg-primary text-primary-foreground">
-        <div className="grid w-full gap-10 px-6 py-14 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1.3fr] md:px-10 xl:px-16">
-          <div className="space-y-4">
-            <Logo variant={g.t("site-footer", "logo") === "green" ? "green" : "white"} className="h-7 md:h-8" />
-            <p data-role="body" className="max-w-sm text-sm leading-relaxed opacity-80">{g.t("site-footer", "about")}</p>
-          </div>
-          <div className="space-y-2 text-sm">
-            <p data-role="heading" className="mb-4 text-xs font-bold uppercase">{g.t("site-footer", "h_discover")}</p>
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => ({ label: g.t("site-footer", `d${n}_label`), url: g.t("site-footer", `d${n}_url`) })).filter((l) => l.label.trim()).map((l) => <a key={l.label} href={l.url || "#"} data-role="link" className="block opacity-80 hover:opacity-100">{l.label}</a>)}
-          </div>
-          <div className="space-y-2 text-sm">
-            <p data-role="heading" className="mb-4 text-xs font-bold uppercase">{g.t("site-footer", "h_info")}</p>
-            {g.t("site-footer", "info1") && <span data-role="body" className="block opacity-80">{g.t("site-footer", "info1")}</span>}
-            {g.t("site-footer", "info2") && <span data-role="body" className="block opacity-80">{g.t("site-footer", "info2")}</span>}
-            {g.t("site-footer", "info3_label") && <a href={g.t("site-footer", "info3_url")} target="_blank" rel="noreferrer" data-role="link" className="block opacity-80 hover:opacity-100">{g.t("site-footer", "info3_label")}</a>}
-            {POLICY_SLUGS.map(s => <Link key={s} to="/policies/$slug" params={{ slug: s }} data-role="link" className="block opacity-80 hover:opacity-100">{policies[s].label}</Link>)}
-          </div>
-          <div className="space-y-3 text-sm">
-            <p data-role="heading" className="text-xs font-bold uppercase">{g.t("site-footer", "club_title")}</p>
-            <div data-role="body" className="leading-relaxed opacity-80 [&_p]:m-0" dangerouslySetInnerHTML={{ __html: sanitizeDescription(g.t("site-footer", "club_text")) }} />
-            {g.t("site-footer", "club_show") !== "no" && <NewsletterForm placeholder={g.t("site-footer", "club_placeholder")} button={g.t("site-footer", "club_button")} success={g.t("site-footer", "club_success")} />}
-          </div>
-        </div>
-        <div data-role="body" className="border-t border-primary-foreground/20 py-4 text-center text-xs opacity-70">© {new Date().getFullYear()} {g.t("site-footer", "copyright")}</div>
-      </footer>
+      <ShopFooter />
       <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
         <SheetContent side="left" className="storefront w-[min(88vw,360px)] bg-background px-6">
           <SheetHeader><SheetTitle><Logo variant="green" className="h-7" /></SheetTitle></SheetHeader>

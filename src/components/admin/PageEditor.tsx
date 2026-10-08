@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MediaField } from "@/components/admin/MediaLibrary";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import { ImageFocusEditor } from "@/components/admin/ImageFocusEditor";
+import { FooterNewsletterEditor } from "@/components/admin/FooterNewsletterEditor";
 import { legacyFocus } from "@/lib/image-focus";
 import { FONTS } from "@/lib/section-styles";
 import {
@@ -145,7 +146,7 @@ export function SectionEditor({ def, value, onChange, version }: { def: SectionD
   const media = value.media ?? {};
   const setMedia = (k: string, patch: Record<string, unknown> | undefined) => { const m = { ...media }; if (!patch) delete m[k]; else m[k] = { ...m[k], ...patch }; set({ media: m }); };
   const hasContent = !!def.content?.length || !!def.contentLink;
-  const richCopy = def.id !== "site-footer" && def.content?.some((f) => f.type === "rich");
+  const richCopy = def.id !== "footer-main" && def.content?.some((f) => f.type === "rich");
   const buttonFields = def.content?.filter((f) => /^btn\d+_label$/.test(f.key)) ?? [];
   return <Tabs defaultValue={hasContent ? "content" : def.media?.length ? "media" : "style"} key={def.id}>
     <TabsList className="flex h-auto flex-wrap">
@@ -170,6 +171,7 @@ export function SectionEditor({ def, value, onChange, version }: { def: SectionD
             : <ColorField value={val || undefined} onChange={(c) => setContent(f.key, c)} />}
         </Field>;
       })}
+      {def.id === "footer-main" && <FooterNewsletterEditor />}
       {buttonFields.map((f) => {
         const id = f.key.replace("_label", "");
         return <ButtonEditor key={id} title={`${f.label.replace(" — tekst", "")} — opmaak & kleuren`} value={value.buttons?.[id]} onChange={(style) => {
