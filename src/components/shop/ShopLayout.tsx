@@ -42,15 +42,15 @@ export function ShopLayout({ children, page, cms }: { children: ReactNode; page?
           ))}
         </div>
       </div>}
-      <header data-section="site-header" className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur">
-        <div className="relative mx-auto grid h-16 max-w-[1600px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-3 md:px-6">
+      <header data-section="site-header" className="sticky top-0 z-40 border-b-2 border-border bg-background/90 backdrop-blur">
+        <div className="relative mx-auto grid h-16 max-w-[1600px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-3 md:h-24 md:px-6">
           <Button variant="ghost" size="icon" className="md:hidden" aria-label="Menu openen" onClick={() => setMenuOpen(true)}><Menu /></Button>
           <nav aria-label="Hoofdmenu" className="hidden md:block"><DesktopMenu items={menuItems} /></nav>
           <Link to="/" className="shrink-0" aria-label="CREATEE home">
-            <Logo variant={g.t("site-header", "logo") === "white" ? "white" : "green"} />
+            <Logo variant={g.t("site-header", "logo") === "white" ? "white" : "green"} className="md:h-10" />
           </Link>
           <div className="flex shrink-0 items-center justify-end gap-1 md:gap-3">
-            <span className="hidden text-xs sm:block">NL · EUR €</span>
+            <span className="hidden font-label text-[10px] font-semibold uppercase tracking-widest text-muted-foreground sm:block">NL · EUR €</span>
             <Button asChild variant="ghost" size="icon" aria-label="Mijn account"><Link to="/auth"><UserRound /></Link></Button>
             <Button variant="ghost" size="icon" onClick={() => cart.setOpen(true)} className="relative" aria-label="Winkelmand">
               <ShoppingBag className="h-5 w-5" />
