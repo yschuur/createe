@@ -31,9 +31,9 @@ function FaqItem({ question, answer, id }: { question: string; answer: string; i
   const [open, setOpen] = useState(faqInitiallyExpanded);
   return <div className="contact-faq-item">
     <Button variant="ghost" className="contact-faq-toggle" data-page-button="faq-toggle" aria-expanded={open} aria-controls={id} onClick={() => setOpen(!open)}>
-      <PageText as="span" inline value={question} /><ChevronDown className={`size-3 shrink-0 transition-transform ${open ? "rotate-180" : ""}`} />
+      <span data-role="faq-question" className="min-w-0"><PageText as="span" inline value={question} /></span><ChevronDown className={`size-3 shrink-0 transition-transform ${open ? "rotate-180" : ""}`} />
     </Button>
-    <div id={id} hidden={!open}><PageText value={answer} className="contact-faq-answer" /></div>
+    <div id={id} hidden={!open}><div data-role="faq-answer"><PageText value={answer} className="contact-faq-answer" /></div></div>
   </div>;
 }
 
@@ -87,7 +87,7 @@ function ContactPage() {
         <PageText value={t("contact-faq", "intro")} className="contact-intro" />
         <div className="contact-faq-list">{faq.categories.map((category, index) => {
           const Icon = categoryIcons[category.icon];
-          return <article key={category.id} className="contact-faq-category"><h2><span className="contact-faq-icon"><Icon className="size-4" /></span><PageText as="span" inline value={category.title} /></h2>
+          return <article key={category.id} className="contact-faq-category"><h2><span className="contact-faq-icon"><Icon className="size-4" /></span><span data-role="faq-category" className="min-w-0"><PageText as="span" inline value={category.title} /></span></h2>
             {category.items.map((item, j) => <FaqItem key={item.id} id={`faq-${index}-${j}`} question={item.question} answer={item.answer} />)}
           </article>;
         })}</div>

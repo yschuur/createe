@@ -15,7 +15,7 @@ import { focusPosition, type ImageFocus } from "@/lib/image-focus";
 /* ------------------------------------------------------------------ */
 
 export type PageKey = "home" | "story" | "hybr" | "studio" | "collection" | "product" | "contact" | "global";
-export type RoleId = "kicker" | "heading" | "subheading" | "body" | "label" | "link" | "price" | "button";
+export type RoleId = "kicker" | "heading" | "subheading" | "body" | "label" | "link" | "price" | "button" | "faq-category" | "faq-question" | "faq-answer";
 export type ResponsiveNumber = { mobile?: number | undefined; desktop?: number | undefined };
 export type TypographyStyle = {
   font?: string | undefined; size?: ResponsiveNumber | undefined; weight?: number | undefined; lineHeight?: number | undefined;
@@ -89,7 +89,7 @@ export const PAGE_DEFS: PageDef[] = [
           txt("submit_label", "Verzendknop", "Verstuur bericht"), txt("privacy", "Privacytekst", "Respect voor jouw privacy"),
           { key: "success", label: "Bevestiging", type: "rich", default: "Bedankt! Je bericht is ontvangen." },
         ], buttonTargets: [{ id: "submit", label: "Verstuur bericht", selector: '[data-page-button=submit]' }] },
-      { id: "contact-faq", label: "Veelgestelde vragen", roles: ["heading", "body", "button"], background: true, spacing: true, buttons: true,
+      { id: "contact-faq", label: "Veelgestelde vragen", roles: ["heading", "body", "button", "faq-category", "faq-question", "faq-answer"], background: true, spacing: true, buttons: true,
         content: [{ key: "intro", label: "Tekst boven FAQ", type: "rich", default: "Klik op een onderwerp om de veelgestelde vragen te bekijken." }],
         contentLink: { to: "/admin/contact", label: "Categorieën, vragen en antwoorden beheren" },
         buttonTargets: [{ id: "toggle", label: "FAQ openen / sluiten", selector: '[data-page-button=faq-toggle]' }] },
@@ -394,6 +394,9 @@ const ROLE_SELECTORS: [RoleId, string][] = [
   ["kicker", ".about-kicker,[data-role=kicker]"],
   ["price", "[data-role=price]"],
   ["button", "[data-slot=button]"],
+  ["faq-category", '[data-role="faq-category"],[data-role="faq-category"] *'],
+  ["faq-question", '[data-role="faq-question"],[data-role="faq-question"] *'],
+  ["faq-answer", '[data-role="faq-answer"],[data-role="faq-answer"] *'],
 ];
 const MD = "@media (min-width: 768px)";
 const clampN = (v: unknown, lo: number, hi: number) => (typeof v === "number" && Number.isFinite(v) ? Math.min(hi, Math.max(lo, v)) : undefined);
@@ -447,7 +450,7 @@ export function buildPageCss(key: PageKey, overrides: PageConfig | undefined): s
       if ((key === "story" || key === "hybr") && role !== "button") continue;
       const st = c.typography?.[role];
       if (!st || !s.roles.includes(role)) continue;
-      const sel = selector.split(",").map((x) => `${root} :is(${x}):not(.cms-rich *)`).join(",");
+      const sel = selector.split(",").map((x) => `${root} :is(${x})${role.startsWith("faq-") ? "" : ":not(.cms-rich *)"}`).join(",");
       const decl: string[] = [];
       if (st.font && FONTS[st.font]) decl.push(`font-family:${FONTS[st.font]}`);
       const w = clampN(st.weight, 100, 900); if (w) decl.push(`font-weight:${Math.round(w / 100) * 100}`);

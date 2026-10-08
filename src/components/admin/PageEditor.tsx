@@ -18,7 +18,7 @@ import {
 } from "@/lib/page-settings";
 
 const sel = "h-9 w-full rounded-sm border border-input bg-background px-2 text-sm";
-const ROLE_LABELS: Record<RoleId, string> = { kicker: "Kicker (klein label boven titel)", heading: "Koppen", subheading: "Subkoppen", body: "Tekst", label: "Labels", link: "Links", price: "Prijs", button: "Knoppen (tekst)" };
+const ROLE_LABELS: Record<RoleId, string> = { kicker: "Kicker (klein label boven titel)", heading: "Koppen", subheading: "Subkoppen", body: "Tekst", label: "Labels", link: "Links", price: "Prijs", button: "Knoppen (tekst)", "faq-category": "Categorie", "faq-question": "Vraag", "faq-answer": "Antwoord" };
 const POS_LABELS: Record<Position, string> = { center: "Midden", top: "Boven", bottom: "Onder", left: "Links", right: "Rechts" };
 const SPACE_PRESETS: [string, number][] = [["XS", 8], ["S", 16], ["M", 32], ["L", 56], ["XL", 88], ["XXL", 128]];
 const num = (v: string) => (v === "" ? undefined : Number(v));
@@ -209,7 +209,7 @@ export function SectionEditor({ def, value, onChange, version }: { def: SectionD
       {def.background && <BackgroundEditor image={def.backgroundImage} value={value.background} onChange={(background) => set({ background })} />}
       {def.buttons && <ButtonEditor title="Alle knoppen in dit onderdeel" value={value.button} onChange={(button) => set({ button })} />}
        {def.buttonTargets?.map((target) => <ButtonEditor key={target.id} title={target.label} value={value.buttons?.[target.id]} onChange={(style) => { const buttons = { ...value.buttons }; if (style) buttons[target.id] = style; else delete buttons[target.id]; set({ buttons }); }} />)}
-      {!richCopy && def.roles.filter((r) => r !== "button" || !def.buttons).map((r) => <TypographyEditor key={r} role={r} value={value.typography?.[r]} onChange={(t) => { const ty = { ...value.typography }; if (t) ty[r] = t; else delete ty[r]; set({ typography: ty }); }} />)}
+      {def.roles.filter((r) => (!richCopy || r.startsWith("faq-")) && (r !== "button" || !def.buttons)).map((r) => <TypographyEditor key={r} role={r} value={value.typography?.[r]} onChange={(t) => { const ty = { ...value.typography }; if (t) ty[r] = t; else delete ty[r]; set({ typography: ty }); }} />)}
     </TabsContent>
 
     {(def.spacing || !!def.extras?.length) && <TabsContent value="spacing" className="space-y-4 pt-4">
