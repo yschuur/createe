@@ -1,3 +1,4 @@
+import { MediaField } from "@/components/admin/MediaLibrary";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import { Plus, Trash2, ArrowUp, ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,9 +23,8 @@ export function ProductPageEditor({ value, onChange }: { value: ProductPageConte
       <div className="grid grid-cols-2 gap-3">
         {F("Label 1", "fitLabel")}{F("Waarde 1", "fitValue")}
         {F("Label 2", "modelLabel")}{F("Waarde 2", "modelValue")}
-        {F("Maattabel-knop", "sizeChartLabel")}{F("Maattabel-afbeelding (URL, opent als pop-up)", "sizeChartImage")}
-      </div>
-      {value.sizeChartImage && <img src={value.sizeChartImage} alt="Maattabel" className="max-h-40 rounded-sm border border-border" />}
+        {F("Maattabel-knop", "sizeChartLabel")}</div>
+      <div><Label>Maattabel-afbeelding (opent als pop-up)</Label><MediaField value={value.sizeChartImage} onChange={(v) => set("sizeChartImage", v)} /></div>
       <div className="space-y-3 rounded-sm border border-border p-3">
         <label className="flex items-center justify-between text-sm font-medium">Groen kenmerkenblok tonen<Switch checked={value.featureShow} onCheckedChange={(c) => set("featureShow", c)} /></label>
         {value.featureShow && (<>
