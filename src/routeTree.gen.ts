@@ -37,6 +37,7 @@ import { Route as AuthenticatedAdminOrdersRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAdminPoliciesRouteImport } from './routes/_authenticated/admin.policies'
 import { Route as AuthenticatedAdminShippingRouteImport } from './routes/_authenticated/admin.shipping'
 import { Route as AuthenticatedAdminSportsRouteImport } from './routes/_authenticated/admin.sports'
+import { Route as AuthenticatedAdminStockRouteImport } from './routes/_authenticated/admin.stock'
 import { Route as AuthenticatedAdminStudioRouteImport } from './routes/_authenticated/admin.studio'
 import { Route as AuthenticatedAdminStylesRouteImport } from './routes/_authenticated/admin.styles'
 import { Route as AuthenticatedAdminSubmissionsRouteImport } from './routes/_authenticated/admin.submissions'
@@ -198,6 +199,11 @@ const AuthenticatedAdminSportsRoute =
     path: '/admin/sports',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminStockRoute = AuthenticatedAdminStockRouteImport.update({
+  id: '/admin/stock',
+  path: '/admin/stock',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAdminStudioRoute =
   AuthenticatedAdminStudioRouteImport.update({
     id: '/admin/studio',
@@ -286,6 +292,7 @@ export interface FileRoutesByFullPath {
   '/admin/policies': typeof AuthenticatedAdminPoliciesRoute
   '/admin/shipping': typeof AuthenticatedAdminShippingRoute
   '/admin/sports': typeof AuthenticatedAdminSportsRoute
+  '/admin/stock': typeof AuthenticatedAdminStockRoute
   '/admin/studio': typeof AuthenticatedAdminStudioRoute
   '/admin/styles': typeof AuthenticatedAdminStylesRoute
   '/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
@@ -325,6 +332,7 @@ export interface FileRoutesByTo {
   '/admin/policies': typeof AuthenticatedAdminPoliciesRoute
   '/admin/shipping': typeof AuthenticatedAdminShippingRoute
   '/admin/sports': typeof AuthenticatedAdminSportsRoute
+  '/admin/stock': typeof AuthenticatedAdminStockRoute
   '/admin/studio': typeof AuthenticatedAdminStudioRoute
   '/admin/styles': typeof AuthenticatedAdminStylesRoute
   '/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
@@ -366,6 +374,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/policies': typeof AuthenticatedAdminPoliciesRoute
   '/_authenticated/admin/shipping': typeof AuthenticatedAdminShippingRoute
   '/_authenticated/admin/sports': typeof AuthenticatedAdminSportsRoute
+  '/_authenticated/admin/stock': typeof AuthenticatedAdminStockRoute
   '/_authenticated/admin/studio': typeof AuthenticatedAdminStudioRoute
   '/_authenticated/admin/styles': typeof AuthenticatedAdminStylesRoute
   '/_authenticated/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
@@ -407,6 +416,7 @@ export interface FileRouteTypes {
     | '/admin/policies'
     | '/admin/shipping'
     | '/admin/sports'
+    | '/admin/stock'
     | '/admin/studio'
     | '/admin/styles'
     | '/admin/submissions'
@@ -446,6 +456,7 @@ export interface FileRouteTypes {
     | '/admin/policies'
     | '/admin/shipping'
     | '/admin/sports'
+    | '/admin/stock'
     | '/admin/studio'
     | '/admin/styles'
     | '/admin/submissions'
@@ -486,6 +497,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/policies'
     | '/_authenticated/admin/shipping'
     | '/_authenticated/admin/sports'
+    | '/_authenticated/admin/stock'
     | '/_authenticated/admin/studio'
     | '/_authenticated/admin/styles'
     | '/_authenticated/admin/submissions'
@@ -716,6 +728,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminSportsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/stock': {
+      id: '/_authenticated/admin/stock'
+      path: '/admin/stock'
+      fullPath: '/admin/stock'
+      preLoaderRoute: typeof AuthenticatedAdminStockRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/studio': {
       id: '/_authenticated/admin/studio'
       path: '/admin/studio'
@@ -803,6 +822,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminPoliciesRoute: typeof AuthenticatedAdminPoliciesRoute
   AuthenticatedAdminShippingRoute: typeof AuthenticatedAdminShippingRoute
   AuthenticatedAdminSportsRoute: typeof AuthenticatedAdminSportsRoute
+  AuthenticatedAdminStockRoute: typeof AuthenticatedAdminStockRoute
   AuthenticatedAdminStudioRoute: typeof AuthenticatedAdminStudioRoute
   AuthenticatedAdminStylesRoute: typeof AuthenticatedAdminStylesRoute
   AuthenticatedAdminSubmissionsRoute: typeof AuthenticatedAdminSubmissionsRoute
@@ -828,6 +848,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminPoliciesRoute: AuthenticatedAdminPoliciesRoute,
   AuthenticatedAdminShippingRoute: AuthenticatedAdminShippingRoute,
   AuthenticatedAdminSportsRoute: AuthenticatedAdminSportsRoute,
+  AuthenticatedAdminStockRoute: AuthenticatedAdminStockRoute,
   AuthenticatedAdminStudioRoute: AuthenticatedAdminStudioRoute,
   AuthenticatedAdminStylesRoute: AuthenticatedAdminStylesRoute,
   AuthenticatedAdminSubmissionsRoute: AuthenticatedAdminSubmissionsRoute,
