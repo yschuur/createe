@@ -92,10 +92,17 @@ function Home() {
       </div>
     </section>
     {home.show_ratings && <RatingsBar googleLabel={cms.t("home-ratings", "google_label")} trustLabel={cms.t("home-ratings", "trust_label")} trustUrl={cms.t("home-ratings", "trust_url")} googleUrl={cms.t("home-ratings", "google_url")} />}
-    <section data-section="home-products" aria-label="CREATEE collectie" className="px-4 py-7 md:px-6">
-      {home.carousel_title && <h2 className="mb-5 font-display text-2xl text-primary md:text-3xl">{home.carousel_title}</h2>}
-      <div ref={row} className="home-product-carousel">{featured.slice(0,count).map(p=><ProductCard key={p.id} product={p} index={2} />)}</div>
-      <div className="mt-6 flex items-center justify-between gap-3"><a href={cms.t("home-products", "collection_url")} className="text-sm font-medium underline underline-offset-4">{home.collection_link_label}</a><div className="flex gap-2"><Button variant="outline" size="icon" aria-label="Vorige producten" onClick={()=>row.current?.scrollBy({left:-row.current.clientWidth,behavior:"smooth"})}><ArrowLeft /></Button><Button variant="outline" size="icon" aria-label="Volgende producten" onClick={()=>row.current?.scrollBy({left:row.current.clientWidth,behavior:"smooth"})}><ArrowRight /></Button></div></div>
+    <section data-section="home-products" aria-label="CREATEE collectie" className="px-4 pt-7 pb-3 md:px-6">
+      {home.carousel_title && <h2 className="mb-4 font-display text-2xl text-primary md:text-3xl">{home.carousel_title}</h2>}
+      <div
+        ref={row}
+        className="home-product-carousel"
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerLeave={onPointerUp}
+        onClickCapture={onClickCapture}
+      >{featured.slice(0,count).map(p=><ProductCard key={p.id} product={p} index={2} />)}</div>
     </section>
   </ShopLayout>;
 }
