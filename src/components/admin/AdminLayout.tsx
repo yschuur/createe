@@ -19,6 +19,7 @@ const items = [
   { to: "/admin/collections", label: "Collecties", icon: Layers },
   { to: "/admin/discounts", label: "Acties", icon: Tag },
   { to: "/admin/orders", label: "Bestellingen", icon: Package },
+  { to: "/admin/submissions", label: "Inzendingen", icon: MessageSquare },
   { to: "/admin/shipping", label: "Verzending", icon: Truck },
   { to: "/admin/emails", label: "E-mails", icon: MessageSquare },
   { to: "/admin/import", label: "Importeren", icon: Upload },
