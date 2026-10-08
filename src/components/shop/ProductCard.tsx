@@ -40,15 +40,16 @@ export function ProductCard({ product, index = 0 }: { product: ProductWithRelati
           </div>
         )}
       </div>
-      <Link to="/products/$handle" params={{ handle: product.slug }} className="mt-3 flex items-start justify-between gap-2">
+      <Link to="/products/$handle" params={{ handle: product.slug }} className="mt-3 flex flex-wrap items-start justify-between gap-2">
         <div className="min-w-0">
           <h3 className="font-display truncate text-lg leading-tight md:whitespace-normal md:overflow-visible">{product.name}</h3>
-          <p className="text-xs uppercase tracking-wider text-muted-foreground">{product.product_type}</p>
+          <p className="hidden text-xs uppercase tracking-wider text-muted-foreground md:block">{product.product_type}</p>
         </div>
         <div className="shrink-0 text-right text-sm">
           <p data-role="price" className="font-medium">{formatPrice(min)}</p>
           {compareAt && <p className="text-xs text-muted-foreground line-through">{formatPrice(compareAt)}</p>}
         </div>
+        <p className="w-full text-xs uppercase tracking-wider text-muted-foreground md:hidden">{product.product_type}</p>
       </Link>
     </div>
   );
