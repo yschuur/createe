@@ -132,6 +132,7 @@ function EditProduct() {
               <div><Label>Pasvorm</Label><Input value={p.fit ?? ""} onChange={(e) => set("fit", e.target.value)} /></div>
               <div><Label>Materiaal</Label><Input value={p.fabric ?? ""} onChange={(e) => set("fabric", e.target.value)} /></div>
             </div>
+            <div><Label>Sport</Label><div className="mt-2 flex gap-4">{(["golf", "padel"] as const).map((sp) => <label key={sp} className="flex items-center gap-2 text-sm"><input type="checkbox" checked={p.sports.includes(sp)} onChange={(e) => set("sports", e.target.checked ? [...p.sports, sp] : p.sports.filter((x) => x !== sp))} />{sp === "golf" ? "Golf" : "Padel"}</label>)}</div><p className="mt-1 text-xs text-muted-foreground">Bepaalt bij welke sport het product verschijnt, ook in categorieën zoals Tees.</p></div>
             <div><Label>Tags (komma-gescheiden)</Label><Input value={p.tags.join(", ")} onChange={(e) => set("tags", e.target.value.split(",").map((t) => t.trim()).filter(Boolean))} /></div>
           </Box>
 
