@@ -101,12 +101,13 @@ function ProductPage() {
         </div>
         <div className="px-4 pb-10 md:sticky md:top-24 md:self-start md:px-0 md:pt-6">
           <div className="flex items-baseline justify-between gap-4">
-            <h1 className="pdp-title min-w-0 text-3xl">{product.name}</h1>
-            <div data-role="price" className="text-right text-base">
+            <h1 className="pdp-title min-w-0 truncate text-3xl">{product.name}</h1>
+            <div data-role="price" className="shrink-0 text-right text-base">
               <span>{formatPrice(variant?.price ?? variants[0]?.price)}</span>
               {compareAt && <span className="ml-2 text-sm text-muted-foreground line-through">{formatPrice(compareAt)}</span>}
             </div>
           </div>
+          {product.product_type && <p className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">{product.product_type}</p>}
 
           {hasOptions && optionNames.map((name, idx) => {
             if (!name) return null;
