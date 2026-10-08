@@ -35,7 +35,7 @@ function MobileItem({ item, depth, onNavigate }: { item: MenuItem; depth: number
   const has = item.children.length > 0;
   return <li className={depth === 0 ? "border-b border-border" : ""}>
     <div className="flex items-center justify-between" style={{ paddingLeft: depth * 16 }}>
-      <ItemLink item={item} onClick={onNavigate} className={depth === 0 ? "flex-1 py-4 text-lg font-semibold uppercase" : "flex-1 py-3 text-sm"} />
+      <ItemLink item={item} onClick={onNavigate} className={depth === 0 ? "flex-1 py-4 font-display text-xl font-bold uppercase tracking-[0.12em]" : "flex-1 py-3 font-label text-sm"} />
       {has && <button type="button" aria-expanded={open} aria-label={`${item.label} submenu`} onClick={() => setOpen(!open)} className="p-3"><ChevronDown className={`size-4 transition ${open ? "rotate-180" : ""}`} /></button>}
     </div>
     {has && open && <ul className="pb-2">{item.children.map((c, i) => <MobileItem key={i} item={c} depth={depth + 1} onNavigate={onNavigate} />)}</ul>}
