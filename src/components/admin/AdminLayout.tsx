@@ -93,9 +93,9 @@ export function AdminLayout({ title, actions, children }: { title: string; actio
         </button>
       </aside>
       <div className="flex-1">
-        <nav className="flex gap-4 overflow-x-auto bg-primary px-4 py-3 text-sm text-primary-foreground md:hidden">
-          <Link to="/admin">Overzicht</Link>
-          {groups.flatMap((g) => g.items).map((i) => <Link key={i.to} to={i.to as never}>{i.label}</Link>)}
+        <nav className="grid grid-cols-2 gap-2 bg-primary p-3 text-sm text-primary-foreground sm:grid-cols-3 md:hidden">
+          <MobileNavLink i={overview} />
+          {groups.flatMap((g) => g.items).map((i) => <MobileNavLink key={i.to} i={i} />)}
         </nav>
         <div className="mx-auto max-w-6xl p-4 md:p-8">
           <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
