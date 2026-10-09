@@ -59,6 +59,17 @@ function NavLink({ i, className }: { i: NavItem; className?: string }) {
   );
 }
 
+function MobileNavLink({ i }: { i: NavItem }) {
+  return (
+    <Link to={i.to as never} activeOptions={{ exact: !!i.exact }}
+      className="flex min-h-11 min-w-0 items-center gap-2 rounded-md bg-primary-foreground/10 px-3 py-2 hover:bg-primary-foreground/20"
+      activeProps={{ className: "bg-primary-foreground font-medium text-primary" }}>
+      <i.icon className="h-4 w-4 shrink-0" />
+      <span className="truncate">{i.label}</span>
+    </Link>
+  );
+}
+
 export function AdminLayout({ title, actions, children }: { title: string; actions?: ReactNode; children: ReactNode }) {
   const nav = useNavigate();
   const { data: isAdmin, isLoading } = useQuery({
