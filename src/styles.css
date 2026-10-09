@@ -458,3 +458,11 @@
   .cs-banner.cs-mobile-sized > img,
   .cs-mobile-sized .cs-large-card { height: var(--cs-mobile-height); min-height: 0; aspect-ratio: auto; }
 }
+
+/* Explicit section gutters remove the legacy width cap; blank settings retain it. */
+@container (min-width: 32rem) {
+  .cs-section.cs-desktop-spacing { width: 100%; max-width: none; padding-left: min(var(--cs-left), 40%); padding-right: min(var(--cs-right), 40%); }
+}
+@container (width < 32rem) {
+  .cs-section.cs-mobile-spacing { width: 100%; max-width: none; padding-left: min(var(--cs-mobile-left), 40%); padding-right: min(var(--cs-mobile-right), 40%); }
+}

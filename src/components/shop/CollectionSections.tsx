@@ -63,9 +63,14 @@ const cols: Record<number, string> = { 1: "@2xl:grid-cols-1", 2: "@2xl:grid-cols
 /** Renders one product/banner section. `products` is the currently visible (filtered) list; hidden ones are skipped. */
 export function CollectionSection({ s, products, used, alt }: { s: Section; products: ProductWithRelations[]; used: Set<string>; alt: string }) {
   if (s.hidden) return null;
+  const spacingClasses = `cs-section ${s.leftSpacing !== undefined || s.rightSpacing !== undefined ? "cs-desktop-spacing" : ""} ${s.mobileLeftSpacing !== undefined || s.mobileRightSpacing !== undefined ? "cs-mobile-spacing" : ""}`;
+  const spacingStyle = {
+    "--cs-left": `${s.leftSpacing ?? 0}px`, "--cs-right": `${s.rightSpacing ?? 0}px`,
+    "--cs-mobile-left": `${s.mobileLeftSpacing ?? 0}px`, "--cs-mobile-right": `${s.mobileRightSpacing ?? 0}px`,
+  } as CSSProperties;
   if (s.type === "banner") {
     if (!s.desktop) return null;
-    return <section data-section="collection-banner" className={`cs-banner w-full ${s.height ? "cs-desktop-sized" : ""} ${s.mobileHeight ? "cs-mobile-sized" : ""}`} style={{ "--cs-height": `${s.height}px`, "--cs-mobile-height": `${s.mobileHeight}px` } as CSSProperties}>
+    return <section data-section="collection-banner" className={`cs-banner w-full ${spacingClasses} ${s.height ? "cs-desktop-sized" : ""} ${s.mobileHeight ? "cs-mobile-sized" : ""}`} style={{ ...spacingStyle, "--cs-height": `${s.height}px`, "--cs-mobile-height": `${s.mobileHeight}px` } as CSSProperties}>
       <img src={s.desktop} alt={alt} className={`block h-auto w-full object-cover ${s.mobile ? "hidden @2xl:block" : ""}`} />
       {s.mobile && <img src={s.mobile} alt={alt} className="block h-auto w-full object-cover @2xl:hidden" />}
     </section>;
@@ -80,14 +85,14 @@ export function CollectionSection({ s, products, used, alt }: { s: Section; prod
   }
   cards.forEach((c) => used.add(c.p.id));
   if (!cards.length) return null;
-  const sizing = s.type !== "regular" ? { style: { "--cs-height": `${s.largeHeight}px`, "--cs-mobile-height": `${s.mobileLargeHeight}px` } as CSSProperties } : {};
-  const wrap = `mx-auto max-w-7xl px-4 py-5 md:px-8 ${s.type !== "regular" ? `${s.largeHeight ? "cs-desktop-sized" : ""} ${s.mobileLargeHeight ? "cs-mobile-sized" : ""}` : ""}`;
+  const sizing = { style: { ...spacingStyle, ...(s.type !== "regular" ? { "--cs-height": `${s.largeHeight}px`, "--cs-mobile-height": `${s.mobileLargeHeight}px` } : {}) } as CSSProperties };
+  const wrap = `mx-auto max-w-7xl px-4 py-5 md:px-8 ${spacingClasses} ${s.type !== "regular" ? `${s.largeHeight ? "cs-desktop-sized" : ""} ${s.mobileLargeHeight ? "cs-mobile-sized" : ""}` : ""}`;
 
-  if (s.type === "regular") return <section className={wrap}><div className={`grid grid-cols-2 gap-x-3 gap-y-6 @2xl:gap-x-4 ${cols[s.columns]}`}>{cards.map((c) => <SmallCard key={c.p.id} card={c} show={s.show} />)}</div></section>;
+  if (s.type === "regular") return <section className={wrap} {...sizing}><div className={`grid grid-cols-2 gap-x-3 gap-y-6 @2xl:gap-x-4 ${cols[s.columns]}`}>{cards.map((c) => <SmallCard key={c.p.id} card={c} show={s.show} />)}</div></section>;
   if (s.type === "featured") return <section className={wrap} {...sizing}><div className={`grid grid-cols-1 gap-3 @2xl:gap-4 ${cols[s.columns]}`}>{cards.map((c) => <LargeCard key={c.p.id} card={c} show={s.show} />)}</div></section>;
 
   const { large, small } = arrangeMixed(s.layout, cards.map((c) => ({ ...c, size: c.item.size })));
-  if (s.layout === "small") return <section className={wrap}><div className={`grid grid-cols-2 gap-x-3 gap-y-6 @2xl:gap-x-4 ${cols[s.columns]}`}>{small.map((c) => <SmallCard key={c.p.id} card={c} show={s.show} />)}</div></section>;
+  if (s.layout === "small") return <section className={wrap} {...sizing}><div className={`grid grid-cols-2 gap-x-3 gap-y-6 @2xl:gap-x-4 ${cols[s.columns]}`}>{small.map((c) => <SmallCard key={c.p.id} card={c} show={s.show} />)}</div></section>;
   if (s.layout === "large") return <section className={wrap} {...sizing}><div className={`grid grid-cols-1 gap-3 @2xl:gap-4 ${cols[s.columns]}`}>{large.map((c) => <LargeCard key={c.p.id} card={c} show={s.show} />)}</div></section>;
   const one = s.layout !== "2l-4s";
   const lg = one

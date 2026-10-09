@@ -98,6 +98,7 @@ function LayoutEditor() {
 function SectionSettings({ s, products, onChange }: { s: Section; products: ProductWithRelations[]; onChange: (p: Partial<Section>) => void }) {
   if (s.type === "banner") return <div className="space-y-3 text-sm">
     <p className="font-semibold">Banner</p>
+    <SpacingFields s={s} onChange={onChange} />
     <label className="block space-y-1"><span>Desktopafbeelding</span><MediaField value={s.desktop} onChange={(v) => onChange({ desktop: v })} /></label>
     <label className="block space-y-1"><span>Mobiele afbeelding (optioneel)</span><MediaField value={s.mobile} onChange={(v) => onChange({ mobile: v })} /></label>
     <HeightFields desktop={s.height} mobile={s.mobileHeight} label="Bannerhoogte" onDesktop={(height) => onChange({ height })} onMobile={(mobileHeight) => onChange({ mobileHeight })} />
@@ -108,6 +109,7 @@ function SectionSettings({ s, products, onChange }: { s: Section; products: Prod
   const manual = !(s.type === "regular" && s.source === "auto");
   return <div className="space-y-3 text-sm">
     <p className="font-semibold">{SECTION_TYPES.find((t) => t.type === s.type)?.label}</p>
+    <SpacingFields s={s} onChange={onChange} />
     {s.type === "mixed" && <label className="block space-y-1"><span>Layout</span>
       <select className="w-full rounded-sm border border-border bg-background px-2 py-1.5" value={s.layout} onChange={(e) => onChange({ layout: e.target.value as Section & { type: "mixed" } extends { layout: infer L } ? L : never })}>{MIXED_LAYOUTS.map((l) => <option key={l} value={l}>{LAYOUT_LABELS[l]}</option>)}</select></label>}
     {s.type === "regular" && <div className="flex gap-2"><Button size="sm" variant={s.source === "auto" ? "default" : "outline"} onClick={() => onChange({ source: "auto" })}>Automatisch uit collectie</Button><Button size="sm" variant={s.source === "manual" ? "default" : "outline"} onClick={() => onChange({ source: "manual" })}>Zelf kiezen</Button></div>}
@@ -121,6 +123,15 @@ function SectionSettings({ s, products, onChange }: { s: Section; products: Prod
 }
 
 function thumb(p: ProductWithRelations | undefined) { const im = p ? galleryImages(p)[0] : undefined; return im ? imgUrl(im.url, 120) : ""; }
+
+function SpacingFields({ s, onChange }: { s: Section; onChange: (p: Partial<Section>) => void }) {
+  return <div className="space-y-2"><p className="font-medium">Afstand links/rechts</p>
+    {([{ label: "Desktop", left: "leftSpacing", right: "rightSpacing" }, { label: "Mobiel", left: "mobileLeftSpacing", right: "mobileRightSpacing" }] as const).map(({ label, left, right }) => <div key={label} className="grid grid-cols-2 gap-2">
+      {([{ key: left, side: "links" }, { key: right, side: "rechts" }] as const).map(({ key, side }) => <label key={key} className="block space-y-1"><span>{label} {side} (px)</span><Input aria-label={`Afstand ${label.toLowerCase()} ${side}`} type="number" min={0} max={500} value={s[key] ?? ""} placeholder="Standaard" onChange={(e) => onChange({ [key]: e.target.value === "" ? undefined : Math.max(0, Math.min(500, Math.round(Number(e.target.value) || 0))) })} /></label>)}
+    </div>)}
+    <Button size="sm" variant="outline" onClick={() => onChange({ leftSpacing: 0, rightSpacing: 0, mobileLeftSpacing: 0, mobileRightSpacing: 0 })}>Volledige breedte</Button>
+  </div>;
+}
 
 function HeightFields({ desktop, mobile, label, onDesktop, onMobile }: { desktop: number; mobile: number; label: string; onDesktop: (value: number) => void; onMobile: (value: number) => void }) {
   const valueOf = (value: string) => Math.max(0, Math.min(2000, Math.round(Number(value) || 0)));

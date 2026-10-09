@@ -4,6 +4,14 @@ import { arrangeMixed, layoutFor, parseLayouts, sectionSchema } from "@/lib/coll
 const it6 = Array.from({ length: 6 }, (_, i) => ({ id: String(i) as string, size: undefined as "large" | "small" | undefined }));
 
 describe("collection layout", () => {
+  it("keeps zero gutters for full-width sections and independent left/right spacing", () => {
+    for (const type of ["banner", "mixed", "featured", "regular"]) {
+      expect(sectionSchema.parse({ id: type, type, leftSpacing: 0, rightSpacing: 0, mobileLeftSpacing: 12, mobileRightSpacing: 24 })).toMatchObject({ leftSpacing: 0, rightSpacing: 0, mobileLeftSpacing: 12, mobileRightSpacing: 24 });
+    }
+  });
+  it("preserves legacy spacing when no override is set", () => {
+    expect(sectionSchema.parse({ id: "legacy", type: "mixed" }).leftSpacing).toBeUndefined();
+  });
   it("preserves independently configured desktop and mobile banner heights", () => {
     const s = sectionSchema.parse({ id: "banner", type: "banner", height: 350, mobileHeight: 180 });
     expect(s).toMatchObject({ height: 350, mobileHeight: 180 });
