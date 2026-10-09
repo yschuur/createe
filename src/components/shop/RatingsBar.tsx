@@ -39,7 +39,7 @@ function TrustpilotStars() {
 }
 
 export function RatingsBar({ googleLabel, trustLabel, trustUrl, googleUrl }: { googleLabel: string; trustLabel: string; trustUrl?: string; googleUrl?: string }) {
-  const block = "flex min-w-0 flex-1 items-center justify-center gap-2 rounded-md bg-shop-surface px-2.5 py-2 shadow-[0_1px_3px_rgba(0,0,0,0.08)] ring-1 ring-black/5 sm:flex-none sm:gap-3 sm:px-6 sm:py-3";
+  const block = "flex min-w-0 flex-1 items-center justify-center gap-2 rounded-md bg-white px-2.5 py-2 shadow-[0_1px_3px_rgba(0,0,0,0.08)] ring-1 ring-black/5 sm:flex-none sm:gap-3 sm:px-6 sm:py-3";
   return (
     <div data-section="home-ratings" className="flex flex-nowrap items-stretch justify-center gap-2 bg-shop-surface px-3 py-3 sm:gap-5 sm:px-4 sm:py-4">
       <a href={googleUrl || undefined} target="_blank" rel="noreferrer" className={`${block} transition hover:shadow-[0_2px_8px_rgba(0,0,0,0.12)]`}>

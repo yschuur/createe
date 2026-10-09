@@ -17,7 +17,6 @@
 - Product HTML is sanitized with sanitize-html before rendering (worker-safe, works in SSR).
 - Original editorial pages use /pages/ons-verhaal and /pages/de-hybr-polo, with /pages/design-studio redirecting to /design-studio — preserves original links while keeping one request form.
 - Screenshot-led storefront styles are scoped with .storefront and semantic shop surface tokens — keeps the admin design unchanged.
-- Storefront surface colors use the shared paper token; the page CSS builder maps saved pure-white background and button-background values to that token without changing foreground colors — keeps existing CMS overrides consistent with the surface theme.
 - Contact FAQ uses validated site_settings JSON and rich-text editing; contact submissions use a validated public server insert and admin-only RLS reads — keeps customer messages private and readable in admin.
 - Editable storefront content (homepage header, announcement bar, carousel order) lives as JSON rows in `site_settings`, read publicly and written by admins via RLS — lets the owner change copy without code.
 - Hero videos are uploaded as H.264 MP4 without audio — browser-safe and light.
