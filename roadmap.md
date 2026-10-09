@@ -1,4 +1,5 @@
 # Roadmap
+- [x] Collectie-indeling: afstand links/rechts per sectie, inclusief volledige breedte; beheer-voorbeeld gecontroleerd met onafhankelijke desktop/mobiele afstanden en 0/0, 9 tests geslaagd; live instellingen niet gewijzigd.
 - [x] Collectie-indeling: bannerhoogte en grote-afbeeldingshoogte per sectie, desktop/mobiel; gedeeld shopvoorbeeld getest met 350/180px en 500/320px, 7 tests geslaagd; geen live instellingen gewijzigd.
 - [x] Footer opnieuw opgebouwd: zelfstandige tegel, oude beheerplekken verwijderd, Ontdek/Informatie leeg; opslaan/herladen en zichtbare kop-/tekst-/linkgroottes getest, testlink en teststijlen verwijderd.
 - [x] Contact volgens screenshot: formulier links, beheerbare FAQ rechts; mobiel gestapeld en vragen standaard dicht; formulieropslag, beheer-teruglezing, FAQ opslaan/herladen en mobiele weergave getest. Testbericht verwijderd; e-mailmeldingen wachten op geverifieerd domein.

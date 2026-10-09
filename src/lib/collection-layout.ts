@@ -10,7 +10,8 @@ const item = z.object({
   image: z.string().max(2000).optional(),
   label: z.string().max(40).optional(),
 });
-const base = { id: z.string(), hidden: z.boolean().default(false) };
+const spacing = z.number().int().min(0).max(500).optional();
+const base = { id: z.string(), hidden: z.boolean().default(false), leftSpacing: spacing, rightSpacing: spacing, mobileLeftSpacing: spacing, mobileRightSpacing: spacing };
 const height = z.number().int().min(0).max(2000).default(0);
 const largeSizing = { largeHeight: height, mobileLargeHeight: height };
 export const MIXED_LAYOUTS = ["2l-4s", "1l-left", "1l-right", "small", "large"] as const;
