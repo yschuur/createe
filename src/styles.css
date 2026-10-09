@@ -450,3 +450,11 @@
 
 /* Collection section large cards: soft bottom shade so overlay text stays readable. */
 .cs-large-shade { background: linear-gradient(to top, color-mix(in oklab, var(--foreground) 72%, transparent), transparent); }
+@container (min-width: 32rem) {
+  .cs-banner.cs-desktop-sized > img,
+  .cs-desktop-sized .cs-large-card { height: var(--cs-height); min-height: 0; aspect-ratio: auto; }
+}
+@container (width < 32rem) {
+  .cs-banner.cs-mobile-sized > img,
+  .cs-mobile-sized .cs-large-card { height: var(--cs-mobile-height); min-height: 0; aspect-ratio: auto; }
+}
