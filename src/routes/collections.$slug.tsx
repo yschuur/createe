@@ -11,6 +11,8 @@ import { z } from "zod";
 import { seoFrom, seoMeta, seoQuery } from "@/lib/seo";
 import { ShopLayout } from "@/components/shop/ShopLayout";
 import { ProductCard } from "@/components/shop/ProductCard";
+import { CollectionSection } from "@/components/shop/CollectionSections";
+import { layoutFor, layoutsQuery } from "@/lib/collection-layout";
 
 const searchSchema = z.object({
   collection: z.string().max(100).optional().catch(undefined),
@@ -76,13 +78,22 @@ function SportShopPage() {
   const { data: heightMap } = useQuery(bannerHeightsQuery());
   const ownBanners = !!active && (bannerMap?.[active.slug] ?? []).some((b) => b.url);
   const bannerHeight = heightMap?.[ownBanners && active ? active.slug : data.sport.slug] ?? 0;
+  const { data: layoutMap } = useQuery(layoutsQuery());
+  const sections = layoutFor(layoutMap ?? {}, data.sport.slug, active?.slug);
+  const visible = sections?.filter((x) => !x.hidden) ?? [];
+  const lead = visible.slice(0, visible.findIndex((x) => x.type !== "banner") === -1 ? visible.length : visible.findIndex((x) => x.type !== "banner"));
+  const rest = visible.slice(lead.length);
+  const hasLeadBanner = lead.some((x) => x.type === "banner" && x.desktop);
+  const used = new Set<string>();
+  const alt = `CREATEE ${active?.name ?? data.sport.name}`;
   const chip = "rounded-full border border-border px-4 py-1.5 text-sm hover:border-primary";
   const on = "bg-primary text-primary-foreground border-primary";
   return (
     <ShopLayout cms="collection">
-      <section data-section="collection-header" className="mx-auto max-w-7xl px-4 pt-12 md:px-8">
-        <h1 className="text-5xl font-extrabold uppercase md:text-7xl">{data.sport.name}{active && <span className="block text-2xl md:text-3xl">{active.name}</span>}</h1>
-        {active?.description && <div className="prose-shop mt-2 max-w-xl text-muted-foreground" dangerouslySetInnerHTML={{ __html: sanitizeDescription(active.description) }} />}
+      <div className="@container">{lead.map((x) => <CollectionSection key={x.id} s={x} products={products} used={used} alt={alt} />)}</div>
+      <section data-section="collection-header" className={`mx-auto max-w-7xl px-4 md:px-8 ${hasLeadBanner ? "pt-6" : "pt-12"}`}>
+        <h1 className={hasLeadBanner ? "sr-only" : "text-5xl font-extrabold uppercase md:text-7xl"}><span>{data.sport.name}{active && <span className="block text-2xl md:text-3xl">{active.name}</span>}</span></h1>
+        {!hasLeadBanner && active?.description && <div className="prose-shop mt-2 max-w-xl text-muted-foreground" dangerouslySetInnerHTML={{ __html: sanitizeDescription(active.description) }} />}
         <div className="mt-6 flex flex-wrap gap-2" aria-label="Collecties">
           <Link to="/collections/$slug" params={{ slug }} search={{}} className={`${chip} ${!active ? on : ""}`}>Alles</Link>
           {data.collections.map((c) => <Link key={c.id} to="/collections/$slug" params={{ slug }} search={{ collection: c.slug }} className={`${chip} ${active?.id === c.id ? on : ""}`}>{c.name}</Link>)}
@@ -154,12 +165,15 @@ function SportShopPage() {
           onClose={() => setDrawerOpen(false)}
         />
       )}
-      <section data-section="collection-grid" className="mx-auto max-w-7xl px-4 pb-12 md:px-8">
+      {sections ? <div className="@container pb-8 pt-4">
+        {rest.map((x) => <CollectionSection key={x.id} s={x} products={products} used={used} alt={alt} />)}
+        {products.length === 0 && <p className="py-16 text-center text-muted-foreground">Nog geen producten in deze selectie.</p>}
+      </div> : <section data-section="collection-grid" className="mx-auto max-w-7xl px-4 pb-12 md:px-8">
         <div data-role="grid" className="mt-10 grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-4 md:gap-x-6">
           {products.map((p, i) => <ProductCard key={p.id} product={p} index={i} />)}
         </div>
         {products.length === 0 && <p className="py-16 text-center text-muted-foreground">Nog geen producten in deze selectie.</p>}
-      </section>
+      </section>}
       {banners.length > 0 && (
         <section data-section="collection-banners" className="flex w-full gap-1" style={bannerHeight ? { height: `min(${bannerHeight}px, ${(bannerHeight / 14.4).toFixed(2)}vw)` } : undefined}>
           {banners.map((b, i) => {

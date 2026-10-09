@@ -447,3 +447,6 @@
 @keyframes studio-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @media (max-width: 640px) { .studio-card { width: 220px; margin-right: 1rem; } .studio-card:nth-child(even) { margin-top: 1.5rem; } }
 @media (prefers-reduced-motion: reduce) { .studio-marquee { overflow-x: auto; } .studio-marquee-track { animation: none; } }
+
+/* Collection section large cards: soft bottom shade so overlay text stays readable. */
+.cs-large-shade { background: linear-gradient(to top, color-mix(in oklab, var(--foreground) 72%, transparent), transparent); }
