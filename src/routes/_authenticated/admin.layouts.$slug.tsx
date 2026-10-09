@@ -100,7 +100,8 @@ function SectionSettings({ s, products, onChange }: { s: Section; products: Prod
     <p className="font-semibold">Banner</p>
     <label className="block space-y-1"><span>Desktopafbeelding</span><MediaField value={s.desktop} onChange={(v) => onChange({ desktop: v })} /></label>
     <label className="block space-y-1"><span>Mobiele afbeelding (optioneel)</span><MediaField value={s.mobile} onChange={(v) => onChange({ mobile: v })} /></label>
-    <p className="text-xs text-muted-foreground">Zonder mobiele afbeelding wordt de desktopafbeelding gebruikt. De afbeelding houdt haar eigen verhouding.</p>
+    <HeightFields desktop={s.height} mobile={s.mobileHeight} label="Bannerhoogte" onDesktop={(height) => onChange({ height })} onMobile={(mobileHeight) => onChange({ mobileHeight })} />
+    <p className="text-xs text-muted-foreground">Zonder mobiele afbeelding wordt de desktopafbeelding gebruikt. Lege hoogte = originele verhouding. Bij een ingestelde hoogte vult de foto het kader.</p>
   </div>;
   const showRow = <div className="grid grid-cols-2 gap-2">{(["name", "material", "price", "colors"] as const).map((k) => <label key={k} className="flex items-center gap-2"><Switch checked={s.show[k]} onCheckedChange={(v) => onChange({ show: { ...s.show, [k]: v } })} />{{ name: "Naam", material: "Materiaal", price: "Prijs", colors: "Kleuren" }[k]}</label>)}</div>;
   const warning = s.type === "mixed" ? arrangeMixed(s.layout, s.items).warning : null;
@@ -112,6 +113,7 @@ function SectionSettings({ s, products, onChange }: { s: Section; products: Prod
     {s.type === "regular" && <div className="flex gap-2"><Button size="sm" variant={s.source === "auto" ? "default" : "outline"} onClick={() => onChange({ source: "auto" })}>Automatisch uit collectie</Button><Button size="sm" variant={s.source === "manual" ? "default" : "outline"} onClick={() => onChange({ source: "manual" })}>Zelf kiezen</Button></div>}
     {s.type === "regular" && s.source === "auto" && <label className="block space-y-1"><span>Aantal producten (0 = alle overige)</span><Input type="number" min={0} value={s.limit} onChange={(e) => onChange({ limit: Math.max(0, Number(e.target.value) || 0) })} /></label>}
     {(s.type !== "mixed" || s.layout === "small" || s.layout === "large") && <label className="block space-y-1"><span>Kolommen (desktop)</span><Input type="number" min={1} max={s.type === "featured" ? 4 : 6} value={s.columns} onChange={(e) => onChange({ columns: Math.max(1, Math.min(s.type === "featured" ? 4 : 6, Number(e.target.value) || 1)) })} /></label>}
+    {(s.type === "featured" || (s.type === "mixed" && s.layout !== "small")) && <HeightFields desktop={s.largeHeight} mobile={s.mobileLargeHeight} label="Hoogte grote afbeeldingen" onDesktop={(largeHeight) => onChange({ largeHeight })} onMobile={(mobileLargeHeight) => onChange({ mobileLargeHeight })} />}
     {showRow}
     {warning && <p className="rounded-sm bg-accent/20 p-2 text-xs">{warning} De site laat geen lege plekken zien.</p>}
     {manual && <ItemsEditor items={s.items} products={products} withSize={s.type === "mixed"} onChange={(items) => onChange({ items })} />}
@@ -119,6 +121,16 @@ function SectionSettings({ s, products, onChange }: { s: Section; products: Prod
 }
 
 function thumb(p: ProductWithRelations | undefined) { const im = p ? galleryImages(p)[0] : undefined; return im ? imgUrl(im.url, 120) : ""; }
+
+function HeightFields({ desktop, mobile, label, onDesktop, onMobile }: { desktop: number; mobile: number; label: string; onDesktop: (value: number) => void; onMobile: (value: number) => void }) {
+  const valueOf = (value: string) => Math.max(0, Math.min(2000, Math.round(Number(value) || 0)));
+  return <div className="space-y-2"><p className="font-medium">{label}</p>
+    <div className="grid grid-cols-2 gap-2">
+      <label className="block space-y-1"><span>Desktop (px)</span><Input aria-label={`${label} desktop`} type="number" min={0} max={2000} step={10} value={desktop || ""} placeholder="Automatisch" onChange={(e) => onDesktop(valueOf(e.target.value))} /></label>
+      <label className="block space-y-1"><span>Mobiel (px)</span><Input aria-label={`${label} mobiel`} type="number" min={0} max={2000} step={10} value={mobile || ""} placeholder="Automatisch" onChange={(e) => onMobile(valueOf(e.target.value))} /></label>
+    </div>
+  </div>;
+}
 
 function ItemsEditor({ items, products, withSize, onChange }: { items: SectionItem[]; products: ProductWithRelations[]; withSize: boolean; onChange: (i: SectionItem[]) => void }) {
   const [open, setOpen] = useState(false);

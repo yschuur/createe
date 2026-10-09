@@ -1,9 +1,22 @@
 import { describe, expect, it } from "vitest";
-import { arrangeMixed, layoutFor, parseLayouts } from "@/lib/collection-layout";
+import { arrangeMixed, layoutFor, parseLayouts, sectionSchema } from "@/lib/collection-layout";
 
 const it6 = Array.from({ length: 6 }, (_, i) => ({ id: String(i) as string, size: undefined as "large" | "small" | undefined }));
 
 describe("collection layout", () => {
+  it("preserves independently configured desktop and mobile banner heights", () => {
+    const s = sectionSchema.parse({ id: "banner", type: "banner", height: 350, mobileHeight: 180 });
+    expect(s).toMatchObject({ height: 350, mobileHeight: 180 });
+  });
+  it("preserves large image heights in mixed and featured sections", () => {
+    for (const type of ["mixed", "featured"]) {
+      expect(sectionSchema.parse({ id: type, type, largeHeight: 500, mobileLargeHeight: 320 })).toMatchObject({ largeHeight: 500, mobileLargeHeight: 320 });
+    }
+  });
+  it("keeps legacy sections on automatic sizing", () => {
+    expect(sectionSchema.parse({ id: "banner", type: "banner" })).toMatchObject({ height: 0, mobileHeight: 0 });
+    expect(sectionSchema.parse({ id: "mixed", type: "mixed" })).toMatchObject({ largeHeight: 0, mobileLargeHeight: 0 });
+  });
   it("reference layout gives 2 large and 4 small cards", () => {
     const r = arrangeMixed("2l-4s", it6);
     expect(r.large.map((x) => x.id)).toEqual(["0", "1"]);

@@ -1,4 +1,5 @@
 # Roadmap
+- [ ] Collectie-indeling: instelbare bannerhoogte en hoogte van grote productafbeeldingen, met controle in beheer en shop.
 - [x] Footer opnieuw opgebouwd: zelfstandige tegel, oude beheerplekken verwijderd, Ontdek/Informatie leeg; opslaan/herladen en zichtbare kop-/tekst-/linkgroottes getest, testlink en teststijlen verwijderd.
 - [x] Contact volgens screenshot: formulier links, beheerbare FAQ rechts; mobiel gestapeld en vragen standaard dicht; formulieropslag, beheer-teruglezing, FAQ opslaan/herladen en mobiele weergave getest. Testbericht verwijderd; e-mailmeldingen wachten op geverifieerd domein.
 - [x] Ons verhaal/HYBR: tekst bepaalt afbeeldingskader; uitsnede versleepbaar in paginabeheer met werkelijke kaderverhouding, opslaan/herladen en storefront-teruglezing getest; testuitsnede gecentreerd hersteld.
