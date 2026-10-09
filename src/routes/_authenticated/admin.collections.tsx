@@ -1,5 +1,5 @@
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -61,7 +61,7 @@ function CollectionsAdmin() {
     <AdminLayout title="Collecties" actions={<Button onClick={create}>Collectie toevoegen</Button>}>
       <div className="mb-6 flex flex-wrap items-center gap-3 rounded-sm bg-card p-4 text-sm">
         <span className="font-medium">Afbeeldingen onder de producten per sportpagina:</span>
-        {data?.sports.map((s) => <BannerEditor key={s.id} slug={(s as { slug?: string }).slug ?? ""} name={s.name} />)}
+        {data?.sports.map((s) => <span key={s.id} className="flex gap-2"><Button variant="outline" size="sm" asChild><Link to="/admin/layouts/$slug" params={{ slug: s.slug }}>{s.name}: indeling</Link></Button><BannerEditor slug={s.slug} name={s.name} /></span>)}
         <span className="text-xs text-muted-foreground">Een collectie met eigen afbeeldingen toont die; anders die van de sport.</span>
       </div>
       <div className="space-y-3">
@@ -76,6 +76,7 @@ function CollectionsAdmin() {
             <p className="text-sm">{data.links.filter((l) => l.collection_id === c.id).length} producten</p>
             <label className="flex items-center gap-2 text-sm">Zichtbaar <Switch checked={c.published} onCheckedChange={(v) => update(c.id, { published: v })} /></label>
             <Button variant="outline" size="sm" onClick={() => setEditing(c.id)}>Producten</Button>
+            <Button variant="outline" size="sm" asChild><Link to="/admin/layouts/$slug" params={{ slug: c.slug }}>Indeling</Link></Button>
             <BannerEditor slug={c.slug} name={c.name} />
             <Button variant="ghost" size="sm" className="text-destructive" onClick={() => remove(c.id)}>Verwijder</Button>
           </div>
