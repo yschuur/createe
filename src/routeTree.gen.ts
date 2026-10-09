@@ -42,6 +42,7 @@ import { Route as AuthenticatedAdminStockRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAdminStudioRouteImport } from './routes/_authenticated/admin.studio'
 import { Route as AuthenticatedAdminStylesRouteImport } from './routes/_authenticated/admin.styles'
 import { Route as AuthenticatedAdminSubmissionsRouteImport } from './routes/_authenticated/admin.submissions'
+import { Route as AuthenticatedAdminLayoutsSlugRouteImport } from './routes/_authenticated/admin.layouts.$slug'
 import { Route as AuthenticatedAdminOrderIdRouteImport } from './routes/_authenticated/admin.order.$id'
 import { Route as AuthenticatedAdminPagesIndexRouteImport } from './routes/_authenticated/admin.pages.index'
 import { Route as AuthenticatedAdminPagesPageRouteImport } from './routes/_authenticated/admin.pages.$page'
@@ -229,6 +230,12 @@ const AuthenticatedAdminSubmissionsRoute =
     path: '/admin/submissions',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminLayoutsSlugRoute =
+  AuthenticatedAdminLayoutsSlugRouteImport.update({
+    id: '/admin/layouts/$slug',
+    path: '/admin/layouts/$slug',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminOrderIdRoute =
   AuthenticatedAdminOrderIdRouteImport.update({
     id: '/admin/order/$id',
@@ -311,6 +318,7 @@ export interface FileRoutesByFullPath {
   '/admin/styles': typeof AuthenticatedAdminStylesRoute
   '/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/admin/layouts/$slug': typeof AuthenticatedAdminLayoutsSlugRoute
   '/admin/order/$id': typeof AuthenticatedAdminOrderIdRoute
   '/admin/pages/$page': typeof AuthenticatedAdminPagesPageRoute
   '/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
@@ -353,6 +361,7 @@ export interface FileRoutesByTo {
   '/admin/styles': typeof AuthenticatedAdminStylesRoute
   '/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
+  '/admin/layouts/$slug': typeof AuthenticatedAdminLayoutsSlugRoute
   '/admin/order/$id': typeof AuthenticatedAdminOrderIdRoute
   '/admin/pages/$page': typeof AuthenticatedAdminPagesPageRoute
   '/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
@@ -397,6 +406,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/styles': typeof AuthenticatedAdminStylesRoute
   '/_authenticated/admin/submissions': typeof AuthenticatedAdminSubmissionsRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/admin/layouts/$slug': typeof AuthenticatedAdminLayoutsSlugRoute
   '/_authenticated/admin/order/$id': typeof AuthenticatedAdminOrderIdRoute
   '/_authenticated/admin/pages/$page': typeof AuthenticatedAdminPagesPageRoute
   '/_authenticated/admin/products/$id': typeof AuthenticatedAdminProductsIdRoute
@@ -441,6 +451,7 @@ export interface FileRouteTypes {
     | '/admin/styles'
     | '/admin/submissions'
     | '/admin/'
+    | '/admin/layouts/$slug'
     | '/admin/order/$id'
     | '/admin/pages/$page'
     | '/admin/products/$id'
@@ -483,6 +494,7 @@ export interface FileRouteTypes {
     | '/admin/styles'
     | '/admin/submissions'
     | '/admin'
+    | '/admin/layouts/$slug'
     | '/admin/order/$id'
     | '/admin/pages/$page'
     | '/admin/products/$id'
@@ -526,6 +538,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/styles'
     | '/_authenticated/admin/submissions'
     | '/_authenticated/admin/'
+    | '/_authenticated/admin/layouts/$slug'
     | '/_authenticated/admin/order/$id'
     | '/_authenticated/admin/pages/$page'
     | '/_authenticated/admin/products/$id'
@@ -788,6 +801,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminSubmissionsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/layouts/$slug': {
+      id: '/_authenticated/admin/layouts/$slug'
+      path: '/admin/layouts/$slug'
+      fullPath: '/admin/layouts/$slug'
+      preLoaderRoute: typeof AuthenticatedAdminLayoutsSlugRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/order/$id': {
       id: '/_authenticated/admin/order/$id'
       path: '/admin/order/$id'
@@ -867,6 +887,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminStylesRoute: typeof AuthenticatedAdminStylesRoute
   AuthenticatedAdminSubmissionsRoute: typeof AuthenticatedAdminSubmissionsRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedAdminLayoutsSlugRoute: typeof AuthenticatedAdminLayoutsSlugRoute
   AuthenticatedAdminOrderIdRoute: typeof AuthenticatedAdminOrderIdRoute
   AuthenticatedAdminPagesPageRoute: typeof AuthenticatedAdminPagesPageRoute
   AuthenticatedAdminProductsIdRoute: typeof AuthenticatedAdminProductsIdRoute
@@ -895,6 +916,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminStylesRoute: AuthenticatedAdminStylesRoute,
   AuthenticatedAdminSubmissionsRoute: AuthenticatedAdminSubmissionsRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+  AuthenticatedAdminLayoutsSlugRoute: AuthenticatedAdminLayoutsSlugRoute,
   AuthenticatedAdminOrderIdRoute: AuthenticatedAdminOrderIdRoute,
   AuthenticatedAdminPagesPageRoute: AuthenticatedAdminPagesPageRoute,
   AuthenticatedAdminProductsIdRoute: AuthenticatedAdminProductsIdRoute,
