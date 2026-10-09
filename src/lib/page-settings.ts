@@ -293,6 +293,14 @@ export function safeColor(v: unknown): string | undefined {
   return HEX.test(s) || RGB.test(s) ? s : undefined;
 }
 export const isValidColor = (v: string) => !v || !!safeColor(v);
+/** Replace white surfaces only, preserving white text, borders and product colors. */
+function safeBackgroundColor(v: unknown): string | undefined {
+  const color = safeColor(v);
+  if (!color) return undefined;
+  const compact = color.toLowerCase().replace(/\s/g, "");
+  return ["#fff", "#ffffff", "rgb(255,255,255)", "rgba(255,255,255,1)"].includes(compact)
+    ? "var(--shop-paper)" : color;
+}
 /** Only https URLs or site-relative paths without characters that could break out of CSS/HTML. */
 export function safeUrl(v: unknown): string | undefined {
   if (typeof v !== "string" || !v) return undefined;
@@ -439,7 +447,7 @@ export function buildPageCss(key: PageKey, overrides: PageConfig | undefined): s
     // Background
     const bg = c.background;
     if (bg) {
-      const col = safeColor(bg.color);
+      const col = safeBackgroundColor(bg.color);
       if (col) out.push(`${root}{background-color:${col} !important}`);
       const image = s.backgroundImage ? safeUrl(bg.image) : undefined;
       if (image) {
@@ -489,7 +497,7 @@ export function buildPageCss(key: PageKey, overrides: PageConfig | undefined): s
       if (b.variant === "outline") decl.push("background:transparent", "border:1px solid currentColor", "box-shadow:none");
       if (b.variant === "ghost") decl.push("background:transparent", "border-color:transparent", "box-shadow:none");
       if (b.variant === "filled") decl.push("background:var(--primary)", "color:var(--primary-foreground)", "border-color:transparent");
-      const bgc = safeColor(b.bg); if (bgc) decl.push(`background:${bgc}`);
+      const bgc = safeBackgroundColor(b.bg); if (bgc) decl.push(`background:${bgc}`);
       const fc = safeColor(b.color); if (fc) decl.push(`color:${fc}`);
       const bc = safeColor(b.border); if (bc) decl.push(`border:1px solid ${bc}`);
       if (b.font && FONTS[b.font]) decl.push(`font-family:${FONTS[b.font]}`);
@@ -501,7 +509,7 @@ export function buildPageCss(key: PageKey, overrides: PageConfig | undefined): s
       const px = clampN(b.px, 0, 80); if (px !== undefined) decl.push(`padding-left:${px}px`, `padding-right:${px}px`);
       const py = clampN(b.py, 0, 40); if (py !== undefined) decl.push(`padding-top:${py}px`, `padding-bottom:${py}px`, "height:auto");
       if (decl.length) out.push(`${sel}{${decl.map((d) => d + " !important").join(";")}}`);
-      const hover = [["background", b.hoverBg], ["color", b.hoverColor], ["border-color", b.hoverBorder]].flatMap(([prop, value]) => { const col = safeColor(value); return col ? [`${prop}:${col} !important`] : []; });
+      const hover = [["background", b.hoverBg], ["color", b.hoverColor], ["border-color", b.hoverBorder]].flatMap(([prop, value]) => { const col = prop === "background" ? safeBackgroundColor(value) : safeColor(value); return col ? [`${prop}:${col} !important`] : []; });
       if (hover.length) out.push(`${sel}:is(:hover,:focus-visible){${hover.join(";")}}`);
     }
     // Section-specific whitelisted extras
