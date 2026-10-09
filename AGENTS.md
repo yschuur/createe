@@ -31,4 +31,4 @@
 - Sports are rows in `sports`; each product has one sport_id and collections list sport_ids; /collections/<sport> is the sport shop with collections/tags as filters — products never leak across sports and new sports need no code.
 - Order email copy lives in site_settings "order_emails" (src/lib/order-emails.ts); one template — owner edits text.
 - Footer uses its own PAGE_DEFS entry and page_footer settings, rendered by ShopFooter; only its dedicated page editor manages content/styles and newsletter-code selection, with no legacy/global/policy-link fallback — prevents competing footer settings.
-- Collection page sections live in site_settings "collection_layouts" per sport/collection slug, parsed in src/lib/collection-layout.ts, rendered with container queries; none = classic grid - no schema change, admin preview can switch device.
+- Collection page sections and desktop/mobile banner and large-card dimensions live in site_settings "collection_layouts" per sport/collection slug, validated in src/lib/collection-layout.ts and rendered with container queries by the shared shop/admin preview; none = classic grid - no schema change.

@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import type { CSSProperties } from "react";
 import { productColor } from "@/lib/product-colors";
 import { galleryImages } from "@/lib/product-gallery";
 import { formatPrice, imgUrl, prettyValue, priceRange, type ProductWithRelations } from "@/lib/shop";
@@ -9,7 +10,7 @@ type Card = { p: ProductWithRelations; item: SectionItem };
 
 const material = (p: ProductWithRelations) => p.fabric || p.product_type || "";
 const colorsOf = (p: ProductWithRelations) => Array.from(new Set(p.product_variants.map((v) => v.color).filter((c): c is string => !!c)));
-const imageOf = ({ p, item }: Card, w: number) => item.image || (galleryImages(p)[0] ? imgUrl(galleryImages(p)[0]!.url, w) : "");
+const imageOf = ({ p, item }: Card, w: number) => { const first = galleryImages(p)[0]; return item.image || (first ? imgUrl(first.url, w) : ""); };
 
 function Swatches({ p }: { p: ProductWithRelations }) {
   const cs = colorsOf(p);
@@ -21,7 +22,7 @@ export function LargeCard({ card, show, className = "" }: { card: Card; show: Sh
   const { p, item } = card;
   const src = imageOf(card, 1100);
   return (
-    <Link to="/products/$handle" params={{ handle: p.slug }} className={`group relative block aspect-[4/5] overflow-hidden bg-card ${className}`} aria-label={p.name}>
+    <Link to="/products/$handle" params={{ handle: p.slug }} className={`cs-large-card group relative block aspect-[4/5] overflow-hidden bg-card ${className}`} aria-label={p.name}>
       {src && <img src={src} alt={p.name} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-opacity group-hover:opacity-95" />}
       {item.label && <span className="absolute left-3 top-3 bg-background/90 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.2em]">{item.label}</span>}
       <div className="cs-large-shade absolute inset-x-0 bottom-0 p-4 pt-20 text-background">
@@ -64,9 +65,9 @@ export function CollectionSection({ s, products, used, alt }: { s: Section; prod
   if (s.hidden) return null;
   if (s.type === "banner") {
     if (!s.desktop) return null;
-    return <section data-section="collection-banner" className="w-full">
-      <img src={s.desktop} alt={alt} className={`block h-auto w-full ${s.mobile ? "hidden @2xl:block" : ""}`} />
-      {s.mobile && <img src={s.mobile} alt={alt} className="block h-auto w-full @2xl:hidden" />}
+    return <section data-section="collection-banner" className={`cs-banner w-full ${s.height ? "cs-desktop-sized" : ""} ${s.mobileHeight ? "cs-mobile-sized" : ""}`} style={{ "--cs-height": `${s.height}px`, "--cs-mobile-height": `${s.mobileHeight}px` } as CSSProperties}>
+      <img src={s.desktop} alt={alt} className={`block h-auto w-full object-cover ${s.mobile ? "hidden @2xl:block" : ""}`} />
+      {s.mobile && <img src={s.mobile} alt={alt} className="block h-auto w-full object-cover @2xl:hidden" />}
     </section>;
   }
   const byId = new Map(products.map((p) => [p.id, p]));
@@ -79,19 +80,20 @@ export function CollectionSection({ s, products, used, alt }: { s: Section; prod
   }
   cards.forEach((c) => used.add(c.p.id));
   if (!cards.length) return null;
-  const wrap = "mx-auto max-w-7xl px-4 py-5 md:px-8";
+  const sizing = s.type !== "regular" ? { style: { "--cs-height": `${s.largeHeight}px`, "--cs-mobile-height": `${s.mobileLargeHeight}px` } as CSSProperties } : {};
+  const wrap = `mx-auto max-w-7xl px-4 py-5 md:px-8 ${s.type !== "regular" ? `${s.largeHeight ? "cs-desktop-sized" : ""} ${s.mobileLargeHeight ? "cs-mobile-sized" : ""}` : ""}`;
 
   if (s.type === "regular") return <section className={wrap}><div className={`grid grid-cols-2 gap-x-3 gap-y-6 @2xl:gap-x-4 ${cols[s.columns]}`}>{cards.map((c) => <SmallCard key={c.p.id} card={c} show={s.show} />)}</div></section>;
-  if (s.type === "featured") return <section className={wrap}><div className={`grid grid-cols-1 gap-3 @2xl:gap-4 ${cols[s.columns]}`}>{cards.map((c) => <LargeCard key={c.p.id} card={c} show={s.show} />)}</div></section>;
+  if (s.type === "featured") return <section className={wrap} {...sizing}><div className={`grid grid-cols-1 gap-3 @2xl:gap-4 ${cols[s.columns]}`}>{cards.map((c) => <LargeCard key={c.p.id} card={c} show={s.show} />)}</div></section>;
 
   const { large, small } = arrangeMixed(s.layout, cards.map((c) => ({ ...c, size: c.item.size })));
   if (s.layout === "small") return <section className={wrap}><div className={`grid grid-cols-2 gap-x-3 gap-y-6 @2xl:gap-x-4 ${cols[s.columns]}`}>{small.map((c) => <SmallCard key={c.p.id} card={c} show={s.show} />)}</div></section>;
-  if (s.layout === "large") return <section className={wrap}><div className={`grid grid-cols-1 gap-3 @2xl:gap-4 ${cols[s.columns]}`}>{large.map((c) => <LargeCard key={c.p.id} card={c} show={s.show} />)}</div></section>;
+  if (s.layout === "large") return <section className={wrap} {...sizing}><div className={`grid grid-cols-1 gap-3 @2xl:gap-4 ${cols[s.columns]}`}>{large.map((c) => <LargeCard key={c.p.id} card={c} show={s.show} />)}</div></section>;
   const one = s.layout !== "2l-4s";
   const lg = one
     ? `col-span-2 @2xl:col-span-2 @2xl:row-span-2 @5xl:col-span-3 ${s.layout === "1l-right" ? "@2xl:col-start-3 @5xl:col-start-4 @2xl:row-start-1" : ""}`
     : "col-span-2 @2xl:col-span-2 @2xl:row-span-2";
-  return <section className={wrap}>
+  return <section className={wrap} {...sizing}>
     <div className="grid grid-flow-row-dense grid-cols-2 gap-x-3 gap-y-6 @2xl:grid-cols-4 @2xl:gap-x-4 @5xl:grid-cols-6">
       {large.map((c) => <LargeCard key={c.p.id} card={c} show={s.show} className={`${lg} @2xl:aspect-auto @2xl:h-full @2xl:min-h-[28rem]`} />)}
       {small.map((c) => <SmallCard key={c.p.id} card={c} show={s.show} />)}

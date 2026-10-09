@@ -11,11 +11,13 @@ const item = z.object({
   label: z.string().max(40).optional(),
 });
 const base = { id: z.string(), hidden: z.boolean().default(false) };
+const height = z.number().int().min(0).max(2000).default(0);
+const largeSizing = { largeHeight: height, mobileLargeHeight: height };
 export const MIXED_LAYOUTS = ["2l-4s", "1l-left", "1l-right", "small", "large"] as const;
 export const sectionSchema = z.discriminatedUnion("type", [
-  z.object({ ...base, type: z.literal("banner"), desktop: z.string().max(2000).default(""), mobile: z.string().max(2000).default("") }),
-  z.object({ ...base, type: z.literal("mixed"), layout: z.enum(MIXED_LAYOUTS).default("2l-4s"), columns: z.number().int().min(1).max(6).default(4), items: z.array(item).default([]), show: show.default({}) }),
-  z.object({ ...base, type: z.literal("featured"), columns: z.number().int().min(1).max(4).default(2), items: z.array(item).default([]), show: show.default({}) }),
+  z.object({ ...base, type: z.literal("banner"), desktop: z.string().max(2000).default(""), mobile: z.string().max(2000).default(""), height, mobileHeight: height }),
+  z.object({ ...base, ...largeSizing, type: z.literal("mixed"), layout: z.enum(MIXED_LAYOUTS).default("2l-4s"), columns: z.number().int().min(1).max(6).default(4), items: z.array(item).default([]), show: show.default({}) }),
+  z.object({ ...base, ...largeSizing, type: z.literal("featured"), columns: z.number().int().min(1).max(4).default(2), items: z.array(item).default([]), show: show.default({}) }),
   z.object({ ...base, type: z.literal("regular"), source: z.enum(["manual", "auto"]).default("auto"), limit: z.number().int().min(0).max(200).default(0), columns: z.number().int().min(1).max(6).default(4), items: z.array(item).default([]), show: show.default({}) }),
 ]);
 export type Section = z.infer<typeof sectionSchema>;
