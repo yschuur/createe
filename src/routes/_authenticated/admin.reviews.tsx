@@ -28,7 +28,7 @@ function AdminReviews() {
   const upd = (i: number, k: keyof Review, v: string) => setReviews(cur.reviews.map((r, j) => j === i ? { ...r, [k]: v } : r));
   const move = (i: number, d: number) => {
     const a = [...cur.reviews]; const j = i + d; if (j < 0 || j >= a.length) return;
-    [a[i], a[j]] = [a[j], a[i]]; setReviews(a);
+    const [x] = a.splice(i, 1); a.splice(j, 0, x!); setReviews(a);
   };
 
   async function save() {
