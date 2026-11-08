@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { Star, ChevronLeft, ChevronRight } from "lucide-react";
-import { reviews, trustpilot } from "@/lib/reviews-data";
+import { useQuery } from "@tanstack/react-query";
+import { reviewsQuery, defaultReviewsSettings } from "@/lib/reviews";
 
 function ReviewText({ text }: { text: string }) {
   const [open, setOpen] = useState(false);
@@ -13,12 +14,15 @@ function ReviewText({ text }: { text: string }) {
 
 export function Reviews() {
   const row = useRef<HTMLDivElement>(null);
+  const s = useQuery(reviewsQuery()).data ?? defaultReviewsSettings;
+  const reviews = s.reviews.filter((r) => r.text || r.title);
+  const trustpilot = { total: s.total, link: s.link };
   const scroll = (dir: number) => row.current?.scrollBy({ left: dir * row.current.clientWidth, behavior: "smooth" });
   return <section data-section="site-reviews" aria-label="Klantbeoordelingen" className="px-5 py-5 font-display lg:px-10 lg:py-10">
     <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-10">
       <div className="flex shrink-0 flex-col items-center gap-2 text-center lg:w-40 lg:items-start lg:text-left">
         <div className="flex items-center gap-3 lg:flex-col lg:items-start lg:gap-2">
-          <h3 className="text-lg font-semibold lg:text-xl">Uitstekend</h3>
+          <h3 className="text-lg font-semibold lg:text-xl">{s.heading}</h3>
           <Stars size="lg" />
         </div>
         <p className="text-xs opacity-80">Gebaseerd op <a href={trustpilot.link} target="_blank" rel="noreferrer" className="underline hover:text-review">{trustpilot.total} reviews</a></p>
