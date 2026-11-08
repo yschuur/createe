@@ -36,6 +36,7 @@ const groups: NavGroup[] = [
     items: [
       { to: "/admin/emails", label: "E-mails", icon: MessageSquare },
       { to: "/admin/contact", label: "FAQ", icon: MessageSquare },
+      { to: "/admin/reviews", label: "Reviews", icon: MessageSquare },
     ],
   },
   {
