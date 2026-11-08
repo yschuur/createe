@@ -35,6 +35,7 @@ import { Route as AuthenticatedAdminMediaRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAdminMenuRouteImport } from './routes/_authenticated/admin.menu'
 import { Route as AuthenticatedAdminOrdersRouteImport } from './routes/_authenticated/admin.orders'
 import { Route as AuthenticatedAdminPoliciesRouteImport } from './routes/_authenticated/admin.policies'
+import { Route as AuthenticatedAdminReviewsRouteImport } from './routes/_authenticated/admin.reviews'
 import { Route as AuthenticatedAdminSeoRouteImport } from './routes/_authenticated/admin.seo'
 import { Route as AuthenticatedAdminShippingRouteImport } from './routes/_authenticated/admin.shipping'
 import { Route as AuthenticatedAdminSportsRouteImport } from './routes/_authenticated/admin.sports'
@@ -190,6 +191,12 @@ const AuthenticatedAdminPoliciesRoute =
     path: '/admin/policies',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminReviewsRoute =
+  AuthenticatedAdminReviewsRouteImport.update({
+    id: '/admin/reviews',
+    path: '/admin/reviews',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAdminSeoRoute = AuthenticatedAdminSeoRouteImport.update({
   id: '/admin/seo',
   path: '/admin/seo',
@@ -310,6 +317,7 @@ export interface FileRoutesByFullPath {
   '/admin/menu': typeof AuthenticatedAdminMenuRoute
   '/admin/orders': typeof AuthenticatedAdminOrdersRoute
   '/admin/policies': typeof AuthenticatedAdminPoliciesRoute
+  '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/admin/seo': typeof AuthenticatedAdminSeoRoute
   '/admin/shipping': typeof AuthenticatedAdminShippingRoute
   '/admin/sports': typeof AuthenticatedAdminSportsRoute
@@ -353,6 +361,7 @@ export interface FileRoutesByTo {
   '/admin/menu': typeof AuthenticatedAdminMenuRoute
   '/admin/orders': typeof AuthenticatedAdminOrdersRoute
   '/admin/policies': typeof AuthenticatedAdminPoliciesRoute
+  '/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/admin/seo': typeof AuthenticatedAdminSeoRoute
   '/admin/shipping': typeof AuthenticatedAdminShippingRoute
   '/admin/sports': typeof AuthenticatedAdminSportsRoute
@@ -398,6 +407,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/menu': typeof AuthenticatedAdminMenuRoute
   '/_authenticated/admin/orders': typeof AuthenticatedAdminOrdersRoute
   '/_authenticated/admin/policies': typeof AuthenticatedAdminPoliciesRoute
+  '/_authenticated/admin/reviews': typeof AuthenticatedAdminReviewsRoute
   '/_authenticated/admin/seo': typeof AuthenticatedAdminSeoRoute
   '/_authenticated/admin/shipping': typeof AuthenticatedAdminShippingRoute
   '/_authenticated/admin/sports': typeof AuthenticatedAdminSportsRoute
@@ -443,6 +453,7 @@ export interface FileRouteTypes {
     | '/admin/menu'
     | '/admin/orders'
     | '/admin/policies'
+    | '/admin/reviews'
     | '/admin/seo'
     | '/admin/shipping'
     | '/admin/sports'
@@ -486,6 +497,7 @@ export interface FileRouteTypes {
     | '/admin/menu'
     | '/admin/orders'
     | '/admin/policies'
+    | '/admin/reviews'
     | '/admin/seo'
     | '/admin/shipping'
     | '/admin/sports'
@@ -530,6 +542,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/menu'
     | '/_authenticated/admin/orders'
     | '/_authenticated/admin/policies'
+    | '/_authenticated/admin/reviews'
     | '/_authenticated/admin/seo'
     | '/_authenticated/admin/shipping'
     | '/_authenticated/admin/sports'
@@ -752,6 +765,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminPoliciesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/reviews': {
+      id: '/_authenticated/admin/reviews'
+      path: '/admin/reviews'
+      fullPath: '/admin/reviews'
+      preLoaderRoute: typeof AuthenticatedAdminReviewsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/seo': {
       id: '/_authenticated/admin/seo'
       path: '/admin/seo'
@@ -879,6 +899,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminMenuRoute: typeof AuthenticatedAdminMenuRoute
   AuthenticatedAdminOrdersRoute: typeof AuthenticatedAdminOrdersRoute
   AuthenticatedAdminPoliciesRoute: typeof AuthenticatedAdminPoliciesRoute
+  AuthenticatedAdminReviewsRoute: typeof AuthenticatedAdminReviewsRoute
   AuthenticatedAdminSeoRoute: typeof AuthenticatedAdminSeoRoute
   AuthenticatedAdminShippingRoute: typeof AuthenticatedAdminShippingRoute
   AuthenticatedAdminSportsRoute: typeof AuthenticatedAdminSportsRoute
@@ -908,6 +929,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminMenuRoute: AuthenticatedAdminMenuRoute,
   AuthenticatedAdminOrdersRoute: AuthenticatedAdminOrdersRoute,
   AuthenticatedAdminPoliciesRoute: AuthenticatedAdminPoliciesRoute,
+  AuthenticatedAdminReviewsRoute: AuthenticatedAdminReviewsRoute,
   AuthenticatedAdminSeoRoute: AuthenticatedAdminSeoRoute,
   AuthenticatedAdminShippingRoute: AuthenticatedAdminShippingRoute,
   AuthenticatedAdminSportsRoute: AuthenticatedAdminSportsRoute,
